@@ -1,0 +1,15 @@
+{
+  "analytics_start_date": "2025-12-26",
+  "analytics_end_date": "2026-01-24",
+  "group_box_color": "#aa0000",
+  "sync_auto_enabled": false,
+  "sync_interval_seconds": 60,
+  "sync_last_run": null,
+  "api_key": "RffyEptvn0fl9KOO5g9w",
+  "journal_presets": [
+    "School",
+    "Work",
+    "Main",
+    "Goose"
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "Test 1": {
+    "muscle_groups": [
+      "Back",
+      "Shoulders"
+    ],
+    "exercises": [
+      {
+        "name": "Puil Ups",
+        "sets": [
+          {
+            "reps": 10,
+            "weight": 0.0,
+            "comment": ""
+          },
+          {
+            "reps": 9,
+            "weight": 11.0,
+            "comment": ""
+          },
+          {
+            "reps": 10,
+            "weight": 11.0,
+            "comment": ""
+          }
+        ],
+        "muscle_groups": [
+          "Back"
+        ]
+      },
+      {
+        "name": "Tricep Pull down",
+        "sets": [
+          {
+            "reps": 10,
+            "weight": 32.0,
+            "comment": ""
+          },
+          {
+            "reps": 10,
+            "weight": 40.0,
+            "comment": ""
+          }
+        ],
+        "muscle_groups": [
+          "Shoulders"
+        ]
+      }
+    ],
+    "duration_minutes": 0,
+    "notes": ""
+  }
+}
