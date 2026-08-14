@@ -1,5 +1,6 @@
 from collections import defaultdict
 from datetime import date, datetime, timedelta
+import traceback
 from typing import TYPE_CHECKING
 
 import matplotlib.pyplot as plt
@@ -20,7 +21,7 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from GUI.Main_Window import qdate_to_string, string_to_qdate
+from GUI.Main_Window import qdate_to_string, safe_set_date, string_to_qdate
 
 if TYPE_CHECKING:
     from features.Journal_Service import JournalService
@@ -79,11 +80,15 @@ class AnalyticsView(QWidget):
         # Start with 4-month block containing today (current month and 3 preceding months)
         self.volume_month_window_start = self._get_month_start_for_volume(today)
         
-        # Set default date range (last 30 days)
+        # Set default date range (last 30 days) before connecting dateChanged
         end_date = QDate.currentDate()
         start_date = end_date.addDays(-29)
-        self.start_date_edit.setDate(start_date)
-        self.end_date_edit.setDate(end_date)
+        safe_set_date(self.start_date_edit, start_date, block_signals=True)
+        safe_set_date(self.end_date_edit, end_date, block_signals=True)
+        
+        # Connect after initial dates are set to avoid startup chart refresh during init
+        self.start_date_edit.dateChanged.connect(self._on_date_range_changed)
+        self.end_date_edit.dateChanged.connect(self._on_date_range_changed)
         
         # Update week label after UI is set up
         self._update_week_label()
@@ -124,10 +129,6 @@ class AnalyticsView(QWidget):
         self.end_date_edit.setCalendarPopup(True)
         self.end_date_edit.setDisplayFormat("yyyy-MM-dd")
         date_range_layout.addWidget(self.end_date_edit)
-        
-        # Auto-refresh when date range changes
-        self.start_date_edit.dateChanged.connect(self._on_update_charts)
-        self.end_date_edit.dateChanged.connect(self._on_update_charts)
         
         date_range_layout.addStretch()
         
@@ -483,6 +484,17 @@ class AnalyticsView(QWidget):
         canvas = FigureCanvasQTAgg(figure)
         return canvas
     
+    def _on_date_range_changed(self, qdate: QDate) -> None:
+        """Handle date range picker changes (dateChanged passes QDate)."""
+        try:
+            if not qdate.isValid():
+                print(f"_on_date_range_changed: ignoring invalid QDate: {qdate}")
+                return
+            self._on_update_charts()
+        except Exception:
+            print("_on_date_range_changed failed:")
+            traceback.print_exc()
+
     def _on_update_charts(self) -> None:
         """Load data and regenerate charts."""
         self.refresh_charts()
@@ -492,15 +504,19 @@ class AnalyticsView(QWidget):
         Public method to refresh all charts with current date range.
         This ensures fresh data is loaded from storage.
         """
-        # Get date range
-        start_date = qdate_to_string(self.start_date_edit.date())
-        end_date = qdate_to_string(self.end_date_edit.date())
-        
-        # Generate all charts
-        self._generate_workout_frequency_chart(start_date, end_date)
-        self._generate_volume_by_muscle_chart(start_date, end_date)
-        self._generate_sleep_trends_chart(start_date, end_date)
-        self._generate_task_completion_chart(start_date, end_date)
+        try:
+            # Get date range
+            start_date = qdate_to_string(self.start_date_edit.date())
+            end_date = qdate_to_string(self.end_date_edit.date())
+
+            # Generate all charts
+            self._generate_workout_frequency_chart(start_date, end_date)
+            self._generate_volume_by_muscle_chart(start_date, end_date)
+            self._generate_sleep_trends_chart(start_date, end_date)
+            self._generate_task_completion_chart(start_date, end_date)
+        except Exception:
+            print("refresh_charts failed:")
+            traceback.print_exc()
     
     def _get_weekday(self, date_str: str) -> str:
         """

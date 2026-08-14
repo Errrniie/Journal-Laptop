@@ -251,3 +251,152 @@ class APIClient:
             return (True, None)
         except APIError as e:
             return (False, str(e))
+
+    # --- Journal ---
+
+    def get_journal_page_types(
+        self, include_deleted: bool = False
+    ) -> Tuple[list[dict], Optional[str]]:
+        """GET /journal/page-types. Returns (list of type dicts, error or None)."""
+        try:
+            endpoint = "/journal/page-types"
+            if include_deleted:
+                endpoint += "?include_deleted=true"
+            data = self.api_request("GET", endpoint)
+            if data is None:
+                return [], None
+            if isinstance(data, list):
+                return data, None
+            return [], f"Unexpected response format: expected list, got {type(data)}"
+        except APIError as e:
+            return [], str(e)
+
+    def create_journal_page_type(
+        self,
+        type_key: str,
+        display_name: str,
+        page_order: int = 0,
+    ) -> Tuple[Optional[dict], Optional[str]]:
+        """POST /journal/page-types."""
+        try:
+            payload = {
+                "type_key": type_key,
+                "display_name": display_name,
+                "page_order": page_order,
+            }
+            data = self.api_request("POST", "/journal/page-types", payload)
+            return (data, None)
+        except APIError as e:
+            return (None, str(e))
+
+    def get_journal_by_date(self, entry_date: str) -> Tuple[Optional[dict], Optional[str]]:
+        """GET /journal/by-date/{entry_date}. Returns (entry dict or None, error or None)."""
+        try:
+            data = self.api_request("GET", f"/journal/by-date/{entry_date}")
+            return (data, None)
+        except APIError as e:
+            if e.status_code == 404:
+                return (None, None)
+            return (None, str(e))
+
+    def create_journal_entry(
+        self,
+        entry_date: str,
+        mood: Optional[str] = None,
+        metadata: Optional[dict] = None,
+    ) -> Tuple[Optional[str], Optional[str]]:
+        """POST /journal/entries. Returns (journal_entry_id, error or None)."""
+        try:
+            payload: dict = {"entry_date": entry_date}
+            if mood is not None:
+                payload["mood"] = mood
+            if metadata is not None:
+                payload["metadata"] = metadata
+            data = self.api_request("POST", "/journal/entries", payload)
+            if not data:
+                return (None, "Empty response from journal entry create")
+            entry_id = data.get("journal_entry_id")
+            if not entry_id:
+                return (None, f"Missing journal_entry_id in response: {data}")
+            return (str(entry_id), None)
+        except APIError as e:
+            if e.status_code == 409:
+                return (None, "entry_exists")
+            return (None, str(e))
+
+    def create_journal_page(
+        self,
+        journal_entry_id: str,
+        page_type: str,
+        title: Optional[str] = None,
+        content: str = "",
+        page_order: int = 0,
+        metadata: Optional[dict] = None,
+    ) -> Tuple[Optional[str], Optional[str]]:
+        """POST /journal/pages. Returns (journal_page_id, error or None)."""
+        try:
+            payload: dict = {
+                "journal_entry_id": journal_entry_id,
+                "page_type": page_type,
+                "content": content or "",
+                "page_order": page_order,
+            }
+            if title is not None:
+                payload["title"] = title
+            if metadata is not None:
+                payload["metadata"] = metadata
+            data = self.api_request("POST", "/journal/pages", payload)
+            if not data:
+                return (None, "Empty response from journal page create")
+            page_id = data.get("journal_page_id")
+            if not page_id:
+                return (None, f"Missing journal_page_id in response: {data}")
+            return (str(page_id), None)
+        except APIError as e:
+            if e.status_code == 409:
+                return (None, "page_type_exists")
+            return (None, str(e))
+
+    def delete_journal_page(self, journal_page_id: str) -> Tuple[bool, Optional[str]]:
+        """DELETE /journal/pages/{journal_page_id}."""
+        try:
+            self.api_request("DELETE", f"/journal/pages/{journal_page_id}")
+            return (True, None)
+        except APIError as e:
+            return (False, str(e))
+
+    def restore_journal_page(self, journal_page_id: str) -> Tuple[bool, Optional[str]]:
+        """POST /journal/pages/{journal_page_id}/restore. Returns (success, error or None)."""
+        try:
+            self.api_request("POST", f"/journal/pages/{journal_page_id}/restore")
+            return (True, None)
+        except APIError as e:
+            if e.status_code == 409:
+                return (False, "page_type_inactive")
+            return (False, str(e))
+
+    def update_journal_page(
+        self,
+        journal_page_id: str,
+        content: Optional[str] = None,
+        title: Optional[str] = None,
+        page_order: Optional[int] = None,
+        metadata: Optional[dict] = None,
+    ) -> Tuple[Optional[dict], Optional[str]]:
+        """PATCH /journal/pages/{journal_page_id}. Returns (page dict, error or None)."""
+        try:
+            payload: dict = {}
+            if content is not None:
+                payload["content"] = content
+            if title is not None:
+                payload["title"] = title
+            if page_order is not None:
+                payload["page_order"] = page_order
+            if metadata is not None:
+                payload["metadata"] = metadata
+            if not payload:
+                return (None, "No fields provided for update")
+            data = self.api_request("PATCH", f"/journal/pages/{journal_page_id}", payload)
+            return (data, None)
+        except APIError as e:
+            return (None, str(e))

@@ -16,6 +16,8 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
+from GUI.Main_Window import ensure_qdate, safe_set_date
+
 if TYPE_CHECKING:
     from config.settings_store import SettingsStore
 
@@ -40,9 +42,9 @@ class SettingsDialog(QDialog):
         self.setWindowTitle("Settings")
         self.setMinimumSize(500, 400)
         
-        # Load settings from store
-        self.analytics_start_date = settings_store.get_analytics_start_date()
-        self.analytics_end_date = settings_store.get_analytics_end_date()
+        # Load settings from store (ensure valid QDates)
+        self.analytics_start_date = ensure_qdate(settings_store.get_analytics_start_date())
+        self.analytics_end_date = ensure_qdate(settings_store.get_analytics_end_date())
         self.group_box_color = settings_store.get_group_box_color()
         self.api_key = settings_store.get_api_key()
         
@@ -112,7 +114,7 @@ class SettingsDialog(QDialog):
         self.start_date_edit = QDateEdit()
         self.start_date_edit.setCalendarPopup(True)
         self.start_date_edit.setDisplayFormat("yyyy-MM-dd")
-        self.start_date_edit.setDate(self.analytics_start_date)
+        safe_set_date(self.start_date_edit, self.analytics_start_date, block_signals=True)
         start_layout.addWidget(self.start_date_edit)
         start_layout.addStretch()
         layout.addLayout(start_layout)
@@ -123,7 +125,7 @@ class SettingsDialog(QDialog):
         self.end_date_edit = QDateEdit()
         self.end_date_edit.setCalendarPopup(True)
         self.end_date_edit.setDisplayFormat("yyyy-MM-dd")
-        self.end_date_edit.setDate(self.analytics_end_date)
+        safe_set_date(self.end_date_edit, self.analytics_end_date, block_signals=True)
         end_layout.addWidget(self.end_date_edit)
         end_layout.addStretch()
         layout.addLayout(end_layout)
@@ -260,8 +262,8 @@ class SettingsDialog(QDialog):
     def _on_apply(self) -> None:
         """Handle Apply button - save without closing."""
         # Update settings from UI
-        self.analytics_start_date = self.start_date_edit.date()
-        self.analytics_end_date = self.end_date_edit.date()
+        self.analytics_start_date = ensure_qdate(self.start_date_edit.date())
+        self.analytics_end_date = ensure_qdate(self.end_date_edit.date())
         self.api_key = self.api_key_edit.text().strip()
         
         # Save to settings store
@@ -284,15 +286,15 @@ class SettingsDialog(QDialog):
     
     def set_analytics_start_date(self, qdate: QDate) -> None:
         """Set the analytics start date."""
-        self.analytics_start_date = qdate
+        self.analytics_start_date = ensure_qdate(qdate)
         if hasattr(self, 'start_date_edit'):
-            self.start_date_edit.setDate(qdate)
+            safe_set_date(self.start_date_edit, self.analytics_start_date, block_signals=True)
     
     def set_analytics_end_date(self, qdate: QDate) -> None:
         """Set the analytics end date."""
-        self.analytics_end_date = qdate
+        self.analytics_end_date = ensure_qdate(qdate)
         if hasattr(self, 'end_date_edit'):
-            self.end_date_edit.setDate(qdate)
+            safe_set_date(self.end_date_edit, self.analytics_end_date, block_signals=True)
     
     def set_group_box_color(self, color: str) -> None:
         """Set the group box color."""

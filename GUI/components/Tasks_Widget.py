@@ -20,7 +20,7 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from GUI.Main_Window import qdate_to_string, string_to_qdate
+from GUI.Main_Window import qdate_to_string, safe_set_date, string_to_qdate
 from GUI.components.Star_Rating_Widget import StarRatingWidget
 from GUI.components.Task_Notes_Dialog import TaskNotesDialog
 
@@ -193,8 +193,9 @@ class TasksWidget(QWidget):
         due_date_layout = QHBoxLayout()
         due_date_layout.addWidget(QLabel("Due Date:"))
         self.due_date_edit = QDateEdit()
+        self.due_date_edit.setObjectName("tasks_due_date_edit")
         self.due_date_edit.setCalendarPopup(True)
-        self.due_date_edit.setDate(QDate.currentDate())
+        safe_set_date(self.due_date_edit, QDate.currentDate(), block_signals=True)
         self.due_date_edit.setDisplayFormat("yyyy-MM-dd")
         due_date_layout.addWidget(self.due_date_edit)
         due_date_layout.addStretch()
@@ -616,11 +617,8 @@ class TasksWidget(QWidget):
         # This way the due date automatically follows the day you're viewing
         if date:
             try:
-                qdate = string_to_qdate(date)
-                if qdate.isValid():
-                    self.due_date_edit.setDate(qdate)
+                safe_set_date(self.due_date_edit, date, block_signals=True)
             except (ValueError, AttributeError):
-                # If date conversion fails, use current date as fallback
-                self.due_date_edit.setDate(QDate.currentDate())
+                safe_set_date(self.due_date_edit, QDate.currentDate(), block_signals=True)
         
         self._refresh_task_list()

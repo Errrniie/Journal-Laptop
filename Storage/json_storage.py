@@ -51,11 +51,12 @@ class JSONStorage(StorageInterface):
             # File doesn't exist, return empty dict
             return {}
         except json.JSONDecodeError as e:
-            raise json.JSONDecodeError(
-                f"Corrupted JSON file at {self.file_path}: {e.msg}",
-                e.doc,
-                e.pos
+            # Log corruption details; avoid crashing the GUI on startup.
+            print(
+                f"Warning: corrupted JSON at {self.file_path}: {e.msg} "
+                f"(line {e.lineno}, column {e.colno})"
             )
+            return {}
     
     def _save_data(self, data: dict) -> None:
         """

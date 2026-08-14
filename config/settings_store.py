@@ -94,7 +94,10 @@ class SettingsStore:
             QDate object
         """
         date_str = self._settings.get("analytics_start_date", self._defaults["analytics_start_date"])
-        return QDate.fromString(date_str, "yyyy-MM-dd")
+        qdate = QDate.fromString(str(date_str), "yyyy-MM-dd")
+        if qdate.isValid():
+            return qdate
+        return QDate.fromString(self._defaults["analytics_start_date"], "yyyy-MM-dd")
     
     def get_analytics_end_date(self) -> QDate:
         """
@@ -104,7 +107,10 @@ class SettingsStore:
             QDate object
         """
         date_str = self._settings.get("analytics_end_date", self._defaults["analytics_end_date"])
-        return QDate.fromString(date_str, "yyyy-MM-dd")
+        qdate = QDate.fromString(str(date_str), "yyyy-MM-dd")
+        if qdate.isValid():
+            return qdate
+        return QDate.fromString(self._defaults["analytics_end_date"], "yyyy-MM-dd")
     
     def get_analytics_start_date_string(self) -> str:
         """

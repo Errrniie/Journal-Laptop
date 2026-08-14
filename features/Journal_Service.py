@@ -5,22 +5,59 @@ from Models import DailyEntry, JournalPage
 
 if TYPE_CHECKING:
     from Storage import StorageInterface
+    from features.API_Client import APIClient
+    from features.Journal_Sync_Service import JournalSyncService
 
 
 class JournalService:
     """
     Service for managing journal text entries for daily entries.
-    Provides business logic for journal operations on top of the storage layer.
+    When api_client is set, journal pages and content sync with the Life API.
     """
     
-    def __init__(self, storage: "StorageInterface") -> None:
+    def __init__(
+        self,
+        storage: "StorageInterface",
+        api_client: Optional["APIClient"] = None,
+    ) -> None:
         """
         Initialize Journal Service.
         
         Args:
             storage: StorageInterface instance for data persistence
+            api_client: Optional APIClient for journal sync with backend
         """
         self.storage = storage
+        self.api_client = api_client
+        self.sync_service: Optional["JournalSyncService"] = None
+        if api_client is not None:
+            from features.Journal_Sync_Service import JournalSyncService
+            self.sync_service = JournalSyncService(self, api_client)
+
+    @property
+    def uses_api(self) -> bool:
+        return bool(self.sync_service and self.sync_service.is_enabled)
+
+    def sync_from_api(self, date: str) -> dict:
+        """Load journal entry/pages from API into local storage."""
+        if not self.sync_service:
+            return {"success": True, "skipped": True, "errors": []}
+        return self.sync_service.sync_journal_for_date(date)
+
+    def get_available_page_types(self, date: str) -> list[dict]:
+        if self.sync_service:
+            return self.sync_service.get_available_page_types(date)
+        return []
+
+    def fetch_page_types(self) -> list[dict]:
+        if self.sync_service:
+            return self.sync_service.fetch_page_types()
+        return []
+
+    def create_page_type(self, display_name: str) -> tuple[bool, Optional[str]]:
+        if self.sync_service:
+            return self.sync_service.create_page_type(display_name)
+        return False, "API not configured"
     
     def _validate_date(self, date: str) -> bool:
         """
@@ -126,6 +163,26 @@ class JournalService:
         # Handle None text by converting to empty string
         if text is None:
             text = ""
+
+        if self.uses_api:
+            pages = self.get_pages(date)
+            main_page = next(
+                (
+                    p for p in pages
+                    if (p.page_type and p.page_type.lower().replace(" ", "_") == "main")
+                    or p.name == "Main"
+                ),
+                None,
+            )
+            if main_page is None:
+                sync_result = self.sync_from_api(date)
+                if not sync_result.get("success"):
+                    return False
+                main_page = self.get_page(date, "Main")
+            if main_page is None:
+                return False
+            success, _error = self.sync_service.update_page_content(date, main_page, text)
+            return success
         
         try:
             entry = self._get_or_create_entry(date)
@@ -166,6 +223,21 @@ class JournalService:
         if not self._validate_date(date):
             return False
         
+        if self.uses_api:
+            pages = self.get_pages(date)
+            main_page = next(
+                (
+                    p for p in pages
+                    if (p.page_type and p.page_type.lower().replace(" ", "_") == "main")
+                    or p.name == "Main"
+                ),
+                None,
+            )
+            if main_page is None:
+                return True
+            success, _error = self.sync_service.update_page_content(date, main_page, "")
+            return success
+
         try:
             entry = self._get_or_create_entry(date)
             
@@ -219,11 +291,11 @@ class JournalService:
     
     def get_page(self, date: str, page_name: str) -> Optional[JournalPage]:
         """
-        Get specific page by name for a date.
+        Get specific page by display name or page type for a date.
         
         Args:
             date: Date string in "YYYY-MM-DD" format
-            page_name: Name of the page to retrieve
+            page_name: Display name or page type of the page to retrieve
             
         Returns:
             JournalPage object if found, None otherwise
@@ -236,19 +308,60 @@ class JournalService:
         
         try:
             pages = self.get_pages(date)
-            return next((p for p in pages if p.name == page_name.strip()), None)
+            page_name = page_name.strip()
+            normalized = page_name.lower().replace(" ", "_")
+            return next(
+                (
+                    p for p in pages
+                    if p.name == page_name
+                    or (p.page_type and p.page_type == normalized)
+                ),
+                None,
+            )
         except Exception:
             return None
     
-    def create_page(self, date: str, page_name: str, content: str = "", tag: str | None = None) -> bool:
+    def page_type_exists(self, date: str, page_type: str) -> bool:
+        if not self._validate_date(date) or not page_type:
+            return False
+        if self.sync_service and self.sync_service.is_enabled:
+            return self.sync_service.active_page_type_exists(date, page_type)
+        normalized = page_type.lower().strip().replace(" ", "_")
+        try:
+            pages = self.get_pages(date)
+            return any(
+                p.page_type and p.page_type.lower().strip().replace(" ", "_") == normalized
+                for p in pages
+            )
+        except Exception:
+            return False
+
+    def restore_page(self, date: str, page_name: str) -> tuple[bool, Optional[str]]:
+        """Restore a soft-deleted journal page (API mode)."""
+        if not self.sync_service or not self.sync_service.is_enabled:
+            return False, "API not configured"
+        page = self.get_page(date, page_name)
+        if page is None:
+            return False, "Page not found"
+        return self.sync_service.restore_page(date, page)
+
+    def create_page(
+        self,
+        date: str,
+        page_name: str,
+        content: str = "",
+        tag: str | None = None,
+        page_type: str | None = None,
+    ) -> bool:
         """
         Create a new journal page.
         
         Args:
             date: Date string in "YYYY-MM-DD" format
-            page_name: Name for the new page
+            page_name: Display name / title for the new page (local mode)
             content: Initial content for the page (default empty string)
-            tag: Optional preset tag/category for the page
+            tag: Optional preset tag/category for the page (local mode)
+            page_type: API page type key (API mode; falls back to page_name/tag)
             
         Returns:
             True on success, False on error or if page already exists
@@ -260,7 +373,17 @@ class JournalService:
             return False
         
         page_name = page_name.strip()
-        
+        api_page_type = page_type or tag or page_name
+
+        if self.sync_service and self.sync_service.is_enabled:
+            success, _error = self.sync_service.create_page(
+                date,
+                api_page_type,
+                title=page_name if page_name.lower().replace(" ", "_") != api_page_type.lower().replace(" ", "_") else None,
+                content=content,
+            )
+            return success
+
         try:
             entry = self._get_or_create_entry(date)
             
@@ -306,6 +429,13 @@ class JournalService:
         # Handle None content
         if content is None:
             content = ""
+
+        if self.uses_api:
+            page = self.get_page(date, page_name)
+            if page is None:
+                return False
+            success, _error = self.sync_service.update_page_content(date, page, content)
+            return success
         
         try:
             entry = self._get_or_create_entry(date)
@@ -317,8 +447,15 @@ class JournalService:
                 else:
                     entry.journal_pages = []
             
-            # Find page
-            page = next((p for p in entry.journal_pages if p.name == page_name), None)
+            normalized = page_name.lower().replace(" ", "_")
+            page = next(
+                (
+                    p for p in entry.journal_pages
+                    if p.name == page_name
+                    or (p.page_type and p.page_type.lower().replace(" ", "_") == normalized)
+                ),
+                None,
+            )
             if page is None:
                 return False  # Page doesn't exist
             
@@ -326,7 +463,9 @@ class JournalService:
             page.content = content
             
             # Also update old journal field if this is "Main" page (for backward compatibility)
-            if page_name == "Main":
+            if page.page_type and page.page_type.lower().replace(" ", "_") == "main":
+                entry.journal = content
+            elif page_name == "Main":
                 entry.journal = content
             
             return self._save_entry(entry)
@@ -351,7 +490,14 @@ class JournalService:
             return False
         
         page_name = page_name.strip()
-        
+        page = self.get_page(date, page_name)
+        if page is None:
+            return False
+
+        if self.sync_service and self.sync_service.is_enabled:
+            success, _error = self.sync_service.delete_page(date, page)
+            return success
+
         try:
             entry = self._get_or_create_entry(date)
             
@@ -363,7 +509,10 @@ class JournalService:
                     entry.journal_pages = []
             
             # Find and remove page
-            page_to_remove = next((p for p in entry.journal_pages if p.name == page_name), None)
+            page_to_remove = next(
+                (p for p in entry.journal_pages if p.name == page.name),
+                None,
+            )
             if page_to_remove is None:
                 return False  # Page doesn't exist
             
@@ -375,16 +524,10 @@ class JournalService:
     
     def rename_page(self, date: str, old_name: str, new_name: str) -> bool:
         """
-        Rename a page.
-        
-        Args:
-            date: Date string in "YYYY-MM-DD" format
-            old_name: Current name of the page
-            new_name: New name for the page
-            
-        Returns:
-            True on success, False on error, if page doesn't exist, or if new name already exists
+        Rename a page (local-only; API page types are fixed).
         """
+        if self.uses_api:
+            return False
         if not self._validate_date(date):
             return False
         
@@ -442,6 +585,11 @@ class JournalService:
         
         try:
             pages = self.get_pages(date)
-            return any(p.name == page_name.strip() for p in pages)
+            normalized = page_name.strip().lower().replace(" ", "_")
+            return any(
+                p.name == page_name.strip()
+                or (p.page_type and p.page_type.lower().strip().replace(" ", "_") == normalized)
+                for p in pages
+            )
         except Exception:
             return False

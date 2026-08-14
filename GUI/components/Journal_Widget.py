@@ -22,6 +22,7 @@ from PyQt6.QtWidgets import (
 )
 
 if TYPE_CHECKING:
+    from config.settings_store import SettingsStore
     from features.Journal_Service import JournalService
 
 
@@ -131,8 +132,10 @@ class JournalWidget(QWidget):
         button_row = QHBoxLayout()
         button_row.setSpacing(5)
         
-        self.add_tag_button = QPushButton("+ Add Tag")
+        self.add_tag_button = QPushButton("+ Add Page Type")
         self.add_tag_button.setStyleSheet("font-weight: bold; color: #000000;")
+        self.add_tag_button.setToolTip("Create a new journal page type on the server")
+        self.add_tag_button.setVisible(self.journal_service.uses_api or bool(self.settings_store))
         button_row.addWidget(self.add_tag_button)
         
         # Add Page button with dropdown menu for quick preset creation
@@ -272,8 +275,8 @@ class JournalWidget(QWidget):
         self.delete_page_button.clicked.connect(self._on_delete_page_clicked)
         self.rename_page_button.clicked.connect(self._on_rename_page_clicked)
         
-        # Update preset menu when presets change
-        self._update_preset_menu()
+        # Update add-page menu when presets/page types change
+        self._update_add_page_menu()
         
         # Formatting buttons
         self.bold_button.clicked.connect(self._on_bold_clicked)
@@ -346,7 +349,29 @@ class JournalWidget(QWidget):
             self.page_list_widget.addItem(item)
         
         # Update delete button state
-        self.delete_page_button.setEnabled(len(pages) > 1)
+        can_delete = (
+            bool(self.current_page_name)
+            and self._can_delete_page(self.current_page_name)
+        )
+        self.delete_page_button.setEnabled(can_delete)
+    
+    def _is_main_page(self, page_name: str) -> bool:
+        """True when the named page is the main journal page."""
+        if not self.current_date:
+            return False
+        page = self.journal_service.get_page(self.current_date, page_name)
+        if page and page.page_type:
+            return page.page_type.lower().strip().replace(" ", "_") == "main"
+        return page_name.strip().lower() == "main"
+
+    def _can_delete_page(self, page_name: str) -> bool:
+        """Whether the page can be deleted (not main, not the only page)."""
+        if not self.current_date:
+            return False
+        pages = self.journal_service.get_pages(self.current_date)
+        if len(pages) <= 1:
+            return False
+        return not self._is_main_page(page_name)
     
     def _on_page_selected(self, item: QListWidgetItem) -> None:
         """Switch to selected page."""
@@ -361,7 +386,9 @@ class JournalWidget(QWidget):
         self._load_page(page_name)
     
     def _on_page_double_clicked(self, item: QListWidgetItem) -> None:
-        """Rename page on double-click."""
+        """Rename page on double-click (local-only mode)."""
+        if self.journal_service.uses_api:
+            return
         page_name = item.text()
         self._rename_page_dialog(page_name)
     
@@ -377,9 +404,11 @@ class JournalWidget(QWidget):
         menu = QMenu(self)
         
         rename_action = menu.addAction("Rename")
+        rename_action.setEnabled(not self.journal_service.uses_api)
         rename_action.triggered.connect(lambda: self._rename_page_dialog(page_name))
         
         delete_action = menu.addAction("Delete")
+        delete_action.setEnabled(self._can_delete_page(page_name))
         delete_action.triggered.connect(lambda: self._delete_page_by_name(page_name))
         
         # Show menu at cursor position
@@ -390,9 +419,11 @@ class JournalWidget(QWidget):
         if not self.current_date:
             return
         
-        # Don't allow deleting if it's the only page
-        pages = self.journal_service.get_pages(self.current_date)
-        if len(pages) <= 1:
+        if self._is_main_page(page_name):
+            QMessageBox.warning(self, "Error", "The main page cannot be deleted.")
+            return
+
+        if not self._can_delete_page(page_name):
             QMessageBox.warning(self, "Error", "Cannot delete the last page.")
             return
         
@@ -421,27 +452,62 @@ class JournalWidget(QWidget):
                         self.page_name_edit.clear()
                         self.text_edit.clear()
                 self._refresh_page_list()
+                self._update_add_page_menu()
             else:
                 QMessageBox.warning(self, "Error", "Failed to delete page.")
     
-    def _update_preset_menu(self) -> None:
-        """Update the preset menu with current presets."""
+    def _update_add_page_menu(self) -> None:
+        """Populate + Add Page menu from API page types not yet on this day."""
         self.add_page_menu.clear()
-        
-        if not self.settings_store:
+
+        if self.journal_service.uses_api:
+            available_types = self.journal_service.get_available_page_types(self.current_date or "")
+            if not available_types:
+                action = self.add_page_menu.addAction("(All page types added)")
+                action.setEnabled(False)
+                return
+            for page_type in available_types:
+                display_name = page_type.get("display_name") or page_type.get("type_key", "Page")
+                type_key = page_type.get("type_key", display_name)
+                action = self.add_page_menu.addAction(display_name)
+                action.triggered.connect(
+                    lambda checked=False, key=type_key, label=display_name: self._create_page_from_type(key, label)
+                )
             return
-        
-        presets = self.settings_store.get_journal_presets()
-        if presets:
-            # Add quick actions for each preset
-            for preset in presets:
-                action = self.add_page_menu.addAction(f"Quick: {preset}")
-                action.triggered.connect(lambda checked, tag=preset: self._quick_create_page_with_tag(tag))
-            self.add_page_menu.addSeparator()
-        
-        # Always add "Custom..." option
+
+        if self.settings_store:
+            presets = self.settings_store.get_journal_presets()
+            if presets:
+                for preset in presets:
+                    action = self.add_page_menu.addAction(f"Quick: {preset}")
+                    action.triggered.connect(
+                        lambda checked=False, tag=preset: self._quick_create_page_with_tag(tag)
+                    )
+                self.add_page_menu.addSeparator()
+
         custom_action = self.add_page_menu.addAction("Custom...")
         custom_action.triggered.connect(self._on_add_page_clicked)
+
+    def _create_page_from_type(self, page_type: str, display_name: str) -> None:
+        """Create a journal page for the current date using an API page type."""
+        if not self.current_date:
+            QMessageBox.warning(self, "No Date", "Please select a date first.")
+            return
+
+        if self.journal_service.page_type_exists(self.current_date, page_type):
+            QMessageBox.warning(self, "Error", f"A '{display_name}' page already exists for this day.")
+            return
+
+        success = self.journal_service.create_page(
+            self.current_date,
+            display_name,
+            page_type=page_type,
+        )
+        if success:
+            self._refresh_page_list()
+            self._load_page(display_name)
+        else:
+            QMessageBox.warning(self, "Error", f"Failed to create '{display_name}' page on the server.")
     
     def _quick_create_page_with_tag(self, tag: str) -> None:
         """Quickly create a page with a preset tag."""
@@ -482,7 +548,28 @@ class JournalWidget(QWidget):
             QMessageBox.warning(self, "Error", "Failed to create page.")
     
     def _on_add_tag_clicked(self) -> None:
-        """Open dialog to add new preset tag."""
+        """Create a new journal page type on the API."""
+        if self.journal_service.uses_api:
+            display_name, ok = QInputDialog.getText(
+                self,
+                "Add Page Type",
+                "New page type name:",
+                text="",
+            )
+            if not ok or not display_name.strip():
+                return
+            success, error = self.journal_service.create_page_type(display_name.strip())
+            if success:
+                QMessageBox.information(
+                    self,
+                    "Success",
+                    f"Page type '{display_name.strip()}' added.",
+                )
+                self._update_add_page_menu()
+            else:
+                QMessageBox.warning(self, "Error", error or "Failed to add page type.")
+            return
+
         if not self.settings_store:
             QMessageBox.warning(self, "Error", "Settings store not available.")
             return
@@ -497,22 +584,21 @@ class JournalWidget(QWidget):
         if ok and tag_name.strip():
             tag_name = tag_name.strip()
             
-            # Check if tag already exists
             existing_presets = self.settings_store.get_journal_presets()
             if tag_name.lower() in [p.lower() for p in existing_presets]:
                 QMessageBox.warning(self, "Error", "Tag already exists.")
                 return
             
-            # Add preset
             if self.settings_store.add_journal_preset(tag_name):
                 QMessageBox.information(self, "Success", f"Tag '{tag_name}' added successfully.")
-                # Update preset menu after adding new tag
-                self._update_preset_menu()
+                self._update_add_page_menu()
             else:
                 QMessageBox.warning(self, "Error", "Failed to add tag.")
     
     def _on_add_page_clicked(self) -> None:
-        """Open dialog to add new page with optional preset selection."""
+        """Open dialog to add new page (local-only mode)."""
+        if self.journal_service.uses_api:
+            return
         if not self.current_date:
             QMessageBox.warning(self, "No Date", "Please select a date first.")
             return
@@ -583,9 +669,11 @@ class JournalWidget(QWidget):
         if not self.current_date or not self.current_page_name:
             return
         
-        # Don't allow deleting if it's the only page
-        pages = self.journal_service.get_pages(self.current_date)
-        if len(pages) <= 1:
+        if self._is_main_page(self.current_page_name):
+            QMessageBox.warning(self, "Error", "The main page cannot be deleted.")
+            return
+
+        if not self._can_delete_page(self.current_page_name):
             QMessageBox.warning(self, "Error", "Cannot delete the last page.")
             return
         
@@ -609,6 +697,7 @@ class JournalWidget(QWidget):
                 if remaining_pages:
                     self._load_page(remaining_pages[0].name)
                 self._refresh_page_list()
+                self._update_add_page_menu()
             else:
                 QMessageBox.warning(self, "Error", "Failed to delete page.")
     
@@ -775,16 +864,27 @@ class JournalWidget(QWidget):
         
         self.current_date = date
         
-        # Update preset menu when loading entry (in case settings changed)
-        self._update_preset_menu()
+        if self.journal_service.uses_api:
+            result = self.journal_service.sync_from_api(date)
+            if result.get("errors"):
+                QMessageBox.warning(
+                    self,
+                    "Journal Sync",
+                    "Could not load journal from API:\n" + "\n".join(result["errors"][:3]),
+                )
+
+        self._update_add_page_menu()
         
         # Get pages
         pages = self.journal_service.get_pages(date)
         
         if not pages:
-            # Create default "Main" page
-            self.journal_service.create_page(date, "Main")
-            pages = self.journal_service.get_pages(date)
+            if self.journal_service.uses_api:
+                result = self.journal_service.sync_from_api(date)
+                pages = self.journal_service.get_pages(date)
+            else:
+                self.journal_service.create_page(date, "Main")
+                pages = self.journal_service.get_pages(date)
         
         # Load first page (or last viewed page if we track that)
         if pages:

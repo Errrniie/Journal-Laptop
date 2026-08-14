@@ -1,5 +1,6 @@
+import traceback
 from datetime import date, datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 from PyQt6.QtCore import QDate, Qt, QThread, pyqtSignal
 from PyQt6.QtGui import QAction, QKeySequence
@@ -49,20 +50,58 @@ def string_to_qdate(date_str: str) -> QDate:
         date_str: Date string in "YYYY-MM-DD" format
         
     Returns:
-        QDate object
+        QDate object (may be invalid if the string is malformed)
     """
     return QDate.fromString(date_str, "yyyy-MM-dd")
+
+
+def ensure_qdate(
+    value: Union[QDate, str, date, None],
+    fallback: QDate | None = None,
+) -> QDate:
+    """Return a valid QDate, falling back when value is missing or invalid."""
+    if fallback is None:
+        fallback = QDate.currentDate()
+    if isinstance(value, QDate):
+        return value if value.isValid() else fallback
+    if isinstance(value, str) and value.strip():
+        qdate = QDate.fromString(value.strip(), "yyyy-MM-dd")
+        return qdate if qdate.isValid() else fallback
+    if isinstance(value, date):
+        qdate = QDate(value.year, value.month, value.day)
+        return qdate if qdate.isValid() else fallback
+    return fallback
+
+
+def safe_set_date(
+    date_edit: QDateEdit,
+    value: Union[QDate, str, date, None],
+    *,
+    block_signals: bool = False,
+) -> None:
+    """Set a QDateEdit date with validation and optional signal blocking."""
+    qdate = ensure_qdate(value)
+    print(f"safe_set_date: setting {qdate.toString('yyyy-MM-dd')} type={type(value).__name__} block={block_signals}")
+    was_blocked = date_edit.signalsBlocked()
+    if block_signals:
+        date_edit.blockSignals(True)
+    try:
+        date_edit.setDate(qdate)
+    finally:
+        date_edit.blockSignals(was_blocked)
+    print(f"safe_set_date: done {date_edit.objectName() or id(date_edit)}")
 
 
 class BackgroundLoadWorker(QThread):
     """Runs task refetch and workout load in background so UI stays responsive."""
     done = pyqtSignal(str)
 
-    def __init__(self, date_str: str, sync_service, workout_service) -> None:
+    def __init__(self, date_str: str, sync_service, workout_service, journal_service) -> None:
         super().__init__()
         self.date_str = date_str
         self.sync_service = sync_service
         self.workout_service = workout_service
+        self.journal_service = journal_service
 
     def run(self) -> None:
         if self.sync_service:
@@ -70,6 +109,8 @@ class BackgroundLoadWorker(QThread):
         if self.workout_service and getattr(self.workout_service, "api_client", None):
             self.workout_service.invalidate_workout_cache()
             self.workout_service.load_workouts_from_api()
+        if self.journal_service and getattr(self.journal_service, "uses_api", False):
+            self.journal_service.sync_from_api(self.date_str)
         self.done.emit(self.date_str)
 
 
@@ -236,8 +277,9 @@ class MainWindow(QMainWindow):
         
         # Date selector
         self.date_edit = QDateEdit()
+        self.date_edit.setObjectName("main_date_edit")
         self.date_edit.setCalendarPopup(True)
-        self.date_edit.setDate(self.current_date)
+        safe_set_date(self.date_edit, self.current_date, block_signals=True)
         self.date_edit.setDisplayFormat("MMMM d, yyyy")
         self.date_edit.dateChanged.connect(self._on_date_changed)
         toolbar.addWidget(self.date_edit)
@@ -301,20 +343,17 @@ class MainWindow(QMainWindow):
     def _previous_day(self) -> None:
         """Navigate to previous day."""
         self.current_date = self.current_date.addDays(-1)
-        self.date_edit.setDate(self.current_date)
-        # _on_date_changed will be called automatically
+        safe_set_date(self.date_edit, self.current_date)
     
     def _next_day(self) -> None:
         """Navigate to next day."""
         self.current_date = self.current_date.addDays(1)
-        self.date_edit.setDate(self.current_date)
-        # _on_date_changed will be called automatically
+        safe_set_date(self.date_edit, self.current_date)
     
     def _go_to_today(self) -> None:
         """Navigate to today."""
         self.current_date = QDate.currentDate()
-        self.date_edit.setDate(self.current_date)
-        # _on_date_changed will be called automatically
+        safe_set_date(self.date_edit, self.current_date)
     
     def _on_date_changed(self, qdate: QDate) -> None:
         """
@@ -323,12 +362,17 @@ class MainWindow(QMainWindow):
         Args:
             qdate: New QDate selected
         """
-        self.current_date = qdate
-        self._update_date_label()
-        
-        # Convert to string and load entry
-        date_str = qdate_to_string(qdate)
-        self._load_entry_for_date(date_str)
+        try:
+            if not qdate.isValid():
+                print(f"_on_date_changed: ignoring invalid QDate: {qdate}")
+                return
+            self.current_date = qdate
+            self._update_date_label()
+            date_str = qdate_to_string(qdate)
+            self._load_entry_for_date(date_str)
+        except Exception:
+            print("_on_date_changed failed:")
+            traceback.print_exc()
     
     def _load_entry_for_date(self, date_str: str) -> None:
         """
@@ -339,6 +383,7 @@ class MainWindow(QMainWindow):
             date_str,
             getattr(self, "sync_service", None),
             getattr(self, "workout_service", None),
+            getattr(self, "journal_service", None),
         )
         self._load_worker.done.connect(self._on_background_load_done)
         self.setCursor(Qt.CursorShape.WaitCursor)
