@@ -233,7 +233,7 @@ class TaskService:
             
             # Remove task at index
             entry.tasks.pop(task_index)
-            return self._save_entry(entry)
+            return self.replace_tasks_with_sync_info(date, entry.tasks)
         except Exception:
             return False
     
@@ -260,7 +260,7 @@ class TaskService:
             
             # Toggle completion status
             entry.tasks[task_index].completed = not entry.tasks[task_index].completed
-            return self._save_entry(entry)
+            return self.replace_tasks_with_sync_info(date, entry.tasks)
         except Exception:
             return False
     
@@ -283,7 +283,7 @@ class TaskService:
             # Filter out completed tasks
             entry.tasks = [task for task in entry.tasks if not task.completed]
             
-            return self._save_entry(entry)
+            return self.replace_tasks_with_sync_info(date, entry.tasks)
         except Exception:
             return False
     
@@ -305,5 +305,17 @@ class TaskService:
             entry = self._get_or_create_entry(date)
             entry.tasks = tasks
             return self._save_entry(entry)
+        except Exception:
+            return False
+
+    def replace_tasks_with_sync_info(self, date: str, tasks: list[Task]) -> bool:
+        """Replace a date's task list, including replacing it with an empty list."""
+        if not self._validate_date(date):
+            return False
+        try:
+            entry = self._get_or_create_entry(date)
+            entry.tasks = tasks
+            self.storage.save_entry(entry, merge=False)
+            return True
         except Exception:
             return False

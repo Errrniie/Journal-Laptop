@@ -2,8 +2,8 @@
 Type=Application
 Name=Journal
 Comment=Ernesto's life log journal
-Exec=/home/LxSparda/Desktop/Journal/run_app.sh
-Icon=/home/LxSparda/Desktop/Journal/journal_icon.png
+Exec=/home/LxSparda/Desktop/Ernie/Journal/run_app.sh
+Icon=/home/LxSparda/Desktop/Ernie/Journal/journal_icon.png
 Terminal=false
 Categories=Office;Utility;
 StartupWMClass=ernesto-journal

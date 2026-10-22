@@ -1,547 +1,130 @@
 {
-  "2026-06-07": {
-    "date": "2026-06-07",
-    "journal": "",
-    "journal_pages": [],
-    "tasks": [
-      {
-        "name": "Mac Nails",
-        "completed": true,
-        "Priority": 3,
-        "Due_Date": "2026-06-07",
-        "Notes": null,
-        "activity_id": "8df1e08f-9a87-4130-b218-2bccee98af79",
-        "session_id": null,
-        "last_synced": "2026-06-06T19:33:58.803171Z"
-      }
-    ],
-    "sleep_hours": null,
-    "workout": null,
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-06-09": {
-    "date": "2026-06-09",
-    "journal": "",
-    "journal_pages": [],
-    "tasks": [
-      {
-        "name": "Meet with Michael",
-        "completed": false,
-        "Priority": 5,
-        "Due_Date": "2026-06-09",
-        "Notes": null,
-        "activity_id": "6f007f80-31d8-4522-bd6f-602864c709bb",
-        "session_id": null,
-        "last_synced": "2026-06-05T22:06:56.306693Z"
-      }
-    ],
-    "sleep_hours": null,
-    "workout": {
-      "date": "2026-06-09",
-      "muscle_groups": [],
-      "exercises": [
-        {
-          "name": "Barbell Bench Press",
-          "sets": [
-            {
-              "reps": 10,
-              "weight": 90.0,
-              "comment": ""
-            }
-          ],
-          "muscle_groups": []
-        }
-      ],
-      "duration_minutes": 0,
-      "notes": "Total time: 02:20",
-      "workout_time": "01:31",
-      "session_id": "b64825fb-6ae1-4013-95eb-6fcf8b9fecb4"
-    },
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-06-12": {
-    "date": "2026-06-12",
-    "journal": "",
-    "journal_pages": [],
-    "tasks": [
-      {
-        "name": "Monika Birthday",
-        "completed": false,
-        "Priority": 5,
-        "Due_Date": "2026-06-12",
-        "Notes": null,
-        "activity_id": "13840205-d0dd-47c8-b7b7-50066ff3b295",
-        "session_id": null,
-        "last_synced": "2026-06-05T22:06:42.698470Z"
-      }
-    ],
-    "sleep_hours": null,
-    "workout": null,
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-06-08": {
-    "date": "2026-06-08",
-    "journal": "",
-    "journal_pages": [],
-    "tasks": [
-      {
-        "name": "Interview @12",
-        "completed": false,
-        "Priority": 3,
-        "Due_Date": "2026-06-08",
-        "Notes": null,
-        "activity_id": "93040e10-f0e9-44e1-8d1a-f34029516db1",
-        "session_id": null,
-        "last_synced": "2026-06-05T22:06:25.959811Z"
-      }
-    ],
-    "sleep_hours": null,
-    "workout": null,
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-07-01": {
-    "date": "2026-07-01",
-    "journal": "",
-    "journal_pages": [],
-    "tasks": [
-      {
-        "name": "LinkedIn Renewal",
-        "completed": false,
-        "Priority": 3,
-        "Due_Date": "2026-07-01",
-        "Notes": null,
-        "activity_id": "a3f351f0-4bfa-4d39-ab4d-8888ba6226bf",
-        "session_id": null,
-        "last_synced": "2026-06-05T20:25:57.627005Z"
-      }
-    ],
-    "sleep_hours": null,
-    "workout": null,
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-06-05": {
-    "date": "2026-06-05",
-    "journal": "",
-    "journal_pages": [],
-    "tasks": [
-      {
-        "name": "Shave",
-        "completed": true,
-        "Priority": 3,
-        "Due_Date": "2026-06-05",
-        "Notes": null,
-        "activity_id": "48ac240f-b7bd-4379-b1e0-f22d6e8411e1",
-        "session_id": null,
-        "last_synced": "2026-06-05T19:04:56.774682Z"
-      },
-      {
-        "name": "Fix Schedule on Phone App",
-        "completed": false,
-        "Priority": 3,
-        "Due_Date": "2026-06-05",
-        "Notes": null,
-        "activity_id": "9ceff099-210c-46b9-959f-d6e7d9d86bad",
-        "session_id": null,
-        "last_synced": "2026-06-05T16:26:08.248526Z"
-      },
-      {
-        "name": "Haircut Appointment",
-        "completed": false,
-        "Priority": 4,
-        "Due_Date": "2026-06-05",
-        "Notes": null,
-        "activity_id": "62a68e89-04a1-4bf7-ad9c-06f4d735db96",
-        "session_id": null,
-        "last_synced": "2026-06-05T16:25:56.421761Z"
-      },
-      {
-        "name": "Pack Clothes and Everything",
-        "completed": true,
-        "Priority": 3,
-        "Due_Date": "2026-06-05",
-        "Notes": null,
-        "activity_id": "c11bb917-0800-4cb6-ac20-f7e88b45d513",
-        "session_id": null,
-        "last_synced": "2026-06-05T16:25:48.311924Z"
-      },
-      {
-        "name": "Place Quota on YT",
-        "completed": false,
-        "Priority": 4,
-        "Due_Date": "2026-06-05",
-        "Notes": null,
-        "activity_id": "a84bf988-885d-4f2d-adb1-9364ad1d3f78",
-        "session_id": null,
-        "last_synced": "2026-06-05T16:25:36.223387Z"
-      },
-      {
-        "name": "Move Meat Back to Freezer",
-        "completed": true,
-        "Priority": 5,
-        "Due_Date": "2026-06-05",
-        "Notes": null,
-        "activity_id": "dd2ff481-86b2-463f-90f1-de58ad58af0c",
-        "session_id": null,
-        "last_synced": "2026-06-05T16:25:15.941477Z"
-      },
-      {
-        "name": "Journal Today",
-        "completed": false,
-        "Priority": 5,
-        "Due_Date": "2026-06-05",
-        "Notes": null,
-        "activity_id": "ef7eeafc-b9e4-4810-8064-73eb57a097a1",
-        "session_id": null,
-        "last_synced": "2026-06-05T16:24:57.165261Z"
-      },
-      {
-        "name": "Journal for Yesterday",
-        "completed": false,
-        "Priority": 5,
-        "Due_Date": "2026-06-05",
-        "Notes": null,
-        "activity_id": "65759469-5577-43ca-be53-0a7aade30369",
-        "session_id": null,
-        "last_synced": "2026-06-05T16:24:51.206683Z"
-      },
-      {
-        "name": "Work on the PCB",
-        "completed": false,
-        "Priority": 2,
-        "Due_Date": "2026-06-05",
-        "Notes": null,
-        "activity_id": "883740a5-46b7-495e-8fbf-defab5e71652",
-        "session_id": null,
-        "last_synced": "2026-06-05T16:23:54.367611Z"
-      },
-      {
-        "name": "Apply to more Jobs",
-        "completed": false,
-        "Priority": 5,
-        "Due_Date": "2026-06-05",
-        "Notes": null,
-        "activity_id": "ad677475-d75f-42e4-a279-0cb0fd580910",
-        "session_id": null,
-        "last_synced": "2026-06-05T16:23:42.515177Z"
-      },
-      {
-        "name": "Organize Phone HomeScreen",
-        "completed": true,
-        "Priority": 4,
-        "Due_Date": "2026-06-05",
-        "Notes": null,
-        "activity_id": "06a15266-cf75-4f99-8681-78621b7b53cf",
-        "session_id": null,
-        "last_synced": "2026-06-05T16:23:36.405090Z"
-      },
-      {
-        "name": "Finish Updating LinkedIn",
-        "completed": true,
-        "Priority": 4,
-        "Due_Date": "2026-06-05",
-        "Notes": null,
-        "activity_id": "f5319328-3dc9-4d67-a63c-c165fbf10d41",
-        "session_id": null,
-        "last_synced": "2026-06-05T16:22:13.697030Z"
-      },
-      {
-        "name": "Send a message to Chris",
-        "completed": true,
-        "Priority": 5,
-        "Due_Date": "2026-06-05",
-        "Notes": null,
-        "activity_id": "a76676a8-a611-497d-a50e-ee73b2e29599",
-        "session_id": null,
-        "last_synced": "2026-06-05T16:22:03.972573Z"
-      },
-      {
-        "name": "Workout",
-        "completed": true,
-        "Priority": 4,
-        "Due_Date": "2026-06-05",
-        "Notes": null,
-        "activity_id": "decfa599-3033-4f47-aa02-bfa50d017f37",
-        "session_id": null,
-        "last_synced": "2026-06-05T16:21:52.804561Z"
-      }
-    ],
-    "sleep_hours": null,
-    "workout": {
-      "date": "2026-06-05",
-      "muscle_groups": [],
-      "exercises": [
-        {
-          "name": "Barbell Overhead Press",
-          "sets": [
-            {
-              "reps": 8,
-              "weight": 96.0,
-              "comment": ""
-            },
-            {
-              "reps": 6,
-              "weight": 135.0,
-              "comment": ""
-            },
-            {
-              "reps": 4,
-              "weight": 155.0,
-              "comment": ""
-            },
-            {
-              "reps": 4,
-              "weight": 150.0,
-              "comment": ""
-            }
-          ],
-          "muscle_groups": []
-        },
-        {
-          "name": "Bb Shrugs",
-          "sets": [
-            {
-              "reps": 12,
-              "weight": 135.0,
-              "comment": ""
-            },
-            {
-              "reps": 12,
-              "weight": 185.0,
-              "comment": ""
-            },
-            {
-              "reps": 12,
-              "weight": 225.0,
-              "comment": ""
-            }
-          ],
-          "muscle_groups": []
-        }
-      ],
-      "duration_minutes": 0,
-      "notes": "Total time: 05:55",
-      "workout_time": "19:02",
-      "session_id": "c8298cfd-29ae-45c4-8737-b8c75c478f9b"
-    },
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-06-04": {
-    "date": "2026-06-04",
-    "journal": "",
-    "journal_pages": [],
-    "tasks": [
-      {
-        "name": "Apply for Jobs",
-        "completed": false,
-        "Priority": 4,
-        "Due_Date": "2026-06-04",
-        "Notes": null,
-        "activity_id": "86d990d4-1d66-4725-845c-4826b4eda498",
-        "session_id": null,
-        "last_synced": "2026-06-04T05:26:39.509357Z"
-      },
-      {
-        "name": "Lift (Possibly with Caleb)",
-        "completed": true,
-        "Priority": 4,
-        "Due_Date": "2026-06-04",
-        "Notes": null,
-        "activity_id": "85e4f012-5249-4078-b627-fa9a0539f74e",
-        "session_id": null,
-        "last_synced": "2026-06-04T05:26:08.596266Z"
-      },
-      {
-        "name": "Update Linkdein Profile",
-        "completed": true,
-        "Priority": 4,
-        "Due_Date": "2026-06-04",
-        "Notes": null,
-        "activity_id": "7063673b-0cc9-4c16-a3ef-2cf44ed3f74a",
-        "session_id": null,
-        "last_synced": "2026-06-04T05:25:53.625102Z"
-      },
-      {
-        "name": "Call Mary from No Name Painters",
-        "completed": true,
-        "Priority": 3,
-        "Due_Date": "2026-06-04",
-        "Notes": null,
-        "activity_id": "f08db0d0-ac70-478a-8338-6f2a0c175986",
-        "session_id": null,
-        "last_synced": "2026-06-04T05:25:43.512033Z"
-      },
-      {
-        "name": "Get Some Milk",
-        "completed": true,
-        "Priority": 2,
-        "Due_Date": "2026-06-04",
-        "Notes": null,
-        "activity_id": "899ec9d3-871f-4753-9f39-414095a525d8",
-        "session_id": null,
-        "last_synced": "2026-06-04T05:25:26.903543Z"
-      },
-      {
-        "name": "Send Prof Schuebrt an Email",
-        "completed": true,
-        "Priority": 4,
-        "Due_Date": "2026-06-04",
-        "Notes": null,
-        "activity_id": "eef0a3dd-000a-40f8-b8b1-38692e90499c",
-        "session_id": null,
-        "last_synced": "2026-06-04T05:24:38.567864Z"
-      },
-      {
-        "name": "Test Movement of all Motors",
-        "completed": true,
-        "Priority": 5,
-        "Due_Date": "2026-06-04",
-        "Notes": null,
-        "activity_id": "418e9ee6-2fd5-4f17-9765-d8829829518f",
-        "session_id": null,
-        "last_synced": "2026-06-04T05:24:29.150638Z"
-      }
-    ],
-    "sleep_hours": null,
-    "workout": null,
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-06-06": {
-    "date": "2026-06-06",
-    "journal": "",
-    "journal_pages": [],
-    "tasks": [],
-    "sleep_hours": null,
-    "workout": {
-      "date": "2026-06-06",
-      "muscle_groups": [],
-      "exercises": [],
-      "duration_minutes": 0,
-      "notes": "Total time: 15:21",
-      "workout_time": "13:54",
-      "session_id": "49a00539-e164-442b-8318-5c9c1bde6071"
-    },
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-06-03": {
-    "date": "2026-06-03",
-    "journal": "",
-    "journal_pages": [],
-    "tasks": [],
-    "sleep_hours": null,
-    "workout": {
-      "date": "2026-06-03",
-      "muscle_groups": [],
-      "exercises": [
-        {
-          "name": "Pull-Up",
-          "sets": [],
-          "muscle_groups": []
-        },
-        {
-          "name": "Smith Machine Row",
-          "sets": [],
-          "muscle_groups": []
-        },
-        {
-          "name": "Warmup",
-          "sets": [],
-          "muscle_groups": []
-        },
-        {
-          "name": "Cardio",
-          "sets": [],
-          "muscle_groups": []
-        }
-      ],
-      "duration_minutes": 0,
-      "notes": "Total time: 00:00",
-      "workout_time": "14:46",
-      "session_id": "1a628bfb-7ec1-426c-8311-e3a415cb8ff1"
-    },
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-05-30": {
-    "date": "2026-05-30",
-    "journal": "",
-    "journal_pages": [],
-    "tasks": [],
-    "sleep_hours": null,
-    "workout": {
-      "date": "2026-05-30",
-      "muscle_groups": [],
-      "exercises": [
-        {
-          "name": "Warmup",
-          "sets": [],
-          "muscle_groups": []
-        }
-      ],
-      "duration_minutes": 0,
-      "notes": "Total time: 00:00",
-      "workout_time": "19:20",
-      "session_id": "11a22359-16e6-4707-ac8d-74de25002f0c"
-    },
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-05-28": {
-    "date": "2026-05-28",
-    "journal": "",
-    "journal_pages": [],
-    "tasks": [],
-    "sleep_hours": null,
-    "workout": {
-      "date": "2026-05-28",
-      "muscle_groups": [],
-      "exercises": [
-        {
-          "name": "Machine Seated Leg Curl",
-          "sets": [],
-          "muscle_groups": []
-        },
-        {
-          "name": "Warmup",
-          "sets": [],
-          "muscle_groups": []
-        },
-        {
-          "name": "Legs Curl",
-          "sets": [],
-          "muscle_groups": []
-        },
-        {
-          "name": "Machine Seated Leg Curl",
-          "sets": [],
-          "muscle_groups": []
-        },
-        {
-          "name": "Cardio",
-          "sets": [],
-          "muscle_groups": []
-        }
-      ],
-      "duration_minutes": 0,
-      "notes": "Total time: 00:00",
-      "workout_time": "13:50",
-      "session_id": "76a4d98e-e2b3-446a-9089-cc2447c67b49"
-    },
-    "rest_day": false,
-    "missed_day": false
-  },
   "2026-02-21": {
     "date": "2026-02-21",
     "journal": "",
     "journal_pages": [],
-    "tasks": [],
+    "tasks": [
+      {
+        "name": "Finish AeroStructures Quiz",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-02-21",
+        "Notes": null,
+        "activity_id": "f3dbe61e-8ddc-4c00-9df4-e119cc7775d4",
+        "session_id": null,
+        "last_synced": "2026-02-21T06:59:40.236981Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Take Dee on a Walk or something",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-02-21",
+        "Notes": null,
+        "activity_id": "cfc121cf-d3ff-4b01-809d-7cb6d75b9708",
+        "session_id": null,
+        "last_synced": "2026-02-21T06:59:23.426700Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Talk with Dee",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-02-21",
+        "Notes": null,
+        "activity_id": "4f61278b-a0a7-4b65-b987-d5465a9ec8f5",
+        "session_id": null,
+        "last_synced": "2026-02-21T06:26:11.597103Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Talk to Mother about refund",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-02-21",
+        "Notes": null,
+        "activity_id": "194c2095-0344-404c-a84a-17410bb75a42",
+        "session_id": null,
+        "last_synced": "2026-02-21T06:25:45.920504Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Solder the Freezer at moms house",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-02-21",
+        "Notes": null,
+        "activity_id": "13b98664-dae6-4f39-ae37-8712fdb19cab",
+        "session_id": null,
+        "last_synced": "2026-02-21T06:05:32.394084Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Take Mac on a Walk",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-02-21",
+        "Notes": null,
+        "activity_id": "eb9eb4ff-520b-4c29-8670-12fcfe6611b8",
+        "session_id": null,
+        "last_synced": "2026-02-21T06:05:20.167820Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Email Dr. Wig the lens we need",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-02-21",
+        "Notes": "Do research and make sure we get the correct lens",
+        "activity_id": "9b8a417d-42ff-4894-bdb1-370f43e28b7a",
+        "session_id": null,
+        "last_synced": "2026-02-21T06:05:00.098550Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Send Dr Wig Email about meeting him Tuesday Morning",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-02-21",
+        "Notes": null,
+        "activity_id": "b0ce515a-09d3-4347-be98-29e1617132f6",
+        "session_id": null,
+        "last_synced": "2026-02-21T06:04:28.615977Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Go see Katie and hit the sauna",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-02-21",
+        "Notes": null,
+        "activity_id": "ec7c9ca9-66a5-437d-817a-9fba69edaaf3",
+        "session_id": null,
+        "last_synced": "2026-02-21T06:04:04.645686Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Talk with Juan and hit legs with him",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-02-21",
+        "Notes": null,
+        "activity_id": "b4046b57-55b3-41cd-9c23-9e38c59ddb09",
+        "session_id": null,
+        "last_synced": "2026-02-21T06:03:26.079848Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
     "sleep_hours": null,
     "workout": {
       "date": "2026-02-21",
@@ -553,30 +136,66 @@
             {
               "reps": 10,
               "weight": 270.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-21T20:31:34.425494+00:00"
             },
             {
               "reps": 10,
               "weight": 360.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-21T20:31:50.439039+00:00"
             },
             {
               "reps": 11,
               "weight": 450.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-21T20:36:21.882516+00:00"
             },
             {
               "reps": 2,
               "weight": 540.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 5
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-21T20:41:59.747547+00:00"
             },
             {
               "reps": 4,
               "weight": 540.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 4
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-21T20:42:00.527186+00:00"
             }
           ],
-          "muscle_groups": []
+          "muscle_groups": [],
+          "metadata": {}
         },
         {
           "name": "Bulgarian Split Squats",
@@ -584,36 +203,72 @@
             {
               "reps": 8,
               "weight": 40.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-21T21:23:33.448358+00:00"
             },
             {
               "reps": 8,
               "weight": 45.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-21T21:23:39.498547+00:00"
             },
             {
               "reps": 45,
               "weight": 8.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-21T21:23:46.181770+00:00"
             },
             {
               "reps": 8,
               "weight": 45.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 4
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-21T21:24:00.811703+00:00"
             }
           ],
-          "muscle_groups": []
+          "muscle_groups": [],
+          "metadata": {}
         },
         {
           "name": "Cardio",
           "sets": [],
-          "muscle_groups": []
+          "muscle_groups": [],
+          "metadata": {}
         }
       ],
       "duration_minutes": 0,
       "notes": "Total time: 00:00",
       "workout_time": "20:13",
-      "session_id": "93a22db2-93cb-4465-b43d-0b8f077cbd46"
+      "session_id": "93a22db2-93cb-4465-b43d-0b8f077cbd46",
+      "revision": 1,
+      "name": "Leg day with Juan Planet",
+      "edit_reason": "This workout contains a non-exercise activity.",
+      "metadata": {},
+      "source": "",
+      "start_time": "2026-02-21T20:13:56.275000+00:00"
     },
     "rest_day": false,
     "missed_day": false
@@ -634,20 +289,42 @@
             {
               "reps": 15,
               "weight": 0.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-20T20:25:52.903000+00:00"
             },
             {
               "reps": 16,
               "weight": 0.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-20T20:29:25.464804+00:00"
             },
             {
               "reps": 15,
               "weight": 0.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-20T20:33:35.976996+00:00"
             }
           ],
-          "muscle_groups": []
+          "muscle_groups": [],
+          "metadata": {}
         },
         {
           "name": "Tricep Pushdowns",
@@ -655,35 +332,78 @@
             {
               "reps": 12,
               "weight": 70.0,
-              "comment": ""
+              "comment": "forgot timer",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-20T20:10:02.998545+00:00"
             },
             {
               "reps": 8,
               "weight": 80.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-20T20:10:08.878178+00:00"
             },
             {
               "reps": 8,
               "weight": 80.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-20T20:13:30.797182+00:00"
             },
             {
               "reps": 10,
               "weight": 55.0,
-              "comment": ""
+              "comment": "Rope",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 4
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-20T20:16:26.961089+00:00"
             },
             {
               "reps": 10,
               "weight": 55.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 5
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-20T20:20:19.420107+00:00"
             },
             {
               "reps": 9,
               "weight": 55.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 6
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-20T20:23:41.556520+00:00"
             }
           ],
-          "muscle_groups": []
+          "muscle_groups": [],
+          "metadata": {}
         },
         {
           "name": "DB Incline Press",
@@ -691,46 +411,102 @@
             {
               "reps": 10,
               "weight": 40.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-20T19:43:39.699113+00:00"
             },
             {
               "reps": 10,
               "weight": 55.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-20T19:45:04.712924+00:00"
             },
             {
               "reps": 10,
               "weight": 55.0,
-              "comment": ""
+              "comment": "forgot to set",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-20T19:49:38.385275+00:00"
             },
             {
               "reps": 10,
               "weight": 65.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 4
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-20T19:49:43.854917+00:00"
             },
             {
               "reps": 9,
               "weight": 75.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 5
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-20T19:52:36.171703+00:00"
             },
             {
               "reps": 8,
               "weight": 75.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 6
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-20T19:57:01.494630+00:00"
             },
             {
               "reps": 6,
               "weight": 75.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 7
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-20T20:03:39.791458+00:00"
             }
           ],
-          "muscle_groups": []
+          "muscle_groups": [],
+          "metadata": {}
         }
       ],
       "duration_minutes": 0,
       "notes": "Total time: 00:00",
       "workout_time": "18:17",
-      "session_id": "32e53006-cc38-4444-857d-b53a292ad6e7"
+      "session_id": "32e53006-cc38-4444-857d-b53a292ad6e7",
+      "revision": 1,
+      "name": "Chest and Tris",
+      "edit_reason": "This workout contains a non-exercise activity.",
+      "metadata": {},
+      "source": "",
+      "start_time": "2026-02-20T18:17:27.880000+00:00"
     },
     "rest_day": false,
     "missed_day": false
@@ -739,7 +515,104 @@
     "date": "2026-02-17",
     "journal": "",
     "journal_pages": [],
-    "tasks": [],
+    "tasks": [
+      {
+        "name": "Get basic code infastructure up for Katie tomorrow",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-02-17",
+        "Notes": null,
+        "activity_id": "969f6853-8d1d-40b8-a799-108ea243575a",
+        "session_id": null,
+        "last_synced": "2026-02-17T05:48:38.274977Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Call Mother tomorrow",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-02-17",
+        "Notes": null,
+        "activity_id": "b9203613-788b-482b-b0d4-ae4398512245",
+        "session_id": null,
+        "last_synced": "2026-02-17T05:48:22.362994Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Go to Aldi with Ethan if he is back in time",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-02-17",
+        "Notes": null,
+        "activity_id": "c92ecf42-8dda-40d4-b528-3bf5d2c67e97",
+        "session_id": null,
+        "last_synced": "2026-02-17T05:48:08.943003Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Work on the app tomorrow if time permits",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-02-17",
+        "Notes": null,
+        "activity_id": "910a8f3f-0b25-435f-b39f-7b32cee24d9f",
+        "session_id": null,
+        "last_synced": "2026-02-17T05:47:45.146188Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Talk with Noah from CNH around 5pm",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-02-17",
+        "Notes": null,
+        "activity_id": "1c27fa66-d851-4ff9-bdfc-04d7c14db8fe",
+        "session_id": null,
+        "last_synced": "2026-02-17T05:47:14.967650Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Do Research on the Camera for the Goose Project",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-02-17",
+        "Notes": null,
+        "activity_id": "0f69a00d-6c48-4dd3-bb98-26c63e49f9ff",
+        "session_id": null,
+        "last_synced": "2026-02-17T05:47:03.470706Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Talk to Ember and start on the Lab",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-02-17",
+        "Notes": null,
+        "activity_id": "1b19f12a-1bdd-4715-849f-4e1ed77df811",
+        "session_id": null,
+        "last_synced": "2026-02-17T05:46:52.270628Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Hit Sholders",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-02-17",
+        "Notes": null,
+        "activity_id": "c641d044-baa6-4e0f-8ec7-f32dcabe8f20",
+        "session_id": null,
+        "last_synced": "2026-02-17T05:46:34.443255Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
     "sleep_hours": null,
     "workout": {
       "date": "2026-02-17",
@@ -751,20 +624,42 @@
             {
               "reps": 10,
               "weight": 60.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-17T14:48:19.099115+00:00"
             },
             {
               "reps": 10,
               "weight": 60.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-17T14:50:32.343356+00:00"
             },
             {
               "reps": 10,
               "weight": 60.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-17T14:55:57.444805+00:00"
             }
           ],
-          "muscle_groups": []
+          "muscle_groups": [],
+          "metadata": {}
         },
         {
           "name": "DB Shoulder Press",
@@ -772,30 +667,66 @@
             {
               "reps": 10,
               "weight": 35.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-17T14:14:58.658901+00:00"
             },
             {
               "reps": 10,
               "weight": 35.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-17T14:16:36.655697+00:00"
             },
             {
               "reps": 10,
               "weight": 45.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-17T14:19:45.119395+00:00"
             },
             {
               "reps": 10,
               "weight": 55.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 4
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-17T14:21:28.609490+00:00"
             },
             {
               "reps": 8,
               "weight": 65.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 5
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-17T14:26:13.257598+00:00"
             }
           ],
-          "muscle_groups": []
+          "muscle_groups": [],
+          "metadata": {}
         },
         {
           "name": "Reverse Pec Dec",
@@ -803,25 +734,54 @@
             {
               "reps": 10,
               "weight": 100.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-17T14:56:17.425669+00:00"
             },
             {
               "reps": 12,
               "weight": 100.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-17T14:58:05.997064+00:00"
             },
             {
               "reps": 8,
               "weight": 120.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-17T15:12:04.667741+00:00"
             },
             {
               "reps": 4,
               "weight": 100.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 4
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-17T15:12:13.901482+00:00"
             }
           ],
-          "muscle_groups": []
+          "muscle_groups": [],
+          "metadata": {}
         },
         {
           "name": "Lat Raises Cable",
@@ -829,26 +789,54 @@
             {
               "reps": 12,
               "weight": 10.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-17T14:46:35.464647+00:00"
             },
             {
               "reps": 8,
               "weight": 12.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-17T14:46:44.327148+00:00"
             },
             {
               "reps": 8,
               "weight": 12.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-17T14:46:49.074243+00:00"
             }
           ],
-          "muscle_groups": []
+          "muscle_groups": [],
+          "metadata": {}
         }
       ],
       "duration_minutes": 0,
       "notes": "Total time: 00:00",
       "workout_time": "14:14",
-      "session_id": "ba686ebc-9dc6-4ad6-9cfa-764665c19e44"
+      "session_id": "ba686ebc-9dc6-4ad6-9cfa-764665c19e44",
+      "revision": 1,
+      "name": "Sholders",
+      "edit_reason": "This workout contains a non-exercise activity.",
+      "metadata": {},
+      "source": "",
+      "start_time": "2026-02-17T14:14:34.294000+00:00"
     },
     "rest_day": false,
     "missed_day": false
@@ -869,20 +857,42 @@
             {
               "reps": 8,
               "weight": 85.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-16T20:50:50.030548+00:00"
             },
             {
               "reps": 8,
               "weight": 85.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-16T20:54:10.544858+00:00"
             },
             {
               "reps": 8,
               "weight": 85.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-16T20:59:38.717220+00:00"
             }
           ],
-          "muscle_groups": []
+          "muscle_groups": [],
+          "metadata": {}
         },
         {
           "name": "Lat Pulldowns",
@@ -890,20 +900,42 @@
             {
               "reps": 8,
               "weight": 140.0,
-              "comment": ""
+              "comment": "Forgot to mark",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-16T20:42:19.950600+00:00"
             },
             {
               "reps": 8,
               "weight": 170.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-16T20:42:27.249849+00:00"
             },
             {
               "reps": 5,
               "weight": 170.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-16T20:46:09.472433+00:00"
             }
           ],
-          "muscle_groups": []
+          "muscle_groups": [],
+          "metadata": {}
         },
         {
           "name": "Bicep Curls",
@@ -911,20 +943,42 @@
             {
               "reps": 8,
               "weight": 40.0,
-              "comment": ""
+              "comment": "Forgot to mark down",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-16T20:31:48.895996+00:00"
             },
             {
               "reps": 8,
               "weight": 45.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-16T20:31:59.617156+00:00"
             },
             {
               "reps": 8,
               "weight": 45.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-16T20:35:54.139443+00:00"
             }
           ],
-          "muscle_groups": []
+          "muscle_groups": [],
+          "metadata": {}
         },
         {
           "name": "BB Bent over rows",
@@ -932,20 +986,42 @@
             {
               "reps": 10,
               "weight": 143.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-16T20:15:31.031923+00:00"
             },
             {
               "reps": 6,
               "weight": 187.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-16T20:19:31.566854+00:00"
             },
             {
               "reps": 6,
               "weight": 187.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-16T20:23:33.294672+00:00"
             }
           ],
-          "muscle_groups": []
+          "muscle_groups": [],
+          "metadata": {}
         },
         {
           "name": "Pull-ups",
@@ -953,31 +1029,66 @@
             {
               "reps": 10,
               "weight": 0.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-16T19:58:18.149225+00:00"
             },
             {
               "reps": 3,
               "weight": 15.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-16T20:00:56.509342+00:00"
             },
             {
               "reps": 3,
               "weight": 25.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-16T20:05:28.794335+00:00"
             },
             {
               "reps": 3,
               "weight": 30.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 4
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-16T20:09:52.200067+00:00"
             }
           ],
-          "muscle_groups": []
+          "muscle_groups": [],
+          "metadata": {}
         }
       ],
       "duration_minutes": 0,
       "notes": "Total time: 00:00",
       "workout_time": "19:57",
-      "session_id": "2d955324-d1c8-4099-9357-a45dd7587166"
+      "session_id": "2d955324-d1c8-4099-9357-a45dd7587166",
+      "revision": 1,
+      "name": "Back and Bis",
+      "edit_reason": "This workout contains a non-exercise activity.",
+      "metadata": {},
+      "source": "",
+      "start_time": "2026-02-16T19:57:54.977000+00:00"
     },
     "rest_day": false,
     "missed_day": false
@@ -998,30 +1109,66 @@
             {
               "reps": 8,
               "weight": 90.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-14T15:51:23.780337+00:00"
             },
             {
               "reps": 8,
               "weight": 140.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-14T15:53:22.184866+00:00"
             },
             {
               "reps": 8,
               "weight": 180.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-14T15:57:32.672009+00:00"
             },
             {
               "reps": 6,
               "weight": 230.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 4
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-14T16:03:42.738838+00:00"
             },
             {
               "reps": 4,
               "weight": 250.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 5
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-14T16:10:20.576114+00:00"
             }
           ],
-          "muscle_groups": []
+          "muscle_groups": [],
+          "metadata": {}
         },
         {
           "name": "Abductors",
@@ -1029,26 +1176,54 @@
             {
               "reps": 10,
               "weight": 150.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-14T16:14:42.212664+00:00"
             },
             {
               "reps": 10,
               "weight": 180.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-14T16:16:58.010230+00:00"
             },
             {
               "reps": 6,
               "weight": 207.0,
-              "comment": ""
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-02-14T16:19:57.223887+00:00"
             }
           ],
-          "muscle_groups": []
+          "muscle_groups": [],
+          "metadata": {}
         }
       ],
       "duration_minutes": 0,
       "notes": "Total time: 00:00",
       "workout_time": "15:50",
-      "session_id": "1149c2a3-b927-4c2b-828a-59c8a9c607df"
+      "session_id": "1149c2a3-b927-4c2b-828a-59c8a9c607df",
+      "revision": 1,
+      "name": "Legs",
+      "edit_reason": "This workout contains a non-exercise activity.",
+      "metadata": {},
+      "source": "",
+      "start_time": "2026-02-14T15:50:58.197000+00:00"
     },
     "rest_day": false,
     "missed_day": false
@@ -1057,16 +1232,138 @@
     "date": "2026-02-09",
     "journal": "",
     "journal_pages": [],
-    "tasks": [],
+    "tasks": [
+      {
+        "name": "Pack Food for Tuesday",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-02-09",
+        "Notes": null,
+        "activity_id": "15f70d4a-505c-43e3-b6e1-429192084839",
+        "session_id": null,
+        "last_synced": "2026-02-09T05:45:42.732860Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Start Systems Hw",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-02-09",
+        "Notes": null,
+        "activity_id": "8c070274-a9b4-48d4-9178-6b04b8e7520a",
+        "session_id": null,
+        "last_synced": "2026-02-09T05:45:29.341535Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Send a message to Katie letting her know you will be on campus tomorrow",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-02-09",
+        "Notes": null,
+        "activity_id": "c6159edc-11a9-4acc-8506-dc3bc7164fb1",
+        "session_id": null,
+        "last_synced": "2026-02-09T05:44:57.045083Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Hit Sholders Today",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-02-09",
+        "Notes": null,
+        "activity_id": "d0d58018-1148-42f6-acf5-36abc5dd0f46",
+        "session_id": null,
+        "last_synced": "2026-02-09T05:44:24.668536Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Grab the items we need for the goose project and place them in the excel sheet",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-02-09",
+        "Notes": null,
+        "activity_id": "1cb2b1fd-8214-42d3-8eb0-92073a2d48d9",
+        "session_id": null,
+        "last_synced": "2026-02-09T05:43:36.123263Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Text Michael and Figure out when we are working=",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-02-09",
+        "Notes": null,
+        "activity_id": "fa548ddc-2252-4f9e-91c0-48753f8b194e",
+        "session_id": null,
+        "last_synced": "2026-02-09T05:43:10.013186Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Finish the Sketch for Batu",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-02-09",
+        "Notes": null,
+        "activity_id": "ba58e559-522b-4796-a5d0-f57e2ae486c7",
+        "session_id": null,
+        "last_synced": "2026-02-09T05:42:45.036401Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Finish AeroMaterials HW",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-02-09",
+        "Notes": "Due my Midnight",
+        "activity_id": "0a0ccbbd-b63a-495b-84c3-b85d896ba716",
+        "session_id": null,
+        "last_synced": "2026-02-09T05:42:07.579319Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Call Walgreens and Figure out Training",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-02-09",
+        "Notes": null,
+        "activity_id": "7f7e5ac9-2d89-462c-bada-46b64d655891",
+        "session_id": null,
+        "last_synced": "2026-02-09T05:41:30.554334Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
     "sleep_hours": null,
     "workout": {
       "date": "2026-02-09",
       "muscle_groups": [],
-      "exercises": [],
+      "exercises": [
+        {
+          "name": "Warmup",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        }
+      ],
       "duration_minutes": 0,
       "notes": "Total time: 00:00",
-      "workout_time": "00:33",
-      "session_id": "79a4bbe9-ce55-4af8-9217-6381a6203227"
+      "workout_time": "00:57",
+      "session_id": "b28ddd50-00c2-4086-ab44-1d5846f64c25",
+      "revision": 1,
+      "name": "Back Day",
+      "edit_reason": "This workout contains a non-exercise activity.",
+      "metadata": {},
+      "source": "",
+      "start_time": "2026-02-09T00:57:50.644000+00:00"
     },
     "rest_day": false,
     "missed_day": false
@@ -1082,31 +1379,88 @@
       "muscle_groups": [],
       "exercises": [
         {
-          "name": "Smith bench Press",
-          "sets": [
-            {
-              "reps": 12,
-              "weight": 23.0,
-              "comment": ""
-            },
-            {
-              "reps": 3,
-              "weight": 3.0,
-              "comment": ""
-            }
-          ],
-          "muscle_groups": []
+          "name": "Pull Ups",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
         },
         {
-          "name": "Dumbbell Incline Press",
+          "name": "Cardio",
           "sets": [],
-          "muscle_groups": []
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Cardio",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Cardio",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Warmup",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Cardio",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Cardio",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Cardio",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Pull Ups",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Cardio",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Warmup",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Pull Ups",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
         }
       ],
       "duration_minutes": 0,
       "notes": "Total time: 00:00",
-      "workout_time": "02:40",
-      "session_id": "78a58d51-6106-475a-bcb0-a1477dfff956"
+      "workout_time": "21:57",
+      "session_id": "31fb62f4-e34f-44b5-9f08-307ff6d4f8d4",
+      "revision": 1,
+      "name": "Back and Bis",
+      "edit_reason": "This workout contains a non-exercise activity.",
+      "metadata": {},
+      "source": "",
+      "start_time": "2026-02-06T21:57:43.474000+00:00"
     },
     "rest_day": false,
     "missed_day": false
@@ -1124,191 +1478,29 @@
       "duration_minutes": 0,
       "notes": "Please work",
       "workout_time": "19:35",
-      "session_id": "feca321a-04ce-4c10-83eb-034a4caf4d6f"
+      "session_id": "feca321a-04ce-4c10-83eb-034a4caf4d6f",
+      "revision": 1,
+      "name": "Leg Day",
+      "edit_reason": "",
+      "metadata": {},
+      "source": "",
+      "start_time": "2026-02-05T19:35:59.114000+00:00"
     },
     "rest_day": false,
     "missed_day": false
   },
-  "2026-06-17": {
-    "date": "2026-06-17",
-    "journal": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Is this thing right????</p></body></html>",
-    "journal_pages": [
-      {
-        "name": "Main",
-        "content": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Is this thing right????</p></body></html>",
-        "created_at": "2026-06-17T19:54:39.745125Z",
-        "tag": "main",
-        "page_id": "cbb953ec-ca0d-4e38-941f-dad9cd70843b",
-        "page_type": "main",
-        "journal_entry_id": "cf62d07e-b63d-4beb-85a6-533f7810d867"
-      },
-      {
-        "name": "Workout",
-        "content": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">test???</p></body></html>",
-        "created_at": "2026-06-17T20:31:23.043397Z",
-        "tag": "workout",
-        "page_id": "1ec2fa61-b422-453d-be89-241b57a852bc",
-        "page_type": "workout",
-        "journal_entry_id": "cf62d07e-b63d-4beb-85a6-533f7810d867"
-      },
-      {
-        "name": "School",
-        "content": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">reeeeee</p></body></html>",
-        "created_at": "2026-06-17T21:45:27.064859Z",
-        "tag": "school",
-        "page_id": "dc240235-61f9-45d2-b6eb-8d6b34603948",
-        "page_type": "school",
-        "journal_entry_id": "cf62d07e-b63d-4beb-85a6-533f7810d867"
-      },
-      {
-        "name": "Goose Project",
-        "content": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt;\">I hope this works.....<br /><br /></span><span style=\" font-size:9pt; font-style:italic;\">RAHHHHHHHHH</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt;\">I hope this works.....<br /><br /></span><span style=\" font-size:9pt; font-weight:700;\">RAHHHHHHHHH<br /><br />Why not work?</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt; font-weight:700;\"><br /></span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt; font-weight:700;\">Why no send???\u00a0</span></p></body></html>",
-        "created_at": "2026-06-17T21:37:32.568769Z",
-        "tag": "goose",
-        "page_id": "8c6347b0-3f4b-48ea-b036-700fe0e1efc0",
-        "page_type": "goose",
-        "journal_entry_id": "cf62d07e-b63d-4beb-85a6-533f7810d867"
-      },
-      {
-        "name": "Job",
-        "content": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt;\">Nothing</span></p></body></html>",
-        "created_at": "2026-06-17T23:11:41.781015Z",
-        "tag": "job",
-        "page_id": "a2b6bbeb-b4b0-47c9-b3ba-aaa6cc6bfd2d",
-        "page_type": "job",
-        "journal_entry_id": "cf62d07e-b63d-4beb-85a6-533f7810d867"
-      }
-    ],
-    "tasks": [
-      {
-        "name": "Cook food for tomorrow",
-        "completed": false,
-        "Priority": 4,
-        "Due_Date": "2026-06-17",
-        "Notes": null,
-        "activity_id": "c80a255c-6180-4f89-93ba-33a178ef8868",
-        "session_id": null,
-        "last_synced": "2026-06-18T01:00:49.242395Z"
-      },
-      {
-        "name": "Clean House since Katie is coming over",
-        "completed": true,
-        "Priority": 3,
-        "Due_Date": "2026-06-17",
-        "Notes": null,
-        "activity_id": "825cb416-0802-425e-b90b-eb7080d31649",
-        "session_id": null,
-        "last_synced": "2026-06-17T23:53:57.679109Z"
-      },
-      {
-        "name": "Pack clothes for tomrrow",
-        "completed": true,
-        "Priority": 4,
-        "Due_Date": "2026-06-17",
-        "Notes": null,
-        "activity_id": "6479dc1f-ebb3-4d85-aa64-7eaf454959eb",
-        "session_id": null,
-        "last_synced": "2026-06-17T23:53:48.466969Z"
-      },
-      {
-        "name": "Send a message to Chris about tomorrow",
-        "completed": true,
-        "Priority": 5,
-        "Due_Date": "2026-06-17",
-        "Notes": null,
-        "activity_id": "a899bd90-5231-4e6c-9b76-f950492e58fb",
-        "session_id": null,
-        "last_synced": "2026-06-17T23:18:48.800592Z"
-      }
-    ],
-    "sleep_hours": null,
-    "workout": null,
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-06-18": {
-    "date": "2026-06-18",
+  "2026-08-17": {
+    "date": "2026-08-17",
     "journal": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
     "journal_pages": [
       {
         "name": "Main",
         "content": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
-        "created_at": "2026-06-17T23:18:00.801524Z",
+        "created_at": "2026-08-14T22:53:55.488825Z",
         "tag": "main",
-        "page_id": "e3fdbd26-a3ba-4df2-a69c-51f51e2ee539",
+        "page_id": "96908f4a-e678-4097-8057-2f5167d8b9ae",
         "page_type": "main",
-        "journal_entry_id": "1a51a5d4-f658-4d54-98a9-e3039e43a3f0"
-      }
-    ],
-    "tasks": [
-      {
-        "name": "Pick up Katie",
-        "completed": true,
-        "Priority": 5,
-        "Due_Date": "2026-06-18",
-        "Notes": null,
-        "activity_id": "e9c2c540-5013-4326-9c89-e7e3c8e5fd78",
-        "session_id": null,
-        "last_synced": "2026-06-17T23:21:14.941705Z"
-      },
-      {
-        "name": "Confirm with Michael about GP",
-        "completed": true,
-        "Priority": 4,
-        "Due_Date": "2026-06-18",
-        "Notes": null,
-        "activity_id": "fced9497-b387-48ed-82a4-f87070f5a31f",
-        "session_id": null,
-        "last_synced": "2026-06-17T23:21:07.422367Z"
-      },
-      {
-        "name": "Head to the Suburbs After meeting with Sasindu",
-        "completed": true,
-        "Priority": 3,
-        "Due_Date": "2026-06-18",
-        "Notes": null,
-        "activity_id": "2d04e4bb-d152-47ff-8188-1c3dcb87c7cb",
-        "session_id": null,
-        "last_synced": "2026-06-17T23:20:57.344785Z"
-      },
-      {
-        "name": "Meet with Sasindu @930",
-        "completed": true,
-        "Priority": 5,
-        "Due_Date": "2026-06-18",
-        "Notes": null,
-        "activity_id": "2e96dcf2-cac4-4e69-9b6e-1c0f2e581022",
-        "session_id": null,
-        "last_synced": "2026-06-17T23:18:29.730629Z"
-      },
-      {
-        "name": "Workout with Caleb in the Morning @630",
-        "completed": true,
-        "Priority": 5,
-        "Due_Date": "2026-06-18",
-        "Notes": null,
-        "activity_id": "fade50c3-2177-4b10-9898-0970911ffc6b",
-        "session_id": null,
-        "last_synced": "2026-06-17T23:18:11.446378Z"
-      }
-    ],
-    "sleep_hours": null,
-    "workout": null,
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-06-16": {
-    "date": "2026-06-16",
-    "journal": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
-    "journal_pages": [
-      {
-        "name": "Main",
-        "content": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
-        "created_at": "2026-06-17T21:38:52.985065Z",
-        "tag": "main",
-        "page_id": "818623a4-f360-4a89-a768-c9e08a861a01",
-        "page_type": "main",
-        "journal_entry_id": "336a6bbe-9497-4192-b041-cca7edbb3327"
+        "journal_entry_id": "65507606-dcb5-4af7-ade1-58be497a515e"
       }
     ],
     "tasks": [],
@@ -1317,658 +1509,22 @@
     "rest_day": false,
     "missed_day": false
   },
-  "2026-07-16": {
-    "date": "2026-07-16",
+  "2029-08-17": {
+    "date": "2029-08-17",
     "journal": "",
     "journal_pages": [],
     "tasks": [
       {
-        "name": "Read Bible",
+        "name": "IAEP Student Research Grant",
         "completed": false,
         "Priority": 5,
-        "Due_Date": "2026-07-16",
+        "Due_Date": "2029-08-17",
         "Notes": null,
-        "activity_id": "93cb3096-6344-4475-b8a1-94a14d448908",
+        "activity_id": "f42a104d-13fd-4dee-a8e8-0fa203d7f68d",
         "session_id": null,
-        "last_synced": "2026-07-15T05:00:34.036257Z"
-      },
-      {
-        "name": "Pick up Katie after work",
-        "completed": false,
-        "Priority": 4,
-        "Due_Date": "2026-07-16",
-        "Notes": null,
-        "activity_id": "a4e4b02c-22ff-48c4-b1c8-7ad61d4b35d0",
-        "session_id": null,
-        "last_synced": "2026-07-15T05:00:02.888884Z"
-      },
-      {
-        "name": "Email Dr Vural",
-        "completed": false,
-        "Priority": 5,
-        "Due_Date": "2026-07-16",
-        "Notes": null,
-        "activity_id": "19a5e51b-b430-4411-8f74-523b76278431",
-        "session_id": null,
-        "last_synced": "2026-07-15T04:59:43.656402Z"
-      },
-      {
-        "name": "Email Sasindu",
-        "completed": false,
-        "Priority": 5,
-        "Due_Date": "2026-07-16",
-        "Notes": null,
-        "activity_id": "0219f192-b9b0-4be6-b20a-39355aa8d94f",
-        "session_id": null,
-        "last_synced": "2026-07-15T04:59:32.068636Z"
-      },
-      {
-        "name": "Call Vinny Job",
-        "completed": false,
-        "Priority": 5,
-        "Due_Date": "2026-07-16",
-        "Notes": null,
-        "activity_id": "74edd0dc-da2a-411b-b495-5b378b6eb1f4",
-        "session_id": null,
-        "last_synced": "2026-07-15T04:59:21.460852Z"
-      },
-      {
-        "name": "Morning Workout",
-        "completed": false,
-        "Priority": 5,
-        "Due_Date": "2026-07-16",
-        "Notes": null,
-        "activity_id": "52eb539e-6258-4b17-90ec-9497c5876883",
-        "session_id": null,
-        "last_synced": "2026-07-15T04:59:12.012977Z"
-      }
-    ],
-    "sleep_hours": null,
-    "workout": null,
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-06-26": {
-    "date": "2026-06-26",
-    "journal": "",
-    "journal_pages": [],
-    "tasks": [
-      {
-        "name": "Text Mary",
-        "completed": false,
-        "Priority": 3,
-        "Due_Date": "2026-06-26",
-        "Notes": null,
-        "activity_id": "d60f50ee-170e-4cbe-8d45-5007b8764c81",
-        "session_id": null,
-        "last_synced": "2026-06-25T02:56:36.905993Z"
-      },
-      {
-        "name": "Clean GP CAD Files",
-        "completed": false,
-        "Priority": 3,
-        "Due_Date": "2026-06-26",
-        "Notes": null,
-        "activity_id": "2f9eb7fc-278d-4a23-b053-dbe13f4e5926",
-        "session_id": null,
-        "last_synced": "2026-06-25T02:56:29.962698Z"
-      },
-      {
-        "name": "Give Katie Clothes",
-        "completed": false,
-        "Priority": 4,
-        "Due_Date": "2026-06-26",
-        "Notes": null,
-        "activity_id": "2e269575-a956-4263-9e00-e02b7da71a3c",
-        "session_id": null,
-        "last_synced": "2026-06-25T02:55:55.010589Z"
-      },
-      {
-        "name": "Piezo Research",
-        "completed": false,
-        "Priority": 3,
-        "Due_Date": "2026-06-26",
-        "Notes": null,
-        "activity_id": "e790573a-8805-442f-8af2-837ecb3d8123",
-        "session_id": null,
-        "last_synced": "2026-06-25T02:55:44.361668Z"
-      },
-      {
-        "name": "Call Mother about this week",
-        "completed": false,
-        "Priority": 4,
-        "Due_Date": "2026-06-26",
-        "Notes": null,
-        "activity_id": "1ea9503b-9814-4df9-bd94-3b73c7363526",
-        "session_id": null,
-        "last_synced": "2026-06-25T02:55:31.362409Z"
-      },
-      {
-        "name": "Finalize Mitch Plans",
-        "completed": false,
-        "Priority": 5,
-        "Due_Date": "2026-06-26",
-        "Notes": null,
-        "activity_id": "f40d1297-91f0-4f5f-9faf-443997ae717a",
-        "session_id": null,
-        "last_synced": "2026-06-25T02:55:17.515537Z"
-      },
-      {
-        "name": "CAD Models",
-        "completed": false,
-        "Priority": 4,
-        "Due_Date": "2026-06-26",
-        "Notes": null,
-        "activity_id": "da738f5c-ff8c-44a2-959c-a8b7a31a0b22",
-        "session_id": null,
-        "last_synced": "2026-06-25T02:54:55.145531Z"
-      },
-      {
-        "name": "Go see Michael and get Items",
-        "completed": false,
-        "Priority": 5,
-        "Due_Date": "2026-06-26",
-        "Notes": null,
-        "activity_id": "45aed546-6676-43af-8116-9f0ba7305db1",
-        "session_id": null,
-        "last_synced": "2026-06-25T02:54:40.250642Z"
-      },
-      {
-        "name": "Email Wig",
-        "completed": false,
-        "Priority": 5,
-        "Due_Date": "2026-06-26",
-        "Notes": null,
-        "activity_id": "7b2f556a-42e7-480b-94b9-ba9cbcf4d00b",
-        "session_id": null,
-        "last_synced": "2026-06-25T02:54:19.972456Z"
-      },
-      {
-        "name": "Morning Lift with Caleb",
-        "completed": false,
-        "Priority": 5,
-        "Due_Date": "2026-06-26",
-        "Notes": null,
-        "activity_id": "5136170b-4766-47c8-a6f7-9dda81acf749",
-        "session_id": null,
-        "last_synced": "2026-06-25T02:54:02.454089Z"
-      }
-    ],
-    "sleep_hours": null,
-    "workout": null,
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-06-25": {
-    "date": "2026-06-25",
-    "journal": "",
-    "journal_pages": [],
-    "tasks": [
-      {
-        "name": "Bible 20-26",
-        "completed": false,
-        "Priority": 5,
-        "Due_Date": "2026-06-25",
-        "Notes": null,
-        "activity_id": "1a817107-6557-4427-aae8-79acc8cc2b74",
-        "session_id": null,
-        "last_synced": "2026-06-24T04:02:26.103997Z"
-      },
-      {
-        "name": "Goodwill",
-        "completed": false,
-        "Priority": 5,
-        "Due_Date": "2026-06-25",
-        "Notes": null,
-        "activity_id": "6e5309ab-d900-42d7-b219-d23873f5c73b",
-        "session_id": null,
-        "last_synced": "2026-06-24T04:02:01.348601Z"
-      },
-      {
-        "name": "Text Caleb about crib",
-        "completed": false,
-        "Priority": 5,
-        "Due_Date": "2026-06-25",
-        "Notes": null,
-        "activity_id": "c6173c9d-91da-482f-bcc2-e9ffcd42441f",
-        "session_id": null,
-        "last_synced": "2026-06-24T04:01:51.554902Z"
-      },
-      {
-        "name": "Clean Fridge",
-        "completed": true,
-        "Priority": 3,
-        "Due_Date": "2026-06-25",
-        "Notes": null,
-        "activity_id": "f71bdc06-f03d-46bc-b6b0-4bd3f5d64e12",
-        "session_id": null,
-        "last_synced": "2026-06-24T04:01:40.323557Z"
-      },
-      {
-        "name": "Dishes",
-        "completed": true,
-        "Priority": 3,
-        "Due_Date": "2026-06-25",
-        "Notes": null,
-        "activity_id": "21d27f9c-d9cd-4e66-93da-cd60cba0899e",
-        "session_id": null,
-        "last_synced": "2026-06-24T04:01:22.790910Z"
-      },
-      {
-        "name": "Morning Workout",
-        "completed": true,
-        "Priority": 5,
-        "Due_Date": "2026-06-25",
-        "Notes": null,
-        "activity_id": "aefcf1e2-fe34-44da-8ccc-a803d25f3181",
-        "session_id": null,
-        "last_synced": "2026-06-24T04:01:14.596600Z"
-      },
-      {
-        "name": "Get Lunch from Katie",
-        "completed": true,
-        "Priority": 4,
-        "Due_Date": "2026-06-25",
-        "Notes": null,
-        "activity_id": "e2d1c938-8c95-4023-8148-f1752f7a42a0",
-        "session_id": null,
-        "last_synced": "2026-06-24T04:01:04.543550Z"
-      },
-      {
-        "name": "Text Sasindu",
-        "completed": true,
-        "Priority": 5,
-        "Due_Date": "2026-06-25",
-        "Notes": null,
-        "activity_id": "0d6161a2-bb65-4499-a8b1-93f80cf73456",
-        "session_id": null,
-        "last_synced": "2026-06-24T04:00:50.452700Z"
-      },
-      {
-        "name": "Text Titi make plan",
-        "completed": true,
-        "Priority": 5,
-        "Due_Date": "2026-06-25",
-        "Notes": null,
-        "activity_id": "aed7b065-d398-4836-8a91-90c4ee8daf92",
-        "session_id": null,
-        "last_synced": "2026-06-24T04:00:40.225121Z"
-      },
-      {
-        "name": "Get Laptop",
-        "completed": true,
-        "Priority": 5,
-        "Due_Date": "2026-06-25",
-        "Notes": null,
-        "activity_id": "484ea9e0-7af7-4712-9c1d-2a9d41389cb0",
-        "session_id": null,
-        "last_synced": "2026-06-24T04:00:28.089850Z"
-      }
-    ],
-    "sleep_hours": null,
-    "workout": null,
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-06-24": {
-    "date": "2026-06-24",
-    "journal": "",
-    "journal_pages": [],
-    "tasks": [
-      {
-        "name": "Get Gas",
-        "completed": true,
-        "Priority": 3,
-        "Due_Date": "2026-06-24",
-        "Notes": null,
-        "activity_id": "e9844804-6fea-4d66-8fe8-71322cbf24e5",
-        "session_id": null,
-        "last_synced": "2026-06-23T04:07:55.569261Z"
-      },
-      {
-        "name": "Clean Table",
-        "completed": false,
-        "Priority": 3,
-        "Due_Date": "2026-06-24",
-        "Notes": null,
-        "activity_id": "09163d04-89df-40ff-9e3c-bc99070f6084",
-        "session_id": null,
-        "last_synced": "2026-06-23T04:07:51.768569Z"
-      },
-      {
-        "name": "Pack Lunch",
-        "completed": true,
-        "Priority": 4,
-        "Due_Date": "2026-06-24",
-        "Notes": null,
-        "activity_id": "30b41065-18e4-4e21-807a-facc76d1ab97",
-        "session_id": null,
-        "last_synced": "2026-06-23T04:07:43.296819Z"
-      },
-      {
-        "name": "Put Dishes Away",
-        "completed": true,
-        "Priority": 3,
-        "Due_Date": "2026-06-24",
-        "Notes": null,
-        "activity_id": "5b6b8d90-b383-47be-8394-76cbd739341b",
-        "session_id": null,
-        "last_synced": "2026-06-23T04:07:35.037468Z"
-      },
-      {
-        "name": "Homedepot Door Part",
-        "completed": true,
-        "Priority": 4,
-        "Due_Date": "2026-06-24",
-        "Notes": null,
-        "activity_id": "1b8714fb-8f63-4a03-b8bd-8fdd508fc129",
-        "session_id": null,
-        "last_synced": "2026-06-23T04:07:07.837924Z"
-      },
-      {
-        "name": "Clean Dishes",
-        "completed": true,
-        "Priority": 3,
-        "Due_Date": "2026-06-24",
-        "Notes": null,
-        "activity_id": "5291fbc6-c3b3-46c1-aa2f-561215accd8b",
-        "session_id": null,
-        "last_synced": "2026-06-23T04:06:53.572281Z"
-      },
-      {
-        "name": "Defrost Meat",
-        "completed": true,
-        "Priority": 3,
-        "Due_Date": "2026-06-24",
-        "Notes": null,
-        "activity_id": "d421a991-40b6-43a9-8ec5-d3c14c677032",
-        "session_id": null,
-        "last_synced": "2026-06-23T04:06:42.452531Z"
-      },
-      {
-        "name": "ToothBrush",
-        "completed": true,
-        "Priority": 5,
-        "Due_Date": "2026-06-24",
-        "Notes": null,
-        "activity_id": "1fc92ff7-ae75-41fc-95dc-5051c8e9ddf8",
-        "session_id": null,
-        "last_synced": "2026-06-23T04:06:27.324710Z"
-      },
-      {
-        "name": "Make Plan for Laptop",
-        "completed": false,
-        "Priority": 4,
-        "Due_Date": "2026-06-24",
-        "Notes": null,
-        "activity_id": "13102c76-ee13-4077-8502-5fdd3155a597",
-        "session_id": null,
-        "last_synced": "2026-06-23T04:06:15.640215Z"
-      },
-      {
-        "name": "Give Katie Meat",
-        "completed": true,
-        "Priority": 5,
-        "Due_Date": "2026-06-24",
-        "Notes": null,
-        "activity_id": "ac69f50c-d7db-4f6f-90da-331805ff3dd6",
-        "session_id": null,
-        "last_synced": "2026-06-23T04:05:45.878102Z"
-      },
-      {
-        "name": "Workout in Morning",
-        "completed": true,
-        "Priority": 5,
-        "Due_Date": "2026-06-24",
-        "Notes": null,
-        "activity_id": "17edab57-a84d-4faf-858c-e47ac7502ac1",
-        "session_id": null,
-        "last_synced": "2026-06-23T04:05:33.224102Z"
-      },
-      {
-        "name": "Email Sandinu my Hawk Number",
-        "completed": true,
-        "Priority": 5,
-        "Due_Date": "2026-06-24",
-        "Notes": null,
-        "activity_id": "5936bc77-cd5c-4584-a23b-07caad5800b2",
-        "session_id": null,
-        "last_synced": "2026-06-23T04:05:23.076802Z"
-      }
-    ],
-    "sleep_hours": null,
-    "workout": {
-      "date": "2026-06-24",
-      "muscle_groups": [],
-      "exercises": [
-        {
-          "name": "Neutral-Grip Pull-Up",
-          "sets": [
-            {
-              "reps": 6,
-              "weight": 25.0,
-              "comment": ""
-            },
-            {
-              "reps": 4,
-              "weight": 35.0,
-              "comment": ""
-            },
-            {
-              "reps": 4,
-              "weight": 35.0,
-              "comment": ""
-            },
-            {
-              "reps": 3,
-              "weight": 35.0,
-              "comment": ""
-            }
-          ],
-          "muscle_groups": []
-        },
-        {
-          "name": "Warmup",
-          "sets": [],
-          "muscle_groups": []
-        },
-        {
-          "name": "Barbell Row",
-          "sets": [
-            {
-              "reps": 8,
-              "weight": 135.0,
-              "comment": ""
-            },
-            {
-              "reps": 8,
-              "weight": 145.0,
-              "comment": ""
-            }
-          ],
-          "muscle_groups": []
-        }
-      ],
-      "duration_minutes": 0,
-      "notes": "Total time: 49:07",
-      "workout_time": "01:19",
-      "session_id": "f230c5d5-bfa0-4a82-9cd5-a1e6ef95bad1"
-    },
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-07-09": {
-    "date": "2026-07-09",
-    "journal": "",
-    "journal_pages": [],
-    "tasks": [],
-    "sleep_hours": null,
-    "workout": {
-      "date": "2026-07-09",
-      "muscle_groups": [],
-      "exercises": [],
-      "duration_minutes": 0,
-      "notes": "Total time: 00:00",
-      "workout_time": "18:59",
-      "session_id": "b9e924b4-fd44-4e1a-aae9-cd4b29ec8401"
-    },
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-06-29": {
-    "date": "2026-06-29",
-    "journal": "",
-    "journal_pages": [],
-    "tasks": [],
-    "sleep_hours": null,
-    "workout": {
-      "date": "2026-06-29",
-      "muscle_groups": [],
-      "exercises": [
-        {
-          "name": "Dumbbell Arnold Press",
-          "sets": [
-            {
-              "reps": 10,
-              "weight": 30.0,
-              "comment": ""
-            },
-            {
-              "reps": 10,
-              "weight": 30.0,
-              "comment": ""
-            },
-            {
-              "reps": 10,
-              "weight": 40.0,
-              "comment": ""
-            },
-            {
-              "reps": 10,
-              "weight": 40.0,
-              "comment": ""
-            },
-            {
-              "reps": 0,
-              "weight": 0.0,
-              "comment": ""
-            },
-            {
-              "reps": 0,
-              "weight": 0.0,
-              "comment": ""
-            }
-          ],
-          "muscle_groups": []
-        },
-        {
-          "name": "Warmup",
-          "sets": [],
-          "muscle_groups": []
-        }
-      ],
-      "duration_minutes": 0,
-      "notes": "Total time: 00:48",
-      "workout_time": "11:53",
-      "session_id": "4092c104-aaeb-4f97-ab95-6f9352e5cd65"
-    },
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-08-08": {
-    "date": "2026-08-08",
-    "journal": "",
-    "journal_pages": [
-      {
-        "name": "Main",
-        "content": "",
-        "created_at": "2026-08-08T08:10:10.786233Z",
-        "tag": "main",
-        "page_id": "f5b20f78-4faa-471c-9060-1b4b7b4243f3",
-        "page_type": "main",
-        "journal_entry_id": "3f9ce5d7-50e4-4161-9cc3-1c059362f852"
-      }
-    ],
-    "tasks": [],
-    "sleep_hours": null,
-    "workout": null,
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-08-07": {
-    "date": "2026-08-07",
-    "journal": "",
-    "journal_pages": [
-      {
-        "name": "Main",
-        "content": "",
-        "created_at": "2026-08-08T08:10:19.303810Z",
-        "tag": "main",
-        "page_id": "c7253c01-0814-48fe-9bbc-3b3d8da1ecac",
-        "page_type": "main",
-        "journal_entry_id": "a1fe812c-54fb-4dc2-a27b-e1d19cd233a2"
-      }
-    ],
-    "tasks": [],
-    "sleep_hours": null,
-    "workout": null,
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-08-05": {
-    "date": "2026-08-05",
-    "journal": "",
-    "journal_pages": [
-      {
-        "name": "Main",
-        "content": "",
-        "created_at": "2026-08-08T08:10:20.717088Z",
-        "tag": "main",
-        "page_id": "fbe7a556-277f-4337-8726-9fd8820b40f2",
-        "page_type": "main",
-        "journal_entry_id": "c9e51ec9-0016-473d-a8fb-7db8561cf27c"
-      }
-    ],
-    "tasks": [],
-    "sleep_hours": null,
-    "workout": null,
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2026-08-14": {
-    "date": "2026-08-14",
-    "journal": "",
-    "journal_pages": [
-      {
-        "name": "Main",
-        "content": "",
-        "created_at": "2026-08-14T22:36:02.996774Z",
-        "tag": "main",
-        "page_id": "141d3e5a-e454-4b92-a0f6-0f6df61d66ad",
-        "page_type": "main",
-        "journal_entry_id": "02924105-1419-4c79-8583-f633220fda40"
-      }
-    ],
-    "tasks": [],
-    "sleep_hours": null,
-    "workout": null,
-    "rest_day": false,
-    "missed_day": false
-  },
-  "2027-08-19": {
-    "date": "2027-08-19",
-    "journal": "",
-    "journal_pages": [],
-    "tasks": [
-      {
-        "name": "IAEP Student Scholarship",
-        "completed": false,
-        "Priority": 5,
-        "Due_Date": "2027-08-19",
-        "Notes": null,
-        "activity_id": "9c59f959-875c-4558-8474-280499cbe3dc",
-        "session_id": null,
-        "last_synced": "2026-08-14T22:36:42.471718Z"
+        "last_synced": "2026-08-14T22:41:08.749305Z",
+        "revision": 1,
+        "client_request_id": null
       }
     ],
     "sleep_hours": null,
@@ -1989,7 +1545,2879 @@
         "Notes": null,
         "activity_id": "6784b62b-7d2b-4792-9fcf-5637c0216c98",
         "session_id": null,
-        "last_synced": "2026-08-14T22:38:16.439593Z"
+        "last_synced": "2026-08-14T22:38:16.439593Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2027-08-19": {
+    "date": "2027-08-19",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "IAEP Student Scholarship",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2027-08-19",
+        "Notes": null,
+        "activity_id": "9c59f959-875c-4558-8474-280499cbe3dc",
+        "session_id": null,
+        "last_synced": "2026-08-14T22:36:42.471718Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-07-16": {
+    "date": "2026-07-16",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Read Bible",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-07-16",
+        "Notes": null,
+        "activity_id": "93cb3096-6344-4475-b8a1-94a14d448908",
+        "session_id": null,
+        "last_synced": "2026-07-15T05:00:34.036257Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Pick up Katie after work",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-07-16",
+        "Notes": null,
+        "activity_id": "a4e4b02c-22ff-48c4-b1c8-7ad61d4b35d0",
+        "session_id": null,
+        "last_synced": "2026-07-15T05:00:02.888884Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Email Dr Vural",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-07-16",
+        "Notes": null,
+        "activity_id": "19a5e51b-b430-4411-8f74-523b76278431",
+        "session_id": null,
+        "last_synced": "2026-07-15T04:59:43.656402Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Email Sasindu",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-07-16",
+        "Notes": null,
+        "activity_id": "0219f192-b9b0-4be6-b20a-39355aa8d94f",
+        "session_id": null,
+        "last_synced": "2026-07-15T04:59:32.068636Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Call Vinny Job",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-07-16",
+        "Notes": null,
+        "activity_id": "74edd0dc-da2a-411b-b495-5b378b6eb1f4",
+        "session_id": null,
+        "last_synced": "2026-07-15T04:59:21.460852Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Morning Workout",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-07-16",
+        "Notes": null,
+        "activity_id": "52eb539e-6258-4b17-90ec-9497c5876883",
+        "session_id": null,
+        "last_synced": "2026-07-15T04:59:12.012977Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-06-26": {
+    "date": "2026-06-26",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Text Mary",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-06-26",
+        "Notes": null,
+        "activity_id": "d60f50ee-170e-4cbe-8d45-5007b8764c81",
+        "session_id": null,
+        "last_synced": "2026-06-25T02:56:36.905993Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Clean GP CAD Files",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-06-26",
+        "Notes": null,
+        "activity_id": "2f9eb7fc-278d-4a23-b053-dbe13f4e5926",
+        "session_id": null,
+        "last_synced": "2026-06-25T02:56:29.962698Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Give Katie Clothes",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-06-26",
+        "Notes": null,
+        "activity_id": "2e269575-a956-4263-9e00-e02b7da71a3c",
+        "session_id": null,
+        "last_synced": "2026-06-25T02:55:55.010589Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Piezo Research",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-06-26",
+        "Notes": null,
+        "activity_id": "e790573a-8805-442f-8af2-837ecb3d8123",
+        "session_id": null,
+        "last_synced": "2026-06-25T02:55:44.361668Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Call Mother about this week",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-06-26",
+        "Notes": null,
+        "activity_id": "1ea9503b-9814-4df9-bd94-3b73c7363526",
+        "session_id": null,
+        "last_synced": "2026-06-25T02:55:31.362409Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Finalize Mitch Plans",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-06-26",
+        "Notes": null,
+        "activity_id": "f40d1297-91f0-4f5f-9faf-443997ae717a",
+        "session_id": null,
+        "last_synced": "2026-06-25T02:55:17.515537Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "CAD Models",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-06-26",
+        "Notes": null,
+        "activity_id": "da738f5c-ff8c-44a2-959c-a8b7a31a0b22",
+        "session_id": null,
+        "last_synced": "2026-06-25T02:54:55.145531Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Go see Michael and get Items",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-06-26",
+        "Notes": null,
+        "activity_id": "45aed546-6676-43af-8116-9f0ba7305db1",
+        "session_id": null,
+        "last_synced": "2026-06-25T02:54:40.250642Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Email Wig",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-06-26",
+        "Notes": null,
+        "activity_id": "7b2f556a-42e7-480b-94b9-ba9cbcf4d00b",
+        "session_id": null,
+        "last_synced": "2026-06-25T02:54:19.972456Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Morning Lift with Caleb",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-06-26",
+        "Notes": null,
+        "activity_id": "5136170b-4766-47c8-a6f7-9dda81acf749",
+        "session_id": null,
+        "last_synced": "2026-06-25T02:54:02.454089Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-06-25": {
+    "date": "2026-06-25",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Bible 20-26",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-06-25",
+        "Notes": null,
+        "activity_id": "1a817107-6557-4427-aae8-79acc8cc2b74",
+        "session_id": null,
+        "last_synced": "2026-06-24T04:02:26.103997Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Goodwill",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-06-25",
+        "Notes": null,
+        "activity_id": "6e5309ab-d900-42d7-b219-d23873f5c73b",
+        "session_id": null,
+        "last_synced": "2026-06-24T04:02:01.348601Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Text Caleb about crib",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-06-25",
+        "Notes": null,
+        "activity_id": "c6173c9d-91da-482f-bcc2-e9ffcd42441f",
+        "session_id": null,
+        "last_synced": "2026-06-24T04:01:51.554902Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Clean Fridge",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-25",
+        "Notes": null,
+        "activity_id": "f71bdc06-f03d-46bc-b6b0-4bd3f5d64e12",
+        "session_id": null,
+        "last_synced": "2026-06-24T04:01:40.323557Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Dishes",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-25",
+        "Notes": null,
+        "activity_id": "21d27f9c-d9cd-4e66-93da-cd60cba0899e",
+        "session_id": null,
+        "last_synced": "2026-06-24T04:01:22.790910Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Morning Workout",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-25",
+        "Notes": null,
+        "activity_id": "aefcf1e2-fe34-44da-8ccc-a803d25f3181",
+        "session_id": null,
+        "last_synced": "2026-06-24T04:01:14.596600Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Get Lunch from Katie",
+        "completed": true,
+        "Priority": 4,
+        "Due_Date": "2026-06-25",
+        "Notes": null,
+        "activity_id": "e2d1c938-8c95-4023-8148-f1752f7a42a0",
+        "session_id": null,
+        "last_synced": "2026-06-24T04:01:04.543550Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Text Sasindu",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-25",
+        "Notes": null,
+        "activity_id": "0d6161a2-bb65-4499-a8b1-93f80cf73456",
+        "session_id": null,
+        "last_synced": "2026-06-24T04:00:50.452700Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Text Titi make plan",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-25",
+        "Notes": null,
+        "activity_id": "aed7b065-d398-4836-8a91-90c4ee8daf92",
+        "session_id": null,
+        "last_synced": "2026-06-24T04:00:40.225121Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Get Laptop",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-25",
+        "Notes": null,
+        "activity_id": "484ea9e0-7af7-4712-9c1d-2a9d41389cb0",
+        "session_id": null,
+        "last_synced": "2026-06-24T04:00:28.089850Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-06-24": {
+    "date": "2026-06-24",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Get Gas",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-24",
+        "Notes": null,
+        "activity_id": "e9844804-6fea-4d66-8fe8-71322cbf24e5",
+        "session_id": null,
+        "last_synced": "2026-06-23T04:07:55.569261Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Clean Table",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-06-24",
+        "Notes": null,
+        "activity_id": "09163d04-89df-40ff-9e3c-bc99070f6084",
+        "session_id": null,
+        "last_synced": "2026-06-23T04:07:51.768569Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Pack Lunch",
+        "completed": true,
+        "Priority": 4,
+        "Due_Date": "2026-06-24",
+        "Notes": null,
+        "activity_id": "30b41065-18e4-4e21-807a-facc76d1ab97",
+        "session_id": null,
+        "last_synced": "2026-06-23T04:07:43.296819Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Put Dishes Away",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-24",
+        "Notes": null,
+        "activity_id": "5b6b8d90-b383-47be-8394-76cbd739341b",
+        "session_id": null,
+        "last_synced": "2026-06-23T04:07:35.037468Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Homedepot Door Part",
+        "completed": true,
+        "Priority": 4,
+        "Due_Date": "2026-06-24",
+        "Notes": null,
+        "activity_id": "1b8714fb-8f63-4a03-b8bd-8fdd508fc129",
+        "session_id": null,
+        "last_synced": "2026-06-23T04:07:07.837924Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Clean Dishes",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-24",
+        "Notes": null,
+        "activity_id": "5291fbc6-c3b3-46c1-aa2f-561215accd8b",
+        "session_id": null,
+        "last_synced": "2026-06-23T04:06:53.572281Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Defrost Meat",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-24",
+        "Notes": null,
+        "activity_id": "d421a991-40b6-43a9-8ec5-d3c14c677032",
+        "session_id": null,
+        "last_synced": "2026-06-23T04:06:42.452531Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "ToothBrush",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-24",
+        "Notes": null,
+        "activity_id": "1fc92ff7-ae75-41fc-95dc-5051c8e9ddf8",
+        "session_id": null,
+        "last_synced": "2026-06-23T04:06:27.324710Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Make Plan for Laptop",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-06-24",
+        "Notes": null,
+        "activity_id": "13102c76-ee13-4077-8502-5fdd3155a597",
+        "session_id": null,
+        "last_synced": "2026-06-23T04:06:15.640215Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Give Katie Meat",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-24",
+        "Notes": null,
+        "activity_id": "ac69f50c-d7db-4f6f-90da-331805ff3dd6",
+        "session_id": null,
+        "last_synced": "2026-06-23T04:05:45.878102Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Workout in Morning",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-24",
+        "Notes": null,
+        "activity_id": "17edab57-a84d-4faf-858c-e47ac7502ac1",
+        "session_id": null,
+        "last_synced": "2026-06-23T04:05:33.224102Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Email Sandinu my Hawk Number",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-24",
+        "Notes": null,
+        "activity_id": "5936bc77-cd5c-4584-a23b-07caad5800b2",
+        "session_id": null,
+        "last_synced": "2026-06-23T04:05:23.076802Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": {
+      "date": "2026-06-24",
+      "muscle_groups": [],
+      "exercises": [
+        {
+          "name": "Neutral-Grip Pull-Up",
+          "sets": [
+            {
+              "reps": 6,
+              "weight": 25.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-24T02:08:53.877167+00:00"
+            },
+            {
+              "reps": 4,
+              "weight": 35.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-24T02:08:54.032715+00:00"
+            },
+            {
+              "reps": 4,
+              "weight": 35.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-24T02:08:54.170911+00:00"
+            },
+            {
+              "reps": 3,
+              "weight": 35.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 4
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-24T02:08:54.366383+00:00"
+            }
+          ],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Warmup",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Barbell Row",
+          "sets": [
+            {
+              "reps": 8,
+              "weight": 135.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-24T02:08:54.669444+00:00"
+            },
+            {
+              "reps": 8,
+              "weight": 145.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-24T02:08:54.804125+00:00"
+            }
+          ],
+          "muscle_groups": [],
+          "metadata": {}
+        }
+      ],
+      "duration_minutes": 0,
+      "notes": "Total time: 49:07",
+      "workout_time": "01:19",
+      "session_id": "f230c5d5-bfa0-4a82-9cd5-a1e6ef95bad1",
+      "revision": 1,
+      "name": "Gage",
+      "edit_reason": "This workout contains a non-exercise activity.",
+      "metadata": {},
+      "source": "phone",
+      "start_time": "2026-06-24T01:19:42.152000+00:00"
+    },
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-06-17": {
+    "date": "2026-06-17",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Cook food for tomorrow",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-06-17",
+        "Notes": null,
+        "activity_id": "c80a255c-6180-4f89-93ba-33a178ef8868",
+        "session_id": null,
+        "last_synced": "2026-06-18T01:00:49.242395Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Clean House since Katie is coming over",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-17",
+        "Notes": null,
+        "activity_id": "825cb416-0802-425e-b90b-eb7080d31649",
+        "session_id": null,
+        "last_synced": "2026-06-17T23:53:57.679109Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Pack clothes for tomrrow",
+        "completed": true,
+        "Priority": 4,
+        "Due_Date": "2026-06-17",
+        "Notes": null,
+        "activity_id": "6479dc1f-ebb3-4d85-aa64-7eaf454959eb",
+        "session_id": null,
+        "last_synced": "2026-06-17T23:53:48.466969Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Send a message to Chris about tomorrow",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-17",
+        "Notes": null,
+        "activity_id": "a899bd90-5231-4e6c-9b76-f950492e58fb",
+        "session_id": null,
+        "last_synced": "2026-06-17T23:18:48.800592Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-06-18": {
+    "date": "2026-06-18",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Pick up Katie",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-18",
+        "Notes": null,
+        "activity_id": "e9c2c540-5013-4326-9c89-e7e3c8e5fd78",
+        "session_id": null,
+        "last_synced": "2026-06-17T23:21:14.941705Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Confirm with Michael about GP",
+        "completed": true,
+        "Priority": 4,
+        "Due_Date": "2026-06-18",
+        "Notes": null,
+        "activity_id": "fced9497-b387-48ed-82a4-f87070f5a31f",
+        "session_id": null,
+        "last_synced": "2026-06-17T23:21:07.422367Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Head to the Suburbs After meeting with Sasindu",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-18",
+        "Notes": null,
+        "activity_id": "2d04e4bb-d152-47ff-8188-1c3dcb87c7cb",
+        "session_id": null,
+        "last_synced": "2026-06-17T23:20:57.344785Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Meet with Sasindu @930",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-18",
+        "Notes": null,
+        "activity_id": "2e96dcf2-cac4-4e69-9b6e-1c0f2e581022",
+        "session_id": null,
+        "last_synced": "2026-06-17T23:18:29.730629Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Workout with Caleb in the Morning @630",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-18",
+        "Notes": null,
+        "activity_id": "fade50c3-2177-4b10-9898-0970911ffc6b",
+        "session_id": null,
+        "last_synced": "2026-06-17T23:18:11.446378Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-07-09": {
+    "date": "2026-07-09",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [],
+    "sleep_hours": null,
+    "workout": {
+      "date": "2026-07-09",
+      "muscle_groups": [],
+      "exercises": [],
+      "duration_minutes": 0,
+      "notes": "Total time: 00:00",
+      "workout_time": "18:59",
+      "session_id": "b9e924b4-fd44-4e1a-aae9-cd4b29ec8401",
+      "revision": 1,
+      "name": "Phone Workout",
+      "edit_reason": "",
+      "metadata": {},
+      "source": "phone",
+      "start_time": "2026-07-09T18:59:10.940000+00:00"
+    },
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-06-29": {
+    "date": "2026-06-29",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [],
+    "sleep_hours": null,
+    "workout": {
+      "date": "2026-06-29",
+      "muscle_groups": [],
+      "exercises": [
+        {
+          "name": "Dumbbell Arnold Press",
+          "sets": [
+            {
+              "reps": 10,
+              "weight": 30.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-29T11:53:50.298173+00:00"
+            },
+            {
+              "reps": 10,
+              "weight": 30.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-29T11:53:50.398735+00:00"
+            },
+            {
+              "reps": 10,
+              "weight": 40.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-29T11:53:50.455048+00:00"
+            },
+            {
+              "reps": 10,
+              "weight": 40.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-29T11:53:50.517528+00:00"
+            },
+            {
+              "reps": 0,
+              "weight": 0.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-29T11:53:50.592514+00:00"
+            },
+            {
+              "reps": 0,
+              "weight": 0.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-29T11:53:50.678877+00:00"
+            }
+          ],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Warmup",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        }
+      ],
+      "duration_minutes": 0,
+      "notes": "Total time: 00:48",
+      "workout_time": "11:53",
+      "session_id": "4092c104-aaeb-4f97-ab95-6f9352e5cd65",
+      "revision": 1,
+      "name": "With Katie",
+      "edit_reason": "This workout contains a non-exercise activity.",
+      "metadata": {},
+      "source": "phone",
+      "start_time": "2026-06-29T11:53:00.482000+00:00"
+    },
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-06-09": {
+    "date": "2026-06-09",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Meet with Michael",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-06-09",
+        "Notes": null,
+        "activity_id": "6f007f80-31d8-4522-bd6f-602864c709bb",
+        "session_id": null,
+        "last_synced": "2026-06-05T22:06:56.306693Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": {
+      "date": "2026-06-09",
+      "muscle_groups": [],
+      "exercises": [
+        {
+          "name": "Barbell Bench Press",
+          "sets": [
+            {
+              "reps": 10,
+              "weight": 90.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-09T01:40:39.796514+00:00"
+            }
+          ],
+          "muscle_groups": [],
+          "metadata": {
+            "tags": "[Chest]"
+          }
+        }
+      ],
+      "duration_minutes": 0,
+      "notes": "Total time: 02:20",
+      "workout_time": "01:31",
+      "session_id": "b64825fb-6ae1-4013-95eb-6fcf8b9fecb4",
+      "revision": 1,
+      "name": "Chest Aurora",
+      "edit_reason": "This workout contains a non-exercise activity.",
+      "metadata": {},
+      "source": "phone",
+      "start_time": "2026-06-09T01:31:52.357000+00:00"
+    },
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-06-06": {
+    "date": "2026-06-06",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [],
+    "sleep_hours": null,
+    "workout": {
+      "date": "2026-06-06",
+      "muscle_groups": [],
+      "exercises": [],
+      "duration_minutes": 0,
+      "notes": "Total time: 15:21",
+      "workout_time": "13:54",
+      "session_id": "49a00539-e164-442b-8318-5c9c1bde6071",
+      "revision": 1,
+      "name": "Legs W/ Katie",
+      "edit_reason": "",
+      "metadata": {},
+      "source": "phone",
+      "start_time": "2026-06-06T13:54:25.818000+00:00"
+    },
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-06-05": {
+    "date": "2026-06-05",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Shave",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-05",
+        "Notes": null,
+        "activity_id": "48ac240f-b7bd-4379-b1e0-f22d6e8411e1",
+        "session_id": null,
+        "last_synced": "2026-06-05T19:04:56.774682Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Fix Schedule on Phone App",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-06-05",
+        "Notes": null,
+        "activity_id": "9ceff099-210c-46b9-959f-d6e7d9d86bad",
+        "session_id": null,
+        "last_synced": "2026-06-05T16:26:08.248526Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Haircut Appointment",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-06-05",
+        "Notes": null,
+        "activity_id": "62a68e89-04a1-4bf7-ad9c-06f4d735db96",
+        "session_id": null,
+        "last_synced": "2026-06-05T16:25:56.421761Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Pack Clothes and Everything",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-05",
+        "Notes": null,
+        "activity_id": "c11bb917-0800-4cb6-ac20-f7e88b45d513",
+        "session_id": null,
+        "last_synced": "2026-06-05T16:25:48.311924Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Place Quota on YT",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-06-05",
+        "Notes": null,
+        "activity_id": "a84bf988-885d-4f2d-adb1-9364ad1d3f78",
+        "session_id": null,
+        "last_synced": "2026-06-05T16:25:36.223387Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Move Meat Back to Freezer",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-05",
+        "Notes": null,
+        "activity_id": "dd2ff481-86b2-463f-90f1-de58ad58af0c",
+        "session_id": null,
+        "last_synced": "2026-06-05T16:25:15.941477Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Journal Today",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-06-05",
+        "Notes": null,
+        "activity_id": "ef7eeafc-b9e4-4810-8064-73eb57a097a1",
+        "session_id": null,
+        "last_synced": "2026-06-05T16:24:57.165261Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Journal for Yesterday",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-06-05",
+        "Notes": null,
+        "activity_id": "65759469-5577-43ca-be53-0a7aade30369",
+        "session_id": null,
+        "last_synced": "2026-06-05T16:24:51.206683Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Work on the PCB",
+        "completed": false,
+        "Priority": 2,
+        "Due_Date": "2026-06-05",
+        "Notes": null,
+        "activity_id": "883740a5-46b7-495e-8fbf-defab5e71652",
+        "session_id": null,
+        "last_synced": "2026-06-05T16:23:54.367611Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Apply to more Jobs",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-06-05",
+        "Notes": null,
+        "activity_id": "ad677475-d75f-42e4-a279-0cb0fd580910",
+        "session_id": null,
+        "last_synced": "2026-06-05T16:23:42.515177Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Organize Phone HomeScreen",
+        "completed": true,
+        "Priority": 4,
+        "Due_Date": "2026-06-05",
+        "Notes": null,
+        "activity_id": "06a15266-cf75-4f99-8681-78621b7b53cf",
+        "session_id": null,
+        "last_synced": "2026-06-05T16:23:36.405090Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Finish Updating LinkedIn",
+        "completed": true,
+        "Priority": 4,
+        "Due_Date": "2026-06-05",
+        "Notes": null,
+        "activity_id": "f5319328-3dc9-4d67-a63c-c165fbf10d41",
+        "session_id": null,
+        "last_synced": "2026-06-05T16:22:13.697030Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Send a message to Chris",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-05",
+        "Notes": null,
+        "activity_id": "a76676a8-a611-497d-a50e-ee73b2e29599",
+        "session_id": null,
+        "last_synced": "2026-06-05T16:22:03.972573Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Workout",
+        "completed": true,
+        "Priority": 4,
+        "Due_Date": "2026-06-05",
+        "Notes": null,
+        "activity_id": "decfa599-3033-4f47-aa02-bfa50d017f37",
+        "session_id": null,
+        "last_synced": "2026-06-05T16:21:52.804561Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": {
+      "date": "2026-06-05",
+      "muscle_groups": [],
+      "exercises": [
+        {
+          "name": "Barbell Overhead Press",
+          "sets": [
+            {
+              "reps": 8,
+              "weight": 96.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-05T19:04:41.671902+00:00"
+            },
+            {
+              "reps": 6,
+              "weight": 135.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-05T19:51:41.376325+00:00"
+            },
+            {
+              "reps": 4,
+              "weight": 155.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 4
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-05T19:51:41.508390+00:00"
+            },
+            {
+              "reps": 4,
+              "weight": 150.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 5
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-05T19:51:41.676810+00:00"
+            }
+          ],
+          "muscle_groups": [],
+          "metadata": {
+            "tags": "[Back, Sholders]"
+          }
+        },
+        {
+          "name": "Bb Shrugs",
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 135.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 1
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-05T19:51:41.943708+00:00"
+            },
+            {
+              "reps": 12,
+              "weight": 185.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 2
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-05T19:51:42.088511+00:00"
+            },
+            {
+              "reps": 12,
+              "weight": 225.0,
+              "comment": "",
+              "unit": "lbs",
+              "extra_data": {
+                "set": 3
+              },
+              "comment_key": "notes",
+              "weight_key": "weight",
+              "record_time": "2026-06-05T19:51:42.242510+00:00"
+            }
+          ],
+          "muscle_groups": [],
+          "metadata": {
+            "tags": "[Back, Sholders]"
+          }
+        }
+      ],
+      "duration_minutes": 0,
+      "notes": "Total time: 05:55",
+      "workout_time": "19:02",
+      "session_id": "c8298cfd-29ae-45c4-8737-b8c75c478f9b",
+      "revision": 1,
+      "name": "Sholders and Back",
+      "edit_reason": "This workout contains a non-exercise activity.",
+      "metadata": {},
+      "source": "phone",
+      "start_time": "2026-06-05T19:02:01.175000+00:00"
+    },
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-06-03": {
+    "date": "2026-06-03",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [],
+    "sleep_hours": null,
+    "workout": {
+      "date": "2026-06-03",
+      "muscle_groups": [],
+      "exercises": [
+        {
+          "name": "Pull-Up",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Smith Machine Row",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Warmup",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Cardio",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        }
+      ],
+      "duration_minutes": 0,
+      "notes": "Total time: 00:00",
+      "workout_time": "14:46",
+      "session_id": "1a628bfb-7ec1-426c-8311-e3a415cb8ff1",
+      "revision": 1,
+      "name": "Back Bis Katie",
+      "edit_reason": "This workout contains a non-exercise activity.",
+      "metadata": {},
+      "source": "",
+      "start_time": "2026-06-03T14:46:55.413000+00:00"
+    },
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-05-30": {
+    "date": "2026-05-30",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [],
+    "sleep_hours": null,
+    "workout": {
+      "date": "2026-05-30",
+      "muscle_groups": [],
+      "exercises": [
+        {
+          "name": "Warmup",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        }
+      ],
+      "duration_minutes": 0,
+      "notes": "Total time: 00:00",
+      "workout_time": "19:20",
+      "session_id": "11a22359-16e6-4707-ac8d-74de25002f0c",
+      "revision": 1,
+      "name": "Sprints/Pull ups",
+      "edit_reason": "This workout contains a non-exercise activity.",
+      "metadata": {},
+      "source": "",
+      "start_time": "2026-05-30T19:20:40.685000+00:00"
+    },
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-05-28": {
+    "date": "2026-05-28",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [],
+    "sleep_hours": null,
+    "workout": {
+      "date": "2026-05-28",
+      "muscle_groups": [],
+      "exercises": [
+        {
+          "name": "Machine Seated Leg Curl",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Warmup",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Legs Curl",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Machine Seated Leg Curl",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        },
+        {
+          "name": "Cardio",
+          "sets": [],
+          "muscle_groups": [],
+          "metadata": {}
+        }
+      ],
+      "duration_minutes": 0,
+      "notes": "Total time: 00:00",
+      "workout_time": "13:50",
+      "session_id": "76a4d98e-e2b3-446a-9089-cc2447c67b49",
+      "revision": 1,
+      "name": "Legs with Ms Citari",
+      "edit_reason": "This workout contains a non-exercise activity.",
+      "metadata": {},
+      "source": "",
+      "start_time": "2026-05-28T13:50:51.645000+00:00"
+    },
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-08-14": {
+    "date": "2026-08-14",
+    "journal": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
+    "journal_pages": [
+      {
+        "name": "Main",
+        "content": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
+        "created_at": "2026-08-14T22:36:02.996774Z",
+        "tag": "main",
+        "page_id": "141d3e5a-e454-4b92-a0f6-0f6df61d66ad",
+        "page_type": "main",
+        "journal_entry_id": "02924105-1419-4c79-8583-f633220fda40"
+      }
+    ],
+    "tasks": [],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-08-15": {
+    "date": "2026-08-15",
+    "journal": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
+    "journal_pages": [
+      {
+        "name": "Main",
+        "content": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
+        "created_at": "2026-08-14T22:53:54.939052Z",
+        "tag": "main",
+        "page_id": "9ac1e495-3b22-49c4-8ddd-fad1fb6b5415",
+        "page_type": "main",
+        "journal_entry_id": "56fc090a-186a-4c7c-bba0-cce11c6518c7"
+      }
+    ],
+    "tasks": [],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-08-16": {
+    "date": "2026-08-16",
+    "journal": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
+    "journal_pages": [
+      {
+        "name": "Main",
+        "content": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
+        "created_at": "2026-08-14T22:53:55.106623Z",
+        "tag": "main",
+        "page_id": "02c326ab-2078-4857-8e10-39909096af40",
+        "page_type": "main",
+        "journal_entry_id": "0cad6944-5a1e-41d4-bb0c-d0d245d8af1c"
+      }
+    ],
+    "tasks": [],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-08-18": {
+    "date": "2026-08-18",
+    "journal": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
+    "journal_pages": [
+      {
+        "name": "Main",
+        "content": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
+        "created_at": "2026-08-14T22:53:55.647382Z",
+        "tag": "main",
+        "page_id": "b3f5d980-c6b6-4b00-b1d8-ac79231a275c",
+        "page_type": "main",
+        "journal_entry_id": "0af3263e-8121-4865-8657-1f3b2be33c51"
+      }
+    ],
+    "tasks": [],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-08-19": {
+    "date": "2026-08-19",
+    "journal": "",
+    "journal_pages": [
+      {
+        "name": "Main",
+        "content": "",
+        "created_at": "2026-08-14T22:53:56.362846Z",
+        "tag": "main",
+        "page_id": "cf073d4b-64cb-4d5b-bd72-055a27a7b744",
+        "page_type": "main",
+        "journal_entry_id": "48032b1c-094d-40ad-9069-33e8b8ccc0cf"
+      }
+    ],
+    "tasks": [],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-08-20": {
+    "date": "2026-08-20",
+    "journal": "",
+    "journal_pages": [
+      {
+        "name": "Main",
+        "content": "",
+        "created_at": "2026-08-14T23:22:17.308959Z",
+        "tag": "main",
+        "page_id": "adcf4ec9-c1a8-4f0f-84a3-7f7362b06cfd",
+        "page_type": "main",
+        "journal_entry_id": "461b1fde-0e09-4767-90ca-19c78b4431b7"
+      }
+    ],
+    "tasks": [],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-10-19": {
+    "date": "2026-10-19",
+    "journal": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Test 123</p></body></html>",
+    "journal_pages": [
+      {
+        "name": "Main",
+        "content": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Test 123</p></body></html>",
+        "created_at": "2026-10-19T21:40:45.339587Z",
+        "tag": "main",
+        "page_id": "cfb1995c-c291-441e-90f7-61bdf8dba168",
+        "page_type": "main",
+        "journal_entry_id": "4a4e68e0-4bc5-4d1b-8caf-41007d7b4608"
+      },
+      {
+        "name": "School",
+        "content": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">School Test</p></body></html>",
+        "created_at": "2026-10-19T21:41:01.737537Z",
+        "tag": "school",
+        "page_id": "4933363a-c79c-4096-bd51-2de898d75a4f",
+        "page_type": "school",
+        "journal_entry_id": "4a4e68e0-4bc5-4d1b-8caf-41007d7b4608"
+      }
+    ],
+    "tasks": [],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-10-20": {
+    "date": "2026-10-20",
+    "journal": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
+    "journal_pages": [
+      {
+        "name": "Main",
+        "content": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
+        "created_at": "2026-10-21T03:35:16.255647Z",
+        "tag": "main",
+        "page_id": "595433f9-3edb-4316-ab85-cae4b4924b43",
+        "page_type": "main",
+        "journal_entry_id": "b9d6cd96-e329-4d6d-8248-7c76afdbc4fb",
+        "revision": 2
+      },
+      {
+        "name": "Workout",
+        "content": "",
+        "created_at": "2026-10-21T04:52:53.716582Z",
+        "tag": "workout",
+        "page_id": "ccf9d424-4d58-45ec-acb5-cde68f4cd029",
+        "page_type": "workout",
+        "journal_entry_id": "b9d6cd96-e329-4d6d-8248-7c76afdbc4fb",
+        "revision": 1
+      }
+    ],
+    "tasks": [
+      {
+        "name": "Ms Citari Proposal notes",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-10-20",
+        "Notes": null,
+        "activity_id": "e64a7756-9048-41c1-8fa5-8889cbc96974",
+        "session_id": null,
+        "last_synced": "2026-10-21T05:05:04.957672Z",
+        "revision": 51,
+        "client_request_id": "a35e4eda-1926-4776-bcbc-7e88ba4b3c4e"
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-02-12": {
+    "date": "2026-02-12",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Email Prof Schubert",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-02-12",
+        "Notes": "",
+        "activity_id": "918acc99-a91b-407a-b3f5-bc51856b68cb",
+        "session_id": null,
+        "last_synced": "2026-02-11T23:10:18.539945Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Get Wiring done for Goose Project",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-02-12",
+        "Notes": "",
+        "activity_id": "fd9271af-cbd2-4588-ab01-75c04ddd5c51",
+        "session_id": null,
+        "last_synced": "2026-02-11T23:09:30.908192Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Email Architecture Professor",
+        "completed": true,
+        "Priority": 4,
+        "Due_Date": "2026-02-12",
+        "Notes": "",
+        "activity_id": "937bb2c1-f780-439d-90d6-8a9fa6ad8ab8",
+        "session_id": null,
+        "last_synced": "2026-02-11T23:09:05.701588Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-01-26": {
+    "date": "2026-01-26",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Work on Aerostructures hw",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-01-26",
+        "Notes": null,
+        "activity_id": "b0718da8-f9cf-42d0-8df3-88240f3d22df",
+        "session_id": null,
+        "last_synced": "2026-02-09T02:58:03.010195Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Have a meeting with Batu and Michael tomorrow",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-01-26",
+        "Notes": "This did not end up happening....",
+        "activity_id": "984b443b-e703-4829-9456-4861303f2406",
+        "session_id": null,
+        "last_synced": "2026-02-09T02:58:02.937081Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Send Batu a message about EWB",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-01-26",
+        "Notes": null,
+        "activity_id": "094590c0-fd8e-4ee2-aa62-99cc2449dc81",
+        "session_id": null,
+        "last_synced": "2026-02-09T02:58:02.822616Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Meal prep for Tuesday",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-01-26",
+        "Notes": null,
+        "activity_id": "2583cd34-3145-44d9-8696-01cfdd35118d",
+        "session_id": null,
+        "last_synced": "2026-02-09T02:58:02.746241Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Begin doing your aeromaterials homework",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-01-26",
+        "Notes": null,
+        "activity_id": "92b9ca12-cdc8-4290-9342-76eccf976be2",
+        "session_id": null,
+        "last_synced": "2026-02-09T02:58:02.675634Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Make an appointment with Rob tomorrow",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-01-26",
+        "Notes": null,
+        "activity_id": "08dfd301-ff7b-481f-bf04-4128b4ad042f",
+        "session_id": null,
+        "last_synced": "2026-02-09T02:58:02.587631Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Finish the timing circuit",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-01-26",
+        "Notes": null,
+        "activity_id": "16427c3a-9e0b-41dc-bc90-611b32b6397f",
+        "session_id": null,
+        "last_synced": "2026-02-09T02:58:02.514337Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Hit Legs Today",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-01-26",
+        "Notes": null,
+        "activity_id": "e9812d96-7b52-4a70-aa3d-e9be1c393c08",
+        "session_id": null,
+        "last_synced": "2026-02-09T02:58:02.410133Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-04-03": {
+    "date": "2026-04-03",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Movie Night with Katie",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-04-03",
+        "Notes": "",
+        "activity_id": "f32a3522-d897-44b2-b31d-9370f1618ee8",
+        "session_id": null,
+        "last_synced": "2026-03-31T19:13:23.108097Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Aerostructures Hw#4",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-04-03",
+        "Notes": "",
+        "activity_id": "acf3fd4c-926b-4d83-b19e-3c4c293afad5",
+        "session_id": null,
+        "last_synced": "2026-03-31T19:12:10.556069Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Systems Analysis Hw 4",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-04-03",
+        "Notes": "",
+        "activity_id": "17ad23a0-7b42-4b31-80f9-f85ad1a0de7c",
+        "session_id": null,
+        "last_synced": "2026-03-31T19:11:44.410190Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-04-09": {
+    "date": "2026-04-09",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Aerostructures Hw Due",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-04-09",
+        "Notes": "",
+        "activity_id": "4f8102e4-c733-47bd-9bb6-555e3cef850b",
+        "session_id": null,
+        "last_synced": "2026-03-31T19:10:41.353696Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-04-04": {
+    "date": "2026-04-04",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Workout with Katie",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-04-04",
+        "Notes": "",
+        "activity_id": "c05d8c54-a260-4ab6-8528-f4b467f88242",
+        "session_id": null,
+        "last_synced": "2026-03-31T19:13:30.988105Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Lab Due",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-04-04",
+        "Notes": "",
+        "activity_id": "c9a22235-3222-44a9-9307-9d637d08c7f0",
+        "session_id": null,
+        "last_synced": "2026-03-31T19:13:13.893430Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-02-07": {
+    "date": "2026-02-07",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Finish fluids homework",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-02-07",
+        "Notes": "Problem set 4",
+        "activity_id": "79647659-eacf-4c24-85b9-240b670526ac",
+        "session_id": null,
+        "last_synced": "2026-02-05T22:22:21.372413Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-03-31": {
+    "date": "2026-03-31",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Do lab and parse new Data",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-03-31",
+        "Notes": "",
+        "activity_id": "ad283f8d-c967-4886-84f1-61521e92da36",
+        "session_id": null,
+        "last_synced": "2026-03-30T16:43:19.531592Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Call Michael",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-03-31",
+        "Notes": "",
+        "activity_id": "6cfb05e0-cf0c-4e7c-ab75-cdc67d2d4d2d",
+        "session_id": null,
+        "last_synced": "2026-03-30T16:43:03.989084Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "System Analysis HW",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-03-31",
+        "Notes": "",
+        "activity_id": "7ca53e5d-5019-4eee-9f69-3cd966dbd79b",
+        "session_id": null,
+        "last_synced": "2026-03-30T16:42:42.239088Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Email fir on campus job",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-03-31",
+        "Notes": "",
+        "activity_id": "34b5fe16-ac1a-4295-9430-073777078882",
+        "session_id": null,
+        "last_synced": "2026-03-30T16:42:30.515598Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Workout",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-03-31",
+        "Notes": "Chest and tris",
+        "activity_id": "df2f4338-6373-44ea-a80c-30be96a93102",
+        "session_id": null,
+        "last_synced": "2026-03-30T16:41:59.589864Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-06-12": {
+    "date": "2026-06-12",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Monika Birthday",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-06-12",
+        "Notes": null,
+        "activity_id": "13840205-d0dd-47c8-b7b7-50066ff3b295",
+        "session_id": null,
+        "last_synced": "2026-06-05T22:06:42.698470Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-03-26": {
+    "date": "2026-03-26",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Nutrition Post Due",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-03-26",
+        "Notes": "",
+        "activity_id": "6525839a-0d35-4f91-8bf4-384934dcd1e5",
+        "session_id": null,
+        "last_synced": "2026-03-24T07:31:37.488632Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Go with Katie to her barn",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-03-26",
+        "Notes": "",
+        "activity_id": "63cdb31f-cee8-47e9-8a5e-7df38e4565cb",
+        "session_id": null,
+        "last_synced": "2026-03-24T07:31:22.122311Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-01-28": {
+    "date": "2026-01-28",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Monkeys Gotta Lift",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-01-28",
+        "Notes": "Chest Day Baby",
+        "activity_id": "e60509ee-5956-4796-8ce3-82c5ff20ab36",
+        "session_id": null,
+        "last_synced": "2026-02-09T02:58:02.160436Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-04-07": {
+    "date": "2026-04-07",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "CS Exam 2",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-04-07",
+        "Notes": "Have to get 90% on it",
+        "activity_id": "55a5053d-b28a-4279-90a0-d1fdf7c92666",
+        "session_id": null,
+        "last_synced": "2026-03-31T19:13:01.606787Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-01-24": {
+    "date": "2026-01-24",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Non Itchj",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-01-24",
+        "Notes": null,
+        "activity_id": "657e9f1c-7326-44de-b6e7-0e3c9a222c06",
+        "session_id": null,
+        "last_synced": "2026-02-09T02:58:02.284396Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-04-08": {
+    "date": "2026-04-08",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Lab 3",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-04-08",
+        "Notes": "",
+        "activity_id": "73f142f0-6d74-412a-b281-47d1d68042ae",
+        "session_id": null,
+        "last_synced": "2026-04-07T20:18:39.667216Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Katie Research",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-04-08",
+        "Notes": "",
+        "activity_id": "d8579488-d119-4072-9c82-856b04cf5338",
+        "session_id": null,
+        "last_synced": "2026-04-07T20:18:08.386118Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Systems Analysis Hw",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-04-08",
+        "Notes": "",
+        "activity_id": "cc01ade9-e7ad-4fe2-8688-63d189e272b2",
+        "session_id": null,
+        "last_synced": "2026-04-07T20:17:57.520453Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Lab 4 Due",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-04-08",
+        "Notes": "",
+        "activity_id": "57e0506d-81d7-4746-ae5c-898c0c093bc7",
+        "session_id": null,
+        "last_synced": "2026-03-31T19:11:20.950204Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-06-04": {
+    "date": "2026-06-04",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Apply for Jobs",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-06-04",
+        "Notes": null,
+        "activity_id": "86d990d4-1d66-4725-845c-4826b4eda498",
+        "session_id": null,
+        "last_synced": "2026-06-04T05:26:39.509357Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Lift (Possibly with Caleb)",
+        "completed": true,
+        "Priority": 4,
+        "Due_Date": "2026-06-04",
+        "Notes": null,
+        "activity_id": "85e4f012-5249-4078-b627-fa9a0539f74e",
+        "session_id": null,
+        "last_synced": "2026-06-04T05:26:08.596266Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Update Linkdein Profile",
+        "completed": true,
+        "Priority": 4,
+        "Due_Date": "2026-06-04",
+        "Notes": null,
+        "activity_id": "7063673b-0cc9-4c16-a3ef-2cf44ed3f74a",
+        "session_id": null,
+        "last_synced": "2026-06-04T05:25:53.625102Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Call Mary from No Name Painters",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-04",
+        "Notes": null,
+        "activity_id": "f08db0d0-ac70-478a-8338-6f2a0c175986",
+        "session_id": null,
+        "last_synced": "2026-06-04T05:25:43.512033Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Get Some Milk",
+        "completed": true,
+        "Priority": 2,
+        "Due_Date": "2026-06-04",
+        "Notes": null,
+        "activity_id": "899ec9d3-871f-4753-9f39-414095a525d8",
+        "session_id": null,
+        "last_synced": "2026-06-04T05:25:26.903543Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Send Prof Schuebrt an Email",
+        "completed": true,
+        "Priority": 4,
+        "Due_Date": "2026-06-04",
+        "Notes": null,
+        "activity_id": "eef0a3dd-000a-40f8-b8b1-38692e90499c",
+        "session_id": null,
+        "last_synced": "2026-06-04T05:24:38.567864Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Test Movement of all Motors",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-04",
+        "Notes": null,
+        "activity_id": "418e9ee6-2fd5-4f17-9765-d8829829518f",
+        "session_id": null,
+        "last_synced": "2026-06-04T05:24:29.150638Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Drive to Michael to Work on GP",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-04",
+        "Notes": null,
+        "activity_id": "f0197a46-e187-4f4f-86a3-699ca2a43373",
+        "session_id": null,
+        "last_synced": "2026-06-04T05:24:12.756660Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Finish Wiring the drivers",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-04",
+        "Notes": null,
+        "activity_id": "98ad4cda-fd0a-4a96-9834-d8cf6c51a879",
+        "session_id": null,
+        "last_synced": "2026-06-04T05:23:59.185931Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Fold Clothes",
+        "completed": true,
+        "Priority": 2,
+        "Due_Date": "2026-06-04",
+        "Notes": null,
+        "activity_id": "955b4d0e-2fd7-4b81-b34f-dfbf86eb6983",
+        "session_id": null,
+        "last_synced": "2026-06-04T05:23:23.394235Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Clean Dishes",
+        "completed": true,
+        "Priority": 2,
+        "Due_Date": "2026-06-04",
+        "Notes": null,
+        "activity_id": "37d22bc3-4880-4a83-be9a-a160262c5e94",
+        "session_id": null,
+        "last_synced": "2026-06-04T05:23:07.259768Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-02-19": {
+    "date": "2026-02-19",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Talk with Professor Wig about the electronics",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-02-19",
+        "Notes": null,
+        "activity_id": "9112b922-5f38-42ed-a227-83616cd0c7cf",
+        "session_id": null,
+        "last_synced": "2026-02-19T06:46:02.208391Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Get the freshman soldering for the goose project",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-02-19",
+        "Notes": null,
+        "activity_id": "3b0e7d81-46ad-4dda-8d66-e03ad198bc50",
+        "session_id": null,
+        "last_synced": "2026-02-19T06:45:45.607210Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Have a call with Noah TMR",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-02-19",
+        "Notes": null,
+        "activity_id": "b2d6c6f5-23c7-4676-a84f-649b965c3f36",
+        "session_id": null,
+        "last_synced": "2026-02-19T06:45:26.835491Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Meet with Professor Schubert Tmr",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-02-19",
+        "Notes": null,
+        "activity_id": "d8131189-c744-41e9-930a-b748a5d9662c",
+        "session_id": null,
+        "last_synced": "2026-02-19T06:45:14.143551Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Grab my water bottle from BenU",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-02-19",
+        "Notes": null,
+        "activity_id": "83753f12-3a43-48aa-b890-227cb1eaf71e",
+        "session_id": null,
+        "last_synced": "2026-02-19T06:44:55.564852Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Go to work",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-02-19",
+        "Notes": null,
+        "activity_id": "bdcb9779-f147-4b41-bfe4-af4b06461bf4",
+        "session_id": null,
+        "last_synced": "2026-02-19T06:44:40.890010Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Get the motor assembly for Batu",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-02-19",
+        "Notes": null,
+        "activity_id": "fde2a8ad-8f47-4069-a5ef-1eef7ce27145",
+        "session_id": null,
+        "last_synced": "2026-02-19T06:44:34.998236Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Get the paper to Katie so that she knows exactly what she needs in order to start coding",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-02-19",
+        "Notes": null,
+        "activity_id": "ac3845c3-f269-41ca-8429-c926175b282f",
+        "session_id": null,
+        "last_synced": "2026-02-19T06:44:21.534467Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-03-25": {
+    "date": "2026-03-25",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Set up office hours for AeroMaterials",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-03-25",
+        "Notes": "",
+        "activity_id": "d4f4195a-05b1-41de-a67a-f1215aee744d",
+        "session_id": null,
+        "last_synced": "2026-03-24T07:30:45.439309Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Get Katies CSV ready",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-03-25",
+        "Notes": "",
+        "activity_id": "d38920b6-2dd4-46e7-aa79-0d62bdfd448f",
+        "session_id": null,
+        "last_synced": "2026-03-24T07:30:06.880760Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Code for GP",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-03-25",
+        "Notes": "",
+        "activity_id": "d372d50f-20e2-40f8-bf98-07b5e94297cd",
+        "session_id": null,
+        "last_synced": "2026-03-24T07:29:51.774657Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Workout Back Bis Abs",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-03-25",
+        "Notes": "",
+        "activity_id": "386075c6-6081-4d41-bfac-0e53a3ddbba4",
+        "session_id": null,
+        "last_synced": "2026-03-24T07:29:40.729190Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Nutrition Post",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-03-25",
+        "Notes": "",
+        "activity_id": "cfa20b2f-9f86-4be5-b744-5dbe9eb5adb9",
+        "session_id": null,
+        "last_synced": "2026-03-24T07:28:49.146073Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "AeroMatetials HW",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-03-25",
+        "Notes": "",
+        "activity_id": "a409e5d8-273e-498e-b398-898a08f8bf47",
+        "session_id": null,
+        "last_synced": "2026-03-24T07:28:28.419091Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-06-08": {
+    "date": "2026-06-08",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Interview @12",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-06-08",
+        "Notes": null,
+        "activity_id": "93040e10-f0e9-44e1-8d1a-f34029516db1",
+        "session_id": null,
+        "last_synced": "2026-06-05T22:06:25.959811Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-07-01": {
+    "date": "2026-07-01",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "LinkedIn Renewal",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-07-01",
+        "Notes": null,
+        "activity_id": "a3f351f0-4bfa-4d39-ab4d-8888ba6226bf",
+        "session_id": null,
+        "last_synced": "2026-06-05T20:25:57.627005Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-06-07": {
+    "date": "2026-06-07",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Mac Nails",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-07",
+        "Notes": null,
+        "activity_id": "8df1e08f-9a87-4130-b218-2bccee98af79",
+        "session_id": null,
+        "last_synced": "2026-06-06T19:33:58.803171Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Clean/Organize Room",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-07",
+        "Notes": null,
+        "activity_id": "a72c1db5-6232-45c5-bcfb-390a1a2d48ad",
+        "session_id": null,
+        "last_synced": "2026-06-06T04:10:33.229581Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Move Soaps to Bathroom",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-07",
+        "Notes": null,
+        "activity_id": "5e84568c-5a5b-4049-bb60-34dfd4c05833",
+        "session_id": null,
+        "last_synced": "2026-06-06T04:10:18.150896Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Clean up Basement",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-07",
+        "Notes": null,
+        "activity_id": "55770980-6cc9-4b5a-aef3-8726f350261a",
+        "session_id": null,
+        "last_synced": "2026-06-06T04:10:06.668312Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Clean Dinning room Table",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-07",
+        "Notes": null,
+        "activity_id": "d700fdd8-f0a9-4deb-957b-93597724842e",
+        "session_id": null,
+        "last_synced": "2026-06-06T04:09:28.888241Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Talk about TV fix",
+        "completed": false,
+        "Priority": 3,
+        "Due_Date": "2026-06-07",
+        "Notes": null,
+        "activity_id": "346d7a06-3664-4f89-8193-5eb70f379007",
+        "session_id": null,
+        "last_synced": "2026-06-06T04:09:16.532591Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Garbage and Recycling",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-07",
+        "Notes": null,
+        "activity_id": "b2d66b28-00ea-4572-95f6-f4bb696c172d",
+        "session_id": null,
+        "last_synced": "2026-06-06T04:09:04.024285Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Read Bible Vhspters up till 12",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-07",
+        "Notes": null,
+        "activity_id": "db815fec-1975-4fd0-a0f5-b1199b31ed51",
+        "session_id": null,
+        "last_synced": "2026-06-06T04:08:40.125608Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Go visit Mom",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-07",
+        "Notes": null,
+        "activity_id": "56444dea-b475-47ad-ac30-92022cfa5cf2",
+        "session_id": null,
+        "last_synced": "2026-06-06T04:08:29.193047Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Ask Mother What Flowers and Statues",
+        "completed": true,
+        "Priority": 4,
+        "Due_Date": "2026-06-07",
+        "Notes": null,
+        "activity_id": "9575549b-ac6c-4eb5-9adb-d8755d75d6e6",
+        "session_id": null,
+        "last_synced": "2026-06-06T04:08:11.720196Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Journal App work",
+        "completed": true,
+        "Priority": 3,
+        "Due_Date": "2026-06-07",
+        "Notes": null,
+        "activity_id": "1be51f36-932e-4c52-8dee-4fbbb49368e8",
+        "session_id": null,
+        "last_synced": "2026-06-06T04:07:41.467347Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Get info on BlueBerry",
+        "completed": true,
+        "Priority": 4,
+        "Due_Date": "2026-06-07",
+        "Notes": null,
+        "activity_id": "628540b1-1575-4adf-8203-b58f68c761bd",
+        "session_id": null,
+        "last_synced": "2026-06-06T04:06:28.865050Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Respond to Schubert",
+        "completed": true,
+        "Priority": 4,
+        "Due_Date": "2026-06-07",
+        "Notes": null,
+        "activity_id": "38899ef9-d7cf-4e67-97d9-fc2532a306db",
+        "session_id": null,
+        "last_synced": "2026-06-06T04:06:05.023870Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Hair Cut Appointment Check",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-07",
+        "Notes": null,
+        "activity_id": "6186da1c-4ea2-49b9-af42-689f3084db7a",
+        "session_id": null,
+        "last_synced": "2026-06-06T04:05:43.218549Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Send Katie Bible Chapters",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-07",
+        "Notes": null,
+        "activity_id": "fedf02cf-c06c-4ef2-9d31-b1aed6a3c7ce",
+        "session_id": null,
+        "last_synced": "2026-06-06T04:05:32.812399Z",
+        "revision": 1,
+        "client_request_id": null
+      },
+      {
+        "name": "Lift with Katie",
+        "completed": true,
+        "Priority": 5,
+        "Due_Date": "2026-06-07",
+        "Notes": null,
+        "activity_id": "06a1d1bf-50ce-48e1-ac41-654b1c691893",
+        "session_id": null,
+        "last_synced": "2026-06-06T04:05:12.159812Z",
+        "revision": 1,
+        "client_request_id": null
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-10-21": {
+    "date": "2026-10-21",
+    "journal": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
+    "journal_pages": [
+      {
+        "name": "Main",
+        "content": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>",
+        "created_at": "2026-10-21T05:14:02.932473Z",
+        "tag": "main",
+        "page_id": "20c4d649-31b9-44aa-b28e-c16defa044c6",
+        "page_type": "main",
+        "journal_entry_id": "07726e72-2ff3-439a-b015-2d19aaa5973b",
+        "revision": 3
+      },
+      {
+        "name": "School",
+        "content": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Grainger Competition<br /></span>We got knocked out of the competition. Kind of annoying not gonna lie. Not entirely sure why they did not accept the GP. It's fine. We continue to keep pushing ahead. I am not sure as of right now, but we didn't make the cut for some reason. </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">The print stopped half way..... had to spend an extra 1.5hrs here at IIT. It's fine, I'm in the Lab with Sasindu. Did some GP stuff. My HW is done and now I want to journal.</p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I officially begin work next week :D It's $17.05 D: but it's fine. Income is income at the end of the say and we just need to be making money. It's at school so it's an amazing oppurtunity!</p></body></html>",
+        "created_at": "2026-10-22T00:35:08.218151Z",
+        "tag": "school",
+        "page_id": "e366bfcd-9723-4ecf-a0ac-6cd6946211f3",
+        "page_type": "school",
+        "journal_entry_id": "07726e72-2ff3-439a-b015-2d19aaa5973b",
+        "revision": 4
+      },
+      {
+        "name": "Goose Project",
+        "content": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\nhr { height: 1px; border-width: 0; }\nli.unchecked::marker { content: \"\\2610\"; }\nli.checked::marker { content: \"\\2612\"; }\n</style></head><body style=\" font-family:'Sans Serif'; font-size:11pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Finished the PCB today. Made Claude look it over many many times. Hopefully it's correct. Gonna be leaving here in ~10mins. The pieces are still printing. Once these are done, I'm gonna leave and head to the office. We really need a warehouse. Some space to work. For now this is fine. </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">I can see it happening. This project is only the beginning. Michael and I have too much grit to not get a warehouse. It's going to happen and we're going to have a lot of printers. Just gotta keep pushing!</p></body></html>",
+        "created_at": "2026-10-22T00:37:19.567733Z",
+        "tag": "goose",
+        "page_id": "792f8a7c-50ae-4b32-8e89-faabe1d6af1d",
+        "page_type": "goose",
+        "journal_entry_id": "07726e72-2ff3-439a-b015-2d19aaa5973b",
+        "revision": 2
+      }
+    ],
+    "tasks": [
+      {
+        "name": "Meet with Michael",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-10-21",
+        "Notes": null,
+        "activity_id": "a2975a73-33b0-40f0-a9ec-8598a6da1587",
+        "session_id": null,
+        "last_synced": "2026-10-22T00:45:01.248404Z",
+        "revision": 1,
+        "client_request_id": "1f702f56-7a8b-4325-9b7d-e40a10a01301"
+      },
+      {
+        "name": "Send Batu and Update",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-10-21",
+        "Notes": null,
+        "activity_id": "c1308650-1b9c-4f66-a154-84a6ccfa7afb",
+        "session_id": null,
+        "last_synced": "2026-10-22T00:44:51.411456Z",
+        "revision": 1,
+        "client_request_id": "c25f6d3f-8861-42dd-ba2b-e6a90aa3e148"
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-10-22": {
+    "date": "2026-10-22",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Fix Job Application and Change it for Internships",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-10-22",
+        "Notes": null,
+        "activity_id": "b05ae059-9592-48af-9d0a-f0a8374ba6cc",
+        "session_id": null,
+        "last_synced": "2026-10-22T00:46:36.251602Z",
+        "revision": 1,
+        "client_request_id": "54255204-dd2b-46c3-8b11-66435ab56cf1"
+      },
+      {
+        "name": "Hit a workout",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-10-22",
+        "Notes": null,
+        "activity_id": "134584a0-b576-43e7-b3be-0fa9565d6a7b",
+        "session_id": null,
+        "last_synced": "2026-10-22T00:43:14.399383Z",
+        "revision": 1,
+        "client_request_id": "3795699e-3bce-4ed1-b3db-79a381872dd0"
+      },
+      {
+        "name": "Fold Clothes and Pack",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-10-22",
+        "Notes": null,
+        "activity_id": "b8b9d0e1-44c1-4e59-acac-de5965aa74bf",
+        "session_id": null,
+        "last_synced": "2026-10-22T00:43:03.236757Z",
+        "revision": 1,
+        "client_request_id": "b74fd0bf-d37c-4b25-9cd9-47d73fcbb27c"
+      },
+      {
+        "name": "Turn in SpaceCraft HW",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-10-22",
+        "Notes": null,
+        "activity_id": "ed5e7cf1-1852-4f54-9294-7574bd7868e4",
+        "session_id": null,
+        "last_synced": "2026-10-22T00:42:28.119638Z",
+        "revision": 1,
+        "client_request_id": "48f18075-4655-4d6e-ab7b-0b78410dc6c9"
+      }
+    ],
+    "sleep_hours": null,
+    "workout": null,
+    "rest_day": false,
+    "missed_day": false
+  },
+  "2026-10-14": {
+    "date": "2026-10-14",
+    "journal": "",
+    "journal_pages": [],
+    "tasks": [
+      {
+        "name": "Cook the Chicken in the fidge or do something with it.",
+        "completed": false,
+        "Priority": 5,
+        "Due_Date": "2026-10-14",
+        "Notes": null,
+        "activity_id": "ae79063d-0aa7-4108-9604-350c26b4caff",
+        "session_id": null,
+        "last_synced": "2026-10-22T00:45:35.270680Z",
+        "revision": 1,
+        "client_request_id": "dbff8516-2102-4ebb-a29d-0adf26866f54"
       }
     ],
     "sleep_hours": null,

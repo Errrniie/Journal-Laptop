@@ -95,6 +95,7 @@ def safe_set_date(
 class BackgroundLoadWorker(QThread):
     """Runs task refetch and workout load in background so UI stays responsive."""
     done = pyqtSignal(str)
+    error = pyqtSignal(str)
 
     def __init__(self, date_str: str, sync_service, workout_service, journal_service) -> None:
         super().__init__()
@@ -104,14 +105,31 @@ class BackgroundLoadWorker(QThread):
         self.journal_service = journal_service
 
     def run(self) -> None:
-        if self.sync_service:
-            self.sync_service.refetch_and_replace_tasks(self.date_str)
-        if self.workout_service and getattr(self.workout_service, "api_client", None):
-            self.workout_service.invalidate_workout_cache()
-            self.workout_service.load_workouts_from_api()
-        if self.journal_service and getattr(self.journal_service, "uses_api", False):
-            self.journal_service.sync_from_api(self.date_str)
-        self.done.emit(self.date_str)
+        try:
+            task_api = getattr(self.sync_service, "api_client", None)
+            if self.sync_service and getattr(task_api, "api_key", None):
+                result = self.sync_service.refetch_and_replace_tasks(self.date_str)
+                errors = result.get("errors", []) if isinstance(result, dict) else []
+                if isinstance(result, dict) and (not result.get("success") or errors):
+                    self.error.emit("Task sync failed: " + ("; ".join(errors) or "unknown error"))
+            workout_api = getattr(self.workout_service, "api_client", None)
+            if self.workout_service and getattr(workout_api, "api_key", None):
+                self.workout_service.invalidate_workout_cache()
+                success, error = self.workout_service.load_workouts_from_api()
+                if not success:
+                    self.error.emit(f"Workout sync failed: {error or 'unknown error'}")
+            if self.journal_service and getattr(self.journal_service, "uses_api", False):
+                result = self.journal_service.sync_from_api(self.date_str)
+                if isinstance(result, dict) and not result.get("skipped"):
+                    errors = result.get("errors", [])
+                    if not result.get("success") or errors:
+                        self.error.emit("Journal sync failed: " + ("; ".join(errors) or "unknown error"))
+        except Exception as exc:
+            # Notify through a Qt signal so the message is handled on the GUI
+            # thread without interrupting the queued-date lifecycle.
+            self.error.emit(f"Background load failed: {exc}")
+        finally:
+            self.done.emit(self.date_str)
 
 
 class MainWindow(QMainWindow):
@@ -162,6 +180,12 @@ class MainWindow(QMainWindow):
         
         # Current date (default to today)
         self.current_date = QDate.currentDate()
+
+        # Only one remote date load may run at a time. Date navigation can happen
+        # much faster than the API responds, so retain the active QThread and
+        # coalesce additional requests to the most recently selected date.
+        self._load_worker: BackgroundLoadWorker | None = None
+        self._pending_load_date: str | None = None
         
         # Initialize UI
         self._setup_ui()
@@ -260,17 +284,46 @@ class MainWindow(QMainWindow):
     def _setup_date_navigation(self) -> None:
         """Create date selector and navigation controls."""
         toolbar = QToolBar("Date Navigation")
+        toolbar.setObjectName("dateNavigationToolbar")
         toolbar.setMovable(False)
+        toolbar.setStyleSheet("""
+            QToolBar#dateNavigationToolbar {
+                background: #20242e; border: 1px solid #343b49; spacing: 8px;
+                padding: 8px 12px;
+            }
+            QToolBar#dateNavigationToolbar QPushButton {
+                background: #303b4c; color: #f7f9fc; border: 1px solid #526072;
+                border-radius: 8px; padding: 8px 13px; font-weight: 600;
+            }
+            QToolBar#dateNavigationToolbar QPushButton:hover { background: #3c4b60; }
+            QToolBar#dateNavigationToolbar QPushButton#dateTodayButton {
+                background: #377fd1; color: white; border: 0;
+            }
+            QToolBar#dateNavigationToolbar QPushButton#dateTodayButton:hover { background: #4c91dd; }
+            QDateEdit#main_date_edit {
+                background: #171b24; color: #f7f9fc; border: 1px solid #526072;
+                border-radius: 9px; padding: 8px 12px; min-width: 170px;
+                font-size: 11pt; font-weight: 700;
+                selection-background-color: #377fd1;
+            }
+            QDateEdit#main_date_edit:focus { border: 1px solid #5596e2; }
+            QDateEdit#main_date_edit::drop-down {
+                subcontrol-origin: padding; subcontrol-position: right center;
+                width: 30px; border-left: 1px solid #343b49;
+            }
+        """)
         self.addToolBar(Qt.ToolBarArea.TopToolBarArea, toolbar)
         
         # Previous day button
         prev_button = QPushButton("◀ Prev")
+        prev_button.setObjectName("dateNavigationButton")
         prev_button.setToolTip("Previous day (Left Arrow)")
         prev_button.clicked.connect(self._previous_day)
         toolbar.addWidget(prev_button)
         
         # Today button
         today_button = QPushButton("Today")
+        today_button.setObjectName("dateTodayButton")
         today_button.setToolTip("Go to today (T)")
         today_button.clicked.connect(self._go_to_today)
         toolbar.addWidget(today_button)
@@ -281,11 +334,30 @@ class MainWindow(QMainWindow):
         self.date_edit.setCalendarPopup(True)
         safe_set_date(self.date_edit, self.current_date, block_signals=True)
         self.date_edit.setDisplayFormat("MMMM d, yyyy")
+        self.date_edit.setToolTip("Choose the day to review across Journal, Tasks, Workouts, and Sleep")
+        self.date_edit.calendarWidget().setStyleSheet("""
+            QWidget { background: #20242e; color: #f7f9fc; }
+            QCalendarWidget QWidget#qt_calendar_navigationbar { background: #303b4c; }
+            QCalendarWidget QToolButton {
+                background: transparent; color: #f7f9fc; border: 0; padding: 6px;
+            }
+            QCalendarWidget QToolButton:hover { background: #3c4b60; border-radius: 5px; }
+            QCalendarWidget QSpinBox {
+                background: #171b24; color: #f7f9fc; border: 1px solid #526072;
+                border-radius: 5px; padding: 3px;
+            }
+            QCalendarWidget QTableView {
+                background: #20242e; color: #f7f9fc; selection-background-color: #377fd1;
+                selection-color: white; alternate-background-color: #252b37;
+                gridline-color: #343b49; border: 0;
+            }
+        """)
         self.date_edit.dateChanged.connect(self._on_date_changed)
         toolbar.addWidget(self.date_edit)
         
         # Next day button
         next_button = QPushButton("Next ▶")
+        next_button.setObjectName("dateNavigationButton")
         next_button.setToolTip("Next day (Right Arrow)")
         next_button.clicked.connect(self._next_day)
         toolbar.addWidget(next_button)
@@ -294,6 +366,8 @@ class MainWindow(QMainWindow):
         
         # Date display label (formatted)
         self.date_label = QLabel()
+        self.date_label.setObjectName("dateNavigationLabel")
+        self.date_label.setStyleSheet("color: #aeb8c8; font-weight: 600; padding-left: 8px;")
         self._update_date_label()
         toolbar.addWidget(self.date_label)
     
@@ -379,6 +453,15 @@ class MainWindow(QMainWindow):
         Load and populate all widgets with entry data for the given date.
         Tasks and workouts are refetched from API in a background thread.
         """
+        if self._load_worker is not None and self._load_worker.isRunning():
+            self._pending_load_date = date_str
+            self.setCursor(Qt.CursorShape.WaitCursor)
+            return
+
+        self._start_background_load(date_str)
+
+    def _start_background_load(self, date_str: str) -> None:
+        """Start one date load and retain its worker until the thread finishes."""
         self._load_worker = BackgroundLoadWorker(
             date_str,
             getattr(self, "sync_service", None),
@@ -386,18 +469,40 @@ class MainWindow(QMainWindow):
             getattr(self, "journal_service", None),
         )
         self._load_worker.done.connect(self._on_background_load_done)
+        self._load_worker.error.connect(self._on_background_load_error)
+        self._load_worker.finished.connect(self._on_background_load_finished)
         self.setCursor(Qt.CursorShape.WaitCursor)
         self._load_worker.start()
 
     def _on_background_load_done(self, date_str: str) -> None:
         """Called when background refetch/workout load finishes; load widgets on main thread."""
-        self.unsetCursor()
         if date_str != qdate_to_string(self.current_date):
             return
         self.journal_widget.load_entry(date_str)
         self.tasks_widget.load_entry(date_str)
         self.workout_widget.load_entry(date_str)
         self.sleep_widget.load_entry(date_str)
+
+    def _on_background_load_error(self, message: str) -> None:
+        """Show background load failures briefly without blocking the UI."""
+        self.statusBar().showMessage(message, 10000)
+
+    def _on_background_load_finished(self) -> None:
+        """Release a completed worker and run only the newest queued date load."""
+        worker = self.sender()
+        if worker is not self._load_worker:
+            return
+
+        finished_date = self._load_worker.date_str
+        self._load_worker.deleteLater()
+        self._load_worker = None
+
+        pending_date = self._pending_load_date
+        self._pending_load_date = None
+        if pending_date and pending_date != finished_date:
+            self._start_background_load(pending_date)
+        else:
+            self.unsetCursor()
     
     def _on_tab_changed(self, index: int) -> None:
         """
@@ -467,6 +572,9 @@ class MainWindow(QMainWindow):
         if not hasattr(self, 'sync_service') or not self.sync_service:
             QMessageBox.warning(self, "Error", "Sync service not available.")
             return
+        if not self.sync_service.api_client.api_key:
+            QMessageBox.warning(self, "Sync", "Configure the API key before syncing tasks.")
+            return
         
         date_str = qdate_to_string(self.current_date)
         result = self.sync_service.sync_tasks_for_date(date_str)
@@ -475,8 +583,7 @@ class MainWindow(QMainWindow):
             message = (
                 f"Sync completed!\n\n"
                 f"Tasks synced: {result['tasks_synced']}\n"
-                f"Tasks added: {result['tasks_added']}\n"
-                f"Tasks updated: {result['tasks_updated']}"
+                f"Local tasks uploaded: {result.get('tasks_pushed', 0)}"
             )
             if result["errors"]:
                 message += f"\n\nErrors: {len(result['errors'])}"

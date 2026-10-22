@@ -1,5 +1,11 @@
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+from hashlib import sha256
+import json
+import math
+from pathlib import Path
+from threading import RLock
 from typing import TYPE_CHECKING, Optional
+from uuid import uuid4
 
 from Models import DailyEntry, Workout, Exercise, Set
 
@@ -25,6 +31,50 @@ class WorkoutService:
         self.storage = storage
         self.api_client = api_client
         self._workout_cache: Optional[dict[str, Workout]] = None  # date -> Workout
+        self._workout_library: Optional[list[Workout]] = None  # every API session, including same-day sessions
+        self.last_created_session_id: str | None = None
+        self._load_lock = RLock()
+        self._pending_workouts_path = (
+            Path(storage.file_path).with_name("pending_workout_requests.json")
+            if getattr(storage, "file_path", None) else None
+        )
+
+    def _pending_workout_id(self, payload: dict) -> tuple[Optional[str], Optional[str]]:
+        """Persist a request ID before posting so retries cannot duplicate a workout."""
+        if self._pending_workouts_path is None:
+            return None, "Workout request storage is unavailable"
+        path = self._pending_workouts_path
+        fingerprint = sha256(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()
+        try:
+            pending = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+            if not isinstance(pending, dict):
+                raise ValueError("pending request file is not an object")
+            request_id = pending.get(fingerprint)
+            if request_id:
+                return request_id, None
+            request_id = str(uuid4())
+            pending[fingerprint] = request_id
+            temp_path = path.with_suffix(".tmp")
+            temp_path.write_text(json.dumps(pending, indent=2), encoding="utf-8")
+            temp_path.replace(path)
+            return request_id, None
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            return None, f"Could not persist workout request: {exc}"
+
+    def _forget_pending_workout(self, payload: dict) -> None:
+        if self._pending_workouts_path is None:
+            return
+        path = self._pending_workouts_path
+        fingerprint = sha256(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()
+        try:
+            pending = json.loads(path.read_text(encoding="utf-8"))
+            pending.pop(fingerprint, None)
+            temp_path = path.with_suffix(".tmp")
+            temp_path.write_text(json.dumps(pending, indent=2), encoding="utf-8")
+            temp_path.replace(path)
+        except (OSError, ValueError, json.JSONDecodeError):
+            # A retained key is safe: the server will return the existing workout.
+            pass
     
     def _validate_date(self, date: str) -> bool:
         """
@@ -204,102 +254,210 @@ class WorkoutService:
         total_volume = 0.0
         for exercise in workout.exercises:
             for set_obj in exercise.sets:
-                total_volume += set_obj.reps * set_obj.weight
+                unit = str(getattr(set_obj, "unit", "lbs") or "lbs").casefold()
+                weight_lbs = set_obj.weight * (2.2046226218 if unit in ("kg", "kgs") else 1)
+                total_volume += set_obj.reps * weight_lbs
         
         return total_volume
     
     def load_workouts_from_api(self) -> tuple[bool, Optional[str]]:
+        with self._load_lock:
+            return self._load_workouts_from_api_locked()
+
+    def _load_workouts_from_api_locked(self) -> tuple[bool, Optional[str]]:
         """
-        Fetch GET /workouts/full and fill in-memory cache (date -> Workout).
+        Fetch GET /workouts/full into the complete session library and dated cache.
         Returns (True, None) on success, (False, error_message) on failure.
         """
-        if not self.api_client:
+        if not self.api_client or not self.api_client.api_key:
             return False, "API client not configured"
         raw, err = self.api_client.get_workouts_full()
         if err:
             return False, err
-        self._workout_cache = {}
+        next_cache: dict[str, Workout] = {}
+        next_library: list[Workout] = []
+        active_session_ids: set[str] = set()
+        cache_errors: list[str] = []
         for session in raw or []:
+            if not isinstance(session, dict):
+                return False, "Workout API returned a malformed session"
             if session.get("type") != "workout":
                 continue
             session_id = session.get("session_id") or session.get("id")
+            if not session_id:
+                return False, "Workout API returned a session without an ID"
+            active_session_ids.add(str(session_id))
             start_time = session.get("start_time") or ""
             date_str = ""
             workout_time = None
+            session_meta = session.get("metadata") or {}
+            if not isinstance(session_meta, dict):
+                return False, "Workout API returned malformed session metadata"
             if start_time:
                 try:
                     dt = datetime.fromisoformat(start_time.replace("Z", "+00:00"))
                     date_str = dt.strftime("%Y-%m-%d")
                     workout_time = dt.strftime("%H:%M")
-                except (ValueError, AttributeError):
-                    pass
+                    if isinstance(session_meta, dict):
+                        offset = session_meta.get("utc_offset_minutes")
+                        if isinstance(offset, int):
+                            workout_time = (
+                                dt.astimezone(timezone.utc) + timedelta(minutes=offset)
+                            ).strftime("%H:%M")
+                        local_date = session_meta.get("local_date")
+                        if isinstance(local_date, str) and self._validate_date(local_date):
+                            date_str = local_date
+                except (ValueError, AttributeError, TypeError):
+                    return False, f"Workout API returned invalid start time for {session_id}"
             if not date_str:
-                continue
+                return False, f"Workout API returned no date for {session_id}"
             notes = session.get("notes") or ""
             name = session.get("name") or ""
-            if name and not notes:
-                notes = name
             exercises = []
             all_muscle_groups = set()
+            edit_reason = ""
             for act in session.get("activities") or []:
+                if not isinstance(act, dict):
+                    return False, f"Workout API returned a malformed exercise for {session_id}"
                 ex_name = act.get("name") or ""
+                if act.get("type") != "exercise":
+                    edit_reason = "This workout contains a non-exercise activity."
                 meta = act.get("metadata") or {}
+                if not isinstance(meta, dict):
+                    return False, "Workout API returned malformed exercise metadata"
                 muscle_groups = meta.get("muscle_groups") if isinstance(meta.get("muscle_groups"), list) else []
+                if any(not isinstance(group, str) for group in muscle_groups):
+                    return False, f"Workout API returned invalid muscle groups for {session_id}"
                 sets_list = []
                 for rec in act.get("records") or []:
-                    d = rec.get("data") or {}
-                    sets_list.append(Set(
-                        reps=int(d.get("reps", 0)),
-                        weight=float(d.get("weight", 0)),
-                        comment=str(d.get("comment", "")),
-                    ))
+                    try:
+                        if not isinstance(rec, dict):
+                            raise ValueError("record is not an object")
+                        d = rec.get("data") or {}
+                        if not isinstance(d, dict):
+                            raise ValueError("record data is not an object")
+                        if "sets" in d or "reps" not in d or not ({"weight", "weight_kg"} & d.keys()):
+                            edit_reason = "This workout uses a legacy set format that the editor cannot safely replace."
+                        reps = int(d.get("reps", 0))
+                        weight_key = "weight" if "weight" in d else "weight_kg" if "weight_kg" in d else "weight"
+                        weight = float(d.get(weight_key, 0))
+                        if reps < 0 or not math.isfinite(weight):
+                            raise ValueError("reps must be nonnegative and weight must be finite")
+                        comment_key = "comment" if "comment" in d else "notes" if "notes" in d else "comment"
+                        unit = str(d.get("unit") or ("kg" if weight_key == "weight_kg" else "lbs"))
+                        sets_list.append(Set(
+                            reps=reps,
+                            weight=weight,
+                            comment=str(d.get(comment_key) or ""),
+                            unit=unit,
+                            extra_data={key: value for key, value in d.items()
+                                        if key not in {"reps", weight_key, comment_key, "unit"}},
+                            comment_key=comment_key,
+                            weight_key=weight_key,
+                            record_time=rec.get("record_time"),
+                        ))
+                    except (AttributeError, TypeError, ValueError, OverflowError) as exc:
+                        return False, f"Workout API returned a malformed set for {session_id}: {exc}"
                 if ex_name or sets_list:
-                    ex = Exercise(name=ex_name or "Exercise", sets=sets_list, muscle_groups=muscle_groups)
+                    ex = Exercise(
+                        name=ex_name or "Exercise", sets=sets_list,
+                        muscle_groups=muscle_groups, metadata=meta,
+                    )
                     exercises.append(ex)
                     all_muscle_groups.update(muscle_groups)
+            duration_minutes = session_meta.get("duration_minutes", 0)
+            if not isinstance(duration_minutes, int) or duration_minutes < 0:
+                return False, f"Workout API returned invalid duration for {date_str}"
             workout = Workout(
                 date=date_str,
                 muscle_groups=list(all_muscle_groups),
                 exercises=exercises,
-                duration_minutes=0,
+                duration_minutes=duration_minutes,
                 notes=notes,
                 workout_time=workout_time,
                 session_id=session_id,
+                revision=session.get("revision"),
+                name=name,
+                edit_reason=edit_reason,
+                metadata=session_meta,
+                source=session.get("source") or "",
+                start_time=start_time,
             )
-            self._workout_cache[date_str] = workout
-            # Write through to storage so analytics and get_entries_range see API data
+            next_library.append(workout)
+            next_cache.setdefault(date_str, workout)
+
+        # A locally recorded workout has no server ID. Do not replace it with
+        # a phone workout on the same day before the two can be reconciled.
+        try:
+            for date_str in next_cache:
+                existing = self.storage.get_entry(date_str)
+                if existing and existing.workout and not existing.workout.session_id:
+                    return False, f"Local and remote workouts both exist on {date_str}"
+        except Exception as exc:
+            return False, f"Could not inspect local workouts: {exc}"
+
+        # Only write local analytics after the whole API response is usable.
+        for date_str, workout in next_cache.items():
             try:
                 entry = self._get_or_create_entry(date_str)
                 entry.workout = workout
-                self._save_entry(entry)
-            except Exception:
-                pass
+                if not self._save_entry(entry):
+                    cache_errors.append(f"Could not cache workout for {date_str}")
+            except Exception as exc:
+                cache_errors.append(f"Could not cache workout for {date_str}: {exc}")
+
+        # A successful complete API read can explicitly reconcile old remote
+        # sessions from the local analytics cache. Local-only workouts stay put.
+        try:
+            for entry in self.storage.get_entries_range("0001-01-01", "9999-12-31"):
+                cached = entry.workout
+                if cached and cached.session_id and str(cached.session_id) not in active_session_ids:
+                    entry.workout = next_cache.get(entry.date)
+                    self.storage.save_entry(entry, merge=False)
+        except Exception as exc:
+            cache_errors.append(f"Could not reconcile local workout cache: {exc}")
+        if cache_errors:
+            return False, "; ".join(cache_errors[:3])
+        self._workout_cache = next_cache
+        self._workout_library = next_library
         return True, None
     
     def invalidate_workout_cache(self) -> None:
         """Clear API workout cache so next get_workout refetches."""
-        self._workout_cache = None
+        with self._load_lock:
+            self._workout_cache = None
+            self._workout_library = None
     
-    def get_workout(self, date: str) -> Optional[Workout]:
+    def get_workout(self, date: str, session_id: str | None = None) -> Optional[Workout]:
         """
         Get workout for a date. When api_client is set, uses API cache (refetches if cache empty).
         """
         if not self._validate_date(date):
             return None
         try:
-            if self.api_client:
+            if self.api_client and self.api_client.api_key:
                 if self._workout_cache is None:
                     self.load_workouts_from_api()
+                if session_id is not None:
+                    return next((workout for workout in self._workout_library or []
+                                 if workout.date == date and str(workout.session_id) == str(session_id)), None)
                 if self._workout_cache is not None:
-                    return self._workout_cache.get(date)
+                    remote = self._workout_cache.get(date)
+                    if remote is not None:
+                        return remote
             entry = self.storage.get_entry(date)
             if entry is None or entry.workout is None:
+                return None
+            if (self.api_client and self.api_client.api_key and entry.workout.session_id
+                    and self._workout_cache is not None):
+                # A previously cached remote workout is absent from the latest
+                # active response; do not revive it through the local fallback.
                 return None
             return entry.workout
         except Exception:
             return None
     
-    def create_workout(self, date: str, muscle_groups: list[str], exercises: list[Exercise], duration_minutes: int = 0, notes: str = "", workout_time: str | None = None) -> bool:
+    def create_workout(self, date: str, muscle_groups: list[str], exercises: list[Exercise], duration_minutes: int = 0, notes: str = "", workout_time: str | None = None, name: str = "") -> bool:
         """
         Create new workout for a date.
         
@@ -327,7 +485,8 @@ class WorkoutService:
             exercises=exercises if exercises else [],
             duration_minutes=duration_minutes if duration_minutes >= 0 else 0,
             notes=notes if notes else "",
-            workout_time=workout_time if workout_time else None
+            workout_time=workout_time if workout_time else None,
+            name=name,
         )
         
         # Validate workout
@@ -353,16 +512,19 @@ class WorkoutService:
         duration_minutes: int = 0,
         notes: str = "",
         workout_time: Optional[str] = None,
+        name: str = "",
     ) -> tuple[bool, Optional[str]]:
-        """
-        Create workout via API: POST /sessions, then POST /activities per exercise,
-        then POST /records per set. Refreshes workout cache on success.
-        Returns (True, None) or (False, error_message).
-        """
-        if not self.api_client:
+        """Create a complete workout atomically with a durable retry ID."""
+        if not self.api_client or not self.api_client.api_key:
             return False, "API client not configured"
         if not self._validate_date(date):
             return False, "Invalid date"
+        try:
+            existing = self.storage.get_entry(date)
+        except Exception as exc:
+            return False, f"Could not inspect local workout: {exc}"
+        if existing and existing.workout and not existing.workout.session_id:
+            return False, "A local-only workout already exists on this date"
         workout = Workout(
             date=date,
             muscle_groups=muscle_groups or [],
@@ -374,49 +536,126 @@ class WorkoutService:
         is_valid, err = self.validate_workout(workout)
         if not is_valid:
             return False, err or "Validation failed"
-        # Build start_time ISO (date + time or noon)
-        hour, minute = 12, 0
-        if workout_time:
-            parts = workout_time.split(":")
-            if len(parts) >= 2:
-                try:
-                    hour, minute = int(parts[0]), int(parts[1])
-                except ValueError:
-                    pass
-        start_time = f"{date}T{hour:02d}:{minute:02d}:00.000Z"
-        name = (notes or "Workout")[:200]
-        sess, err = self.api_client.create_session(
-            type="workout", name=name, start_time=start_time, notes=notes
+        try:
+            local_start = datetime.strptime(
+                f"{date} {workout_time or '12:00'}", "%Y-%m-%d %H:%M"
+            ).astimezone()
+        except ValueError:
+            return False, "Invalid workout date or time"
+        name = (name or notes or "Workout")[:200]
+        payload = {
+            "start_time": local_start.isoformat(),
+            "name": name,
+            "notes": notes,
+            "duration_minutes": duration_minutes,
+            "source": "desktop",
+            "exercises": [
+                {
+                    "name": exercise.name,
+                    "muscle_groups": getattr(exercise, "muscle_groups", []) or [],
+                    "sets": [
+                        {"reps": set_obj.reps, "weight": set_obj.weight,
+                         "comment": getattr(set_obj, "comment", "") or ""}
+                        for set_obj in exercise.sets
+                    ],
+                }
+                for exercise in exercises
+            ],
+        }
+        request_id, id_error = self._pending_workout_id(payload)
+        if id_error:
+            return False, id_error
+        response, create_error = self.api_client.create_workout(
+            {**payload, "client_request_id": request_id}
         )
-        if err or not sess:
-            return False, err or "Failed to create session"
-        session_id = sess.get("session_id") or sess.get("id")
-        if not session_id:
-            return False, "Session response missing session_id"
-        for exercise in exercises:
-            act, act_err = self.api_client.create_activity(
-                session_id=session_id,
-                type="exercise",
-                name=exercise.name,
-                metadata={"muscle_groups": getattr(exercise, "muscle_groups", []) or []},
-            )
-            if act_err or not act:
-                return False, act_err or "Failed to create activity"
-            activity_id = act.get("activity_id") or act.get("id")
-            if not activity_id:
-                return False, "Activity response missing activity_id"
-            for set_obj in exercise.sets:
-                data = {"reps": set_obj.reps, "weight": set_obj.weight, "comment": getattr(set_obj, "comment", "") or ""}
-                _, rec_err = self.api_client.create_record(activity_id=activity_id, data=data)
-                if rec_err:
-                    return False, rec_err or "Failed to create record"
+        if create_error or not response or not response.get("session_id"):
+            return False, create_error or "Workout create response had no session ID"
         self.invalidate_workout_cache()
-        self.load_workouts_from_api()
+        loaded, load_error = self.load_workouts_from_api()
+        if not loaded:
+            return False, load_error or "Workout was saved, but refresh failed; retry to verify it"
+        saved = next((workout for workout in self._workout_library or []
+                      if str(workout.session_id) == str(response["session_id"])), None)
+        if not saved or str(saved.session_id) != str(response["session_id"]):
+            return False, "Workout was saved, but the server response did not include it on refresh"
+        self._forget_pending_workout(payload)
+        self.last_created_session_id = str(response["session_id"])
+        return True, None
+
+    def update_workout_via_api(
+        self, date: str, session_id: str, expected_revision: int,
+        muscle_groups: list[str], exercises: list[Exercise],
+        duration_minutes: int = 0, notes: str = "",
+        workout_time: Optional[str] = None, name: str = "",
+    ) -> tuple[bool, Optional[str]]:
+        """Save edits to a server workout without replacing a newer phone edit."""
+        if not self.api_client or not self.api_client.api_key:
+            return False, "API client not configured"
+        workout = Workout(
+            date=date, muscle_groups=muscle_groups, exercises=exercises,
+            duration_minutes=duration_minutes, notes=notes,
+            workout_time=workout_time,
+        )
+        valid, error = self.validate_workout(workout)
+        if not valid:
+            return False, error
+        try:
+            original = self.get_workout(date, session_id)
+            if original and original.start_time and workout_time == original.workout_time:
+                local_start = datetime.fromisoformat(original.start_time.replace("Z", "+00:00"))
+                offset = (original.metadata or {}).get("utc_offset_minutes")
+                if isinstance(offset, int):
+                    local_start = local_start.astimezone(timezone(timedelta(minutes=offset)))
+            else:
+                local_start = datetime.strptime(
+                    f"{date} {workout_time or '12:00'}", "%Y-%m-%d %H:%M"
+                )
+                offset = (original.metadata or {}).get("utc_offset_minutes") if original else None
+                if isinstance(offset, int):
+                    local_start = local_start.replace(tzinfo=timezone(timedelta(minutes=offset)))
+                else:
+                    local_start = local_start.astimezone()
+        except (ValueError, TypeError):
+            return False, "Invalid workout date or time"
+        payload = {
+            "expected_revision": expected_revision,
+            "start_time": local_start.isoformat(),
+            "local_date": date,
+            "name": (name or notes or "Workout")[:200],
+            "notes": notes,
+            "duration_minutes": duration_minutes,
+            "exercises": [
+                {
+                    "name": exercise.name,
+                    "muscle_groups": exercise.muscle_groups,
+                    "metadata": exercise.metadata or {},
+                    "sets": [
+                        {"reps": set_obj.reps, "weight": set_obj.weight,
+                         "comment": set_obj.comment, "unit": set_obj.unit,
+                         "extra_data": set_obj.extra_data or {},
+                         "comment_key": set_obj.comment_key,
+                         "weight_key": set_obj.weight_key,
+                         "record_time": set_obj.record_time}
+                        for set_obj in exercise.sets
+                    ],
+                }
+                for exercise in exercises
+            ],
+        }
+        response, update_error = self.api_client.update_workout(session_id, payload)
+        if update_error:
+            return False, update_error
+        if (not response or str(response.get("session_id")) != str(session_id)
+                or response.get("revision") != expected_revision + 1):
+            return False, "Server response did not confirm the workout update"
+        loaded, load_error = self.load_workouts_from_api()
+        if not loaded:
+            return False, f"Workout saved, but refresh failed: {load_error or 'unknown error'}"
         return True, None
     
     def delete_session_and_refetch(self, session_id: str) -> tuple[bool, Optional[str]]:
         """DELETE /sessions/{id}, then refetch workouts. Returns (True, None) or (False, error)."""
-        if not self.api_client:
+        if not self.api_client or not self.api_client.api_key:
             return False, "API client not configured"
         ok, err = self.api_client.delete_session(session_id)
         if not ok:
@@ -427,7 +666,7 @@ class WorkoutService:
     
     def restore_session_and_refetch(self, session_id: str) -> tuple[bool, Optional[str]]:
         """POST /sessions/{id}/restore, then refetch workouts. Returns (True, None) or (False, error)."""
-        if not self.api_client:
+        if not self.api_client or not self.api_client.api_key:
             return False, "API client not configured"
         ok, err = self.api_client.restore_session(session_id)
         if not ok:
@@ -480,6 +719,12 @@ class WorkoutService:
             
             if "notes" in kwargs:
                 workout.notes = kwargs["notes"] if kwargs["notes"] else ""
+
+            if "workout_time" in kwargs:
+                workout.workout_time = kwargs["workout_time"] or None
+
+            if "name" in kwargs:
+                workout.name = kwargs["name"] or ""
             
             # Validate updated workout
             is_valid, error_msg = self.validate_workout(workout)
@@ -781,7 +1026,13 @@ class WorkoutService:
             if entry is None:
                 return None
             
-            if entry.workout is not None:
+            remote_missing = (
+                self.api_client and self.api_client.api_key
+                and self._workout_cache is not None
+                and entry.workout is not None and entry.workout.session_id
+                and date not in self._workout_cache
+            )
+            if entry.workout is not None and not remote_missing:
                 return "workout"
             elif entry.rest_day:
                 return "rest"

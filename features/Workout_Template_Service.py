@@ -52,7 +52,8 @@ class WorkoutTemplateService:
     def _load_templates(self) -> dict:
         """
         Load templates from JSON file.
-        Handles missing file / invalid JSON by treating as empty dict ({}).
+        Missing files return an empty dictionary. Invalid JSON raises an error so
+        callers can fail closed without overwriting the damaged file.
         
         Returns:
             Dictionary with template names as keys and template data as values
@@ -63,9 +64,9 @@ class WorkoutTemplateService:
         except FileNotFoundError:
             # File doesn't exist, return empty dict (treat as {})
             return {}
-        except json.JSONDecodeError:
-            # Handle corrupted JSON - treat as {} for recovery
-            return {}
+        except json.JSONDecodeError as e:
+            # Avoid replacing recoverable templates on the next save.
+            raise IOError(f"Cannot load {self.file_path}: invalid JSON") from e
     
     def _save_templates(self, templates: dict) -> bool:
         """
@@ -104,7 +105,11 @@ class WorkoutTemplateService:
         # #region agent log
         _log("WorkoutTemplateService", "list_templates", "ENTRY", {}, "A")
         # #endregion
-        templates = self._load_templates()
+        try:
+            templates = self._load_templates()
+        except IOError:
+            # A damaged file remains untouched; expose an empty read-only view.
+            return []
         result = sorted(templates.keys())
         # #region agent log
         _log("WorkoutTemplateService", "list_templates", "EXIT", {"count": len(result), "names": result}, "A")
@@ -130,7 +135,10 @@ class WorkoutTemplateService:
             # #endregion
             return None
         
-        templates = self._load_templates()
+        try:
+            templates = self._load_templates()
+        except IOError:
+            return None
         result = templates.get(name.strip())
         # #region agent log
         _log("WorkoutTemplateService", "get_template", "EXIT", {"result": "found" if result else "not_found", "has_date_field": "date" in result if result else False, "keys": list(result.keys()) if result else []}, "B")
@@ -159,7 +167,11 @@ class WorkoutTemplateService:
             return False
         
         name = name.strip()
-        templates = self._load_templates()
+        try:
+            templates = self._load_templates()
+        except IOError:
+            # Never save defaults over an unreadable/corrupt template file.
+            return False
         existed_before = name in templates
         
         # Remove 'date' field if present (templates don't have dates)
@@ -198,7 +210,10 @@ class WorkoutTemplateService:
             return False
         
         name = name.strip()
-        templates = self._load_templates()
+        try:
+            templates = self._load_templates()
+        except IOError:
+            return False
         
         if name not in templates:
             # #region agent log
@@ -232,7 +247,10 @@ class WorkoutTemplateService:
             # #endregion
             return False
         
-        templates = self._load_templates()
+        try:
+            templates = self._load_templates()
+        except IOError:
+            return False
         result = name.strip() in templates
         # #region agent log
         _log("WorkoutTemplateService", "template_exists", "EXIT", {"result": result}, "A")

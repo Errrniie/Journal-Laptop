@@ -5,6 +5,7 @@ Centralized api_request; handles tasks and workouts.
 
 import requests
 from typing import Any, Optional, Tuple
+from urllib.parse import urlencode
 
 
 class APIError(Exception):
@@ -23,6 +24,7 @@ class APIClient:
     """
 
     BASE_URL = "https://life-api.bravedesert-0d7c33d5.northcentralus.azurecontainerapps.io"
+    REQUEST_TIMEOUT = (5, 20)  # connect timeout, response read timeout
 
     def __init__(self, api_key: Optional[str] = None) -> None:
         self.api_key = api_key
@@ -53,7 +55,7 @@ class APIClient:
         if body is not None:
             kwargs["json"] = body
         try:
-            response = self.session.request(method, url, **kwargs)
+            response = self.session.request(method, url, timeout=self.REQUEST_TIMEOUT, **kwargs)
         except requests.exceptions.ConnectionError as e:
             raise APIError(0, f"Connection error: {e}") from e
         except requests.exceptions.Timeout as e:
@@ -87,24 +89,33 @@ class APIClient:
         category: Optional[str] = None,
         include_deleted: Optional[bool] = None,
     ) -> Tuple[list[dict], Optional[str]]:
-        """GET /tasks. Returns (list of task dicts, error_message or None)."""
+        """Fetch every task page; never return a partial list as a full sync."""
         try:
-            params = []
+            params: dict[str, str | int] = {"limit": 200}
             if status is not None:
-                params.append(f"status={status}")
+                params["status"] = status
             if category is not None:
-                params.append(f"category={category}")
+                params["category"] = category
             if include_deleted is not None:
-                params.append(f"include_deleted={str(include_deleted).lower()}")
-            endpoint = "/tasks"
-            if params:
-                endpoint += "?" + "&".join(params)
-            data = self.api_request("GET", endpoint)
-            if data is None:
-                return [], None
-            if isinstance(data, list):
-                return data, None
-            return [], f"Unexpected response format: expected list, got {type(data)}"
+                params["include_deleted"] = str(include_deleted).lower()
+            tasks: list[dict] = []
+            seen_ids: set[str] = set()
+            offset = 0
+            while True:
+                params["offset"] = offset
+                data = self.api_request("GET", "/tasks?" + urlencode(params))
+                if not isinstance(data, list):
+                    return [], f"Unexpected task response format: {type(data)}"
+                if any(not isinstance(task, dict) or not task.get("id") for task in data):
+                    return [], "Task page contains a row without an ID"
+                page_ids = [str(task["id"]) for task in data]
+                if len(set(page_ids)) != len(page_ids) or seen_ids.intersection(page_ids):
+                    return [], "Task pagination repeated an ID; sync was not applied"
+                seen_ids.update(page_ids)
+                tasks.extend(data)
+                if len(data) < 200:
+                    return tasks, None
+                offset += len(data)
         except APIError as e:
             return [], str(e)
 
@@ -115,6 +126,9 @@ class APIClient:
         category: str = "",
         priority: int = 0,
         due_at: Optional[str] = None,
+        due_date: Optional[str] = None,
+        client_request_id: Optional[str] = None,
+        completed: bool = False,
     ) -> Tuple[Optional[dict], Optional[str]]:
         """POST /tasks. Returns (created task dict or None, error or None)."""
         try:
@@ -126,23 +140,40 @@ class APIClient:
             payload["priority"] = priority
             if due_at:
                 payload["due_at"] = due_at
+            if due_date:
+                payload["due_date"] = due_date
+            if client_request_id:
+                payload["client_request_id"] = client_request_id
+            if completed:
+                payload["completed"] = True
             data = self.api_request("POST", "/tasks", payload)
             return (data, None)
         except APIError as e:
             return (None, str(e))
 
-    def complete_task(self, task_id: str) -> Tuple[bool, Optional[str]]:
+    def complete_task(self, task_id: str, expected_revision: Optional[int] = None) -> Tuple[bool, Optional[str]]:
         """POST /tasks/{task_id}/complete. Returns (success, error or None)."""
         try:
-            self.api_request("POST", f"/tasks/{task_id}/complete")
+            suffix = f"?expected_revision={expected_revision}" if expected_revision is not None else ""
+            self.api_request("POST", f"/tasks/{task_id}/complete{suffix}")
             return (True, None)
         except APIError as e:
             return (False, str(e))
 
-    def delete_task(self, task_id: str) -> Tuple[bool, Optional[str]]:
+    def reopen_task(self, task_id: str, expected_revision: Optional[int] = None) -> Tuple[bool, Optional[str]]:
+        """POST /tasks/{task_id}/reopen."""
+        try:
+            suffix = f"?expected_revision={expected_revision}" if expected_revision is not None else ""
+            self.api_request("POST", f"/tasks/{task_id}/reopen{suffix}")
+            return (True, None)
+        except APIError as e:
+            return (False, str(e))
+
+    def delete_task(self, task_id: str, expected_revision: Optional[int] = None) -> Tuple[bool, Optional[str]]:
         """DELETE /tasks/{task_id}. Returns (success, error or None)."""
         try:
-            self.api_request("DELETE", f"/tasks/{task_id}")
+            suffix = f"?expected_revision={expected_revision}" if expected_revision is not None else ""
+            self.api_request("DELETE", f"/tasks/{task_id}{suffix}")
             return (True, None)
         except APIError as e:
             return (False, str(e))
@@ -156,7 +187,7 @@ class APIClient:
             return (False, str(e))
 
     def update_task(self, task_id: str, payload: dict) -> Tuple[Optional[dict], Optional[str]]:
-        """Placeholder: PATCH/PUT /tasks/{task_id} when API supports it. Returns (updated task or None, error or None)."""
+        """PATCH /tasks/{task_id}. Returns (updated task or None, error or None)."""
         try:
             data = self.api_request("PATCH", f"/tasks/{task_id}", payload)
             return (data, None)
@@ -195,6 +226,20 @@ class APIClient:
             return [], f"Unexpected response format: expected list, got {type(data)}"
         except APIError as e:
             return [], str(e)
+
+    def create_workout(self, payload: dict) -> Tuple[Optional[dict], Optional[str]]:
+        """POST /workouts creates the session, exercises, and sets atomically."""
+        try:
+            return self.api_request("POST", "/workouts", payload), None
+        except APIError as e:
+            return None, str(e)
+
+    def update_workout(self, session_id: str, payload: dict) -> Tuple[Optional[dict], Optional[str]]:
+        """PATCH one complete workout with an expected revision."""
+        try:
+            return self.api_request("PATCH", f"/workouts/{session_id}", payload), None
+        except APIError as e:
+            return None, str(e)
 
     def create_session(
         self,
@@ -357,10 +402,12 @@ class APIClient:
                 return (None, "page_type_exists")
             return (None, str(e))
 
-    def delete_journal_page(self, journal_page_id: str) -> Tuple[bool, Optional[str]]:
+    def delete_journal_page(self, journal_page_id: str,
+                            expected_revision: Optional[int] = None) -> Tuple[bool, Optional[str]]:
         """DELETE /journal/pages/{journal_page_id}."""
         try:
-            self.api_request("DELETE", f"/journal/pages/{journal_page_id}")
+            suffix = f"?expected_revision={expected_revision}" if expected_revision is not None else ""
+            self.api_request("DELETE", f"/journal/pages/{journal_page_id}{suffix}")
             return (True, None)
         except APIError as e:
             return (False, str(e))
@@ -382,6 +429,7 @@ class APIClient:
         title: Optional[str] = None,
         page_order: Optional[int] = None,
         metadata: Optional[dict] = None,
+        expected_revision: Optional[int] = None,
     ) -> Tuple[Optional[dict], Optional[str]]:
         """PATCH /journal/pages/{journal_page_id}. Returns (page dict, error or None)."""
         try:
@@ -394,6 +442,8 @@ class APIClient:
                 payload["page_order"] = page_order
             if metadata is not None:
                 payload["metadata"] = metadata
+            if expected_revision is not None:
+                payload["expected_revision"] = expected_revision
             if not payload:
                 return (None, "No fields provided for update")
             data = self.api_request("PATCH", f"/journal/pages/{journal_page_id}", payload)

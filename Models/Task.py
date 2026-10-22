@@ -11,6 +11,8 @@ class Task:
     activity_id: Optional[str] = None  # API activity UUID for tracking
     session_id: Optional[str] = None   # API session UUID
     last_synced: Optional[str] = None  # ISO timestamp of last sync
+    revision: Optional[int] = None  # API revision for conflict-safe edits
+    client_request_id: Optional[str] = None  # Stable ID for retrying local uploads
 
     def __post_init__(self):
         # Ensure Priority is set to 1 if not provided

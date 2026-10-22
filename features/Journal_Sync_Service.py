@@ -99,12 +99,18 @@ class JournalSyncService:
             result["skipped"] = True
             return result
 
+        try:
+            local_entry = self.journal_service.storage.get_entry(date)
+        except Exception as exc:
+            result["errors"].append(f"Could not read local journal: {exc}")
+            return result
         entry_data, error = self.api_client.get_journal_by_date(date)
         if error:
             result["errors"].append(error)
             return result
 
-        if entry_data is None:
+        created_entry = entry_data is None
+        if created_entry:
             entry_id, create_error = self.api_client.create_journal_entry(date)
             if create_error == "entry_exists":
                 entry_data, error = self.api_client.get_journal_by_date(date)
@@ -137,6 +143,18 @@ class JournalSyncService:
         if entry_id:
             self._journal_entry_ids[date] = entry_id
 
+        import_error = self._import_local_pages(
+            entry_id, entry_data, local_entry, include_api_pages=created_entry
+        )
+        if import_error:
+            result["errors"].append(import_error)
+            return result
+        if local_entry is not None:
+            entry_data, error = self.api_client.get_journal_by_date(date)
+            if error or not entry_data:
+                result["errors"].append(error or "Could not verify imported journal pages")
+                return result
+
         pages = self._map_api_pages(entry_data.get("pages") or [], entry_id)
         if not pages:
             page_id, page_error = self.api_client.create_journal_page(
@@ -153,9 +171,90 @@ class JournalSyncService:
                 return result
             pages = self._map_api_pages(entry_data.get("pages") or [], entry_id)
 
-        self._replace_local_pages(date, pages, "")
+        try:
+            self._replace_local_pages(date, pages, "")
+        except Exception as exc:
+            result["errors"].append(f"Could not cache journal pages: {exc}")
+            return result
         result["success"] = True
         return result
+
+    def _import_local_pages(self, entry_id: str, entry_data: dict, local_entry,
+                            *, include_api_pages: bool) -> Optional[str]:
+        """Import unsynced local pages before remote data replaces the cache.
+
+        A differing nonempty remote page is a conflict and is never overwritten.
+        An interrupted import can be resumed on the next sync.
+        """
+        if local_entry is None:
+            return None
+        local_pages = list(local_entry.journal_pages or [])
+        if not local_pages and local_entry.journal:
+            local_pages = [JournalPage(name="Main", content=local_entry.journal, page_type="main")]
+        if not local_pages:
+            return None
+        remote_by_type = {
+            normalize_type_key(page.get("page_type") or ""): page
+            for page in entry_data.get("pages") or []
+        }
+        known_types = None
+
+        for page in local_pages:
+            page_type = normalize_type_key(page.page_type or page.tag or page.name)
+            if not page_type:
+                return "Local journal page has no page type; import stopped"
+            remote = remote_by_type.get(page_type)
+            if page.page_id and not include_api_pages:
+                if remote is None or str(remote.get("id")) != str(page.page_id):
+                    return f"Journal conflict on {page_type}: the remote page was replaced or deleted"
+                local_content = page.content or ""
+                remote_content = remote.get("content") or ""
+                if local_content != remote_content:
+                    if page.revision is None or page.revision != remote.get("revision"):
+                        return f"Journal conflict on {page_type}: local and remote text differ"
+                    _, update_error = self.api_client.update_journal_page(
+                        str(remote["id"]), content=local_content,
+                        expected_revision=page.revision,
+                    )
+                    if update_error:
+                        return f"Could not import {page_type} text: {update_error}"
+                continue
+            if known_types is None:
+                active_types, error = self.api_client.get_journal_page_types()
+                if error:
+                    return error
+                known_types = {row.get("type_key") for row in active_types}
+            if page_type not in known_types:
+                _, type_error = self.api_client.create_journal_page_type(
+                    page_type, page.name or page_type.replace("_", " ").title()
+                )
+                if type_error:
+                    return f"Could not import page type {page_type}: {type_error}"
+                known_types.add(page_type)
+
+            if remote is None:
+                _, page_error = self.api_client.create_journal_page(
+                    journal_entry_id=entry_id,
+                    page_type=page_type,
+                    title=page.name or None,
+                    content=page.content or "",
+                )
+                if page_error:
+                    return f"Could not import {page_type} page: {page_error}"
+                continue
+
+            remote_content = remote.get("content") or ""
+            local_content = page.content or ""
+            if remote_content and local_content and remote_content != local_content:
+                return f"Journal conflict on {page_type}: local and remote text differ"
+            if local_content and not remote_content:
+                _, update_error = self.api_client.update_journal_page(
+                    str(remote["id"]), content=local_content,
+                    expected_revision=remote.get("revision"),
+                )
+                if update_error:
+                    return f"Could not import {page_type} text: {update_error}"
+        return None
 
     def create_page(
         self,
@@ -232,7 +331,7 @@ class JournalSyncService:
             return False, "Page has no API id"
         if page.page_type and normalize_type_key(page.page_type) == "main":
             return False, "The main page cannot be deleted"
-        success, error = self.api_client.delete_journal_page(page.page_id)
+        success, error = self.api_client.delete_journal_page(page.page_id, page.revision)
         if not success:
             return False, error
         sync_result = self.sync_journal_for_date(date)
@@ -264,7 +363,9 @@ class JournalSyncService:
             page = refreshed
             page_id = page.page_id
 
-        api_page, error = self.api_client.update_journal_page(page_id, content=content)
+        api_page, error = self.api_client.update_journal_page(
+            page_id, content=content, expected_revision=page.revision
+        )
         if error:
             return False, error
 
@@ -327,6 +428,7 @@ class JournalSyncService:
                     if title:
                         cached_page.name = title
                     cached_page.created_at = str(api_page.get("created_at") or cached_page.created_at)
+                    cached_page.revision = api_page.get("revision", cached_page.revision)
                 updated = True
                 if cached_page.page_type and normalize_type_key(cached_page.page_type) == "main":
                     entry.journal = content
@@ -346,6 +448,7 @@ class JournalSyncService:
                     page_id=page_id,
                     page_type=page_type,
                     journal_entry_id=str(api_page.get("journal_entry_id") or ""),
+                    revision=api_page.get("revision"),
                 )
             )
             if page_type and normalize_type_key(page_type) == "main":
@@ -368,6 +471,7 @@ class JournalSyncService:
                     page_id=str(api_page.get("id")) if api_page.get("id") else None,
                     page_type=page_type,
                     journal_entry_id=journal_entry_id,
+                    revision=api_page.get("revision"),
                 )
             )
         return pages

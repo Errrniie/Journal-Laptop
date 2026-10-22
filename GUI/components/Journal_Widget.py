@@ -1,11 +1,12 @@
 from typing import TYPE_CHECKING
 
 from PyQt6.QtCore import QPoint, QTimer, Qt, pyqtSignal
-from PyQt6.QtGui import QAction, QColor, QFont, QKeySequence, QTextCharFormat, QTextOption
+from PyQt6.QtGui import QAction, QFont, QKeySequence, QTextCharFormat, QTextOption
 from PyQt6.QtWidgets import (
     QComboBox,
     QDialog,
     QDialogButtonBox,
+    QFormLayout,
     QHBoxLayout,
     QInputDialog,
     QLabel,
@@ -24,6 +25,85 @@ from PyQt6.QtWidgets import (
 if TYPE_CHECKING:
     from config.settings_store import SettingsStore
     from features.Journal_Service import JournalService
+
+
+class NewJournalPageDialog(QDialog):
+    """Create a page from an existing type or name a new one in one step."""
+
+    def __init__(self, *, api_mode: bool, available_types: list[dict],
+                 presets: list[str], parent: QWidget) -> None:
+        super().__init__(parent)
+        self.api_mode = api_mode
+        self.setWindowTitle("New journal page")
+        self.setMinimumWidth(340)
+
+        layout = QVBoxLayout(self)
+        form = QFormLayout()
+        layout.addLayout(form)
+        self.name_edit = QLineEdit()
+        self.name_edit.setPlaceholderText("e.g. Dreams")
+
+        if api_mode:
+            self.type_combo = QComboBox()
+            for page_type in available_types:
+                key = page_type.get("type_key")
+                if key:
+                    self.type_combo.addItem(page_type.get("display_name") or key, key)
+            self.type_combo.addItem("Create a new page...", None)
+            form.addRow("Page", self.type_combo)
+            self.name_label = QLabel("New page name")
+            form.addRow(self.name_label, self.name_edit)
+            self.reuse_hint = QLabel("New page names can be reused on other days.")
+            layout.addWidget(self.reuse_hint)
+            self.type_combo.currentIndexChanged.connect(self._update_name_visibility)
+            if not available_types:
+                self.type_combo.setCurrentIndex(self.type_combo.count() - 1)
+            self._update_name_visibility()
+        else:
+            form.addRow("Page name", self.name_edit)
+            self.category_combo = QComboBox()
+            self.category_combo.setEditable(True)
+            self.category_combo.addItem("No category", None)
+            for preset in presets:
+                self.category_combo.addItem(preset, preset)
+            self.category_combo.setCurrentIndex(0)
+            form.addRow("Category (optional)", self.category_combo)
+
+        self.error_label = QLabel("")
+        self.error_label.setStyleSheet("color: #b42318;")
+        layout.addWidget(self.error_label)
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+        )
+        buttons.button(QDialogButtonBox.StandardButton.Ok).setText("Create page")
+        buttons.accepted.connect(self.accept)
+        buttons.rejected.connect(self.reject)
+        layout.addWidget(buttons)
+        if not api_mode or self.type_combo.currentData() is None:
+            self.name_edit.setFocus()
+        else:
+            self.type_combo.setFocus()
+
+    def _update_name_visibility(self) -> None:
+        is_new_type = self.type_combo.currentData() is None
+        self.name_label.setVisible(is_new_type)
+        self.name_edit.setVisible(is_new_type)
+        self.reuse_hint.setVisible(is_new_type)
+        if is_new_type:
+            self.name_edit.setFocus()
+
+    def accept(self) -> None:
+        if (not self.api_mode or self.type_combo.currentData() is None) and not self.name_edit.text().strip():
+            self.error_label.setText("Enter a page name.")
+            self.name_edit.setFocus()
+            return
+        super().accept()
+
+    def selected_category(self) -> str | None:
+        if self.api_mode:
+            return None
+        text = self.category_combo.currentText().strip()
+        return None if not text or (self.category_combo.currentIndex() == 0 and text == "No category") else text
 
 
 class JournalWidget(QWidget):
@@ -64,10 +144,50 @@ class JournalWidget(QWidget):
     
     def _setup_ui(self) -> None:
         """Create and layout UI components."""
+        self.setObjectName("journalPage")
+        self.setStyleSheet("""
+            QWidget#journalPage { background: #171b24; color: #e6ecf5; }
+            QWidget#journalPage QWidget#journalSidebar,
+            QWidget#journalPage QWidget#journalEditorSurface {
+                background: #20242e; border: 1px solid #343b49; border-radius: 12px;
+            }
+            QWidget#journalPage QLabel { color: #e6ecf5; }
+            QLabel#journalHeading { color: #f7f9fc; font-size: 14pt; font-weight: 700; }
+            QLabel#journalMuted { color: #aeb8c8; }
+            QWidget#journalPage QListWidget {
+                background: #171b24; color: #f7f9fc; border: 1px solid #343b49;
+                border-radius: 9px; outline: 0; padding: 4px;
+            }
+            QWidget#journalPage QListWidget::item {
+                color: #e6ecf5; border-radius: 7px; padding: 10px 9px; margin: 2px;
+            }
+            QWidget#journalPage QListWidget::item:hover { background: #303b4c; }
+            QWidget#journalPage QListWidget::item:selected { background: #35557a; color: #ffffff; }
+            QWidget#journalPage QTextEdit, QWidget#journalPage QLineEdit {
+                background: #171b24; color: #f7f9fc; border: 1px solid #343b49;
+                border-radius: 8px; padding: 9px; selection-background-color: #377fd1;
+            }
+            QWidget#journalPage QTextEdit:focus, QWidget#journalPage QLineEdit:focus {
+                border: 1px solid #5596e2;
+            }
+            QWidget#journalPage QPushButton, QWidget#journalPage QToolButton {
+                background: #303b4c; color: #f7f9fc; border: 1px solid #526072;
+                border-radius: 8px; padding: 8px 12px;
+            }
+            QWidget#journalPage QPushButton:hover, QWidget#journalPage QToolButton:hover {
+                background: #3c4b60;
+            }
+            QWidget#journalPage QPushButton#journalPrimary {
+                background: #377fd1; color: white; border: 0; font-weight: 700;
+            }
+            QWidget#journalPage QPushButton#journalPrimary:hover { background: #4c91dd; }
+            QWidget#journalPage QPushButton#journalDanger { color: #ffc4cf; background: #3b2a32; border-color: #68414b; }
+            QWidget#journalPage QToolButton:checked { background: #35557a; border-color: #5596e2; }
+        """)
         # Main horizontal layout (sidebar + content)
         main_layout = QHBoxLayout(self)
-        main_layout.setContentsMargins(5, 5, 5, 5)
-        main_layout.setSpacing(5)
+        main_layout.setContentsMargins(18, 16, 18, 16)
+        main_layout.setSpacing(14)
         
         # Sidebar
         sidebar = self._create_sidebar()
@@ -80,21 +200,21 @@ class JournalWidget(QWidget):
     def _create_sidebar(self) -> QWidget:
         """Create sidebar with page list and management buttons."""
         sidebar = QWidget()
+        sidebar.setObjectName("journalSidebar")
         sidebar.setFixedWidth(200)
-        sidebar.setStyleSheet("background-color: #f5f5f5; border-right: 1px solid #ddd;")
         
         layout = QVBoxLayout(sidebar)
-        layout.setContentsMargins(5, 5, 5, 5)
-        layout.setSpacing(5)
+        layout.setContentsMargins(12, 12, 12, 12)
+        layout.setSpacing(9)
         
         # Pages header with page count
         header_layout = QHBoxLayout()
         pages_label = QLabel("Pages")
-        pages_label.setStyleSheet("font-weight: bold; font-size: 11pt; padding: 5px; color: #000000;")
+        pages_label.setObjectName("journalHeading")
         header_layout.addWidget(pages_label)
         
         self.page_count_label = QLabel("")
-        self.page_count_label.setStyleSheet("color: gray; font-size: 9pt;")
+        self.page_count_label.setObjectName("journalMuted")
         self.page_count_label.setAlignment(Qt.AlignmentFlag.AlignRight)
         header_layout.addWidget(self.page_count_label)
         
@@ -102,54 +222,18 @@ class JournalWidget(QWidget):
         
         # Page list (scrollable)
         self.page_list_widget = QListWidget()
-        self.page_list_widget.setStyleSheet("""
-            QListWidget {
-                border: none;
-                background-color: white;
-                color: #333333;
-            }
-            QListWidget::item {
-                padding: 8px;
-                border-bottom: 1px solid #e0e0e0;
-                border-radius: 3px;
-                margin: 2px;
-                color: #333333;
-            }
-            QListWidget::item:hover {
-                background-color: #e8e8e8;
-                color: #000000;
-            }
-            QListWidget::item:selected {
-                background-color: #c8d4f0;
-                color: #000000;
-            }
-        """)
         self.page_list_widget.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.page_list_widget.customContextMenuRequested.connect(self._show_page_context_menu)
         layout.addWidget(self.page_list_widget, stretch=1)
         
-        # Button row: Add Tag and Add Page
-        button_row = QHBoxLayout()
-        button_row.setSpacing(5)
-        
-        self.add_tag_button = QPushButton("+ Add Page Type")
-        self.add_tag_button.setStyleSheet("font-weight: bold; color: #000000;")
-        self.add_tag_button.setToolTip("Create a new journal page type on the server")
-        self.add_tag_button.setVisible(self.journal_service.uses_api or bool(self.settings_store))
-        button_row.addWidget(self.add_tag_button)
-        
-        # Add Page button with dropdown menu for quick preset creation
-        self.add_page_button = QPushButton("+ Add Page")
-        self.add_page_button.setStyleSheet("font-weight: bold; color: #000000;")
-        self.add_page_menu = QMenu(self)
-        self.add_page_button.setMenu(self.add_page_menu)
-        button_row.addWidget(self.add_page_button)
-        
-        layout.addLayout(button_row)
+        self.add_page_button = QPushButton("+ New page")
+        self.add_page_button.setObjectName("journalPrimary")
+        self.add_page_button.setToolTip("Choose an existing page or create a new one")
+        layout.addWidget(self.add_page_button)
         
         # Delete Page button
         self.delete_page_button = QPushButton("Delete Page")
-        self.delete_page_button.setStyleSheet("color: red;")
+        self.delete_page_button.setObjectName("journalDanger")
         layout.addWidget(self.delete_page_button)
         
         return sidebar
@@ -157,9 +241,10 @@ class JournalWidget(QWidget):
     def _create_content_area(self) -> QWidget:
         """Create content area with toolbar and rich text editor."""
         content_widget = QWidget()
+        content_widget.setObjectName("journalEditorSurface")
         layout = QVBoxLayout(content_widget)
-        layout.setContentsMargins(10, 10, 10, 10)
-        layout.setSpacing(5)
+        layout.setContentsMargins(18, 16, 18, 12)
+        layout.setSpacing(12)
         
         # Toolbar
         toolbar = self._create_toolbar()
@@ -208,14 +293,15 @@ class JournalWidget(QWidget):
     def _create_toolbar(self) -> QWidget:
         """Create formatting toolbar with bold, italic, and page name."""
         toolbar = QWidget()
+        toolbar.setObjectName("journalToolbar")
         layout = QHBoxLayout(toolbar)
-        layout.setContentsMargins(5, 5, 5, 5)
-        layout.setSpacing(10)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(8)
         
         # Bold button
         self.bold_button = QToolButton()
         self.bold_button.setText("B")
-        self.bold_button.setStyleSheet("font-weight: bold; font-size: 12pt; padding: 5px;")
+        self.bold_button.setStyleSheet("font-weight: bold; font-size: 12pt;")
         self.bold_button.setToolTip("Bold (Ctrl+B)")
         self.bold_button.setCheckable(True)
         layout.addWidget(self.bold_button)
@@ -223,7 +309,7 @@ class JournalWidget(QWidget):
         # Italic button
         self.italic_button = QToolButton()
         self.italic_button.setText("I")
-        self.italic_button.setStyleSheet("font-style: italic; font-size: 12pt; padding: 5px;")
+        self.italic_button.setStyleSheet("font-style: italic; font-size: 12pt;")
         self.italic_button.setToolTip("Italic (Ctrl+I)")
         self.italic_button.setCheckable(True)
         layout.addWidget(self.italic_button)
@@ -242,7 +328,7 @@ class JournalWidget(QWidget):
         self.page_name_edit = QLineEdit()
         self.page_name_edit.setPlaceholderText("Page name...")
         self.page_name_edit.setReadOnly(True)  # Start as read-only, can be made editable
-        self.page_name_edit.setStyleSheet("font-weight: bold; font-size: 11pt;")
+        self.page_name_edit.setStyleSheet("font-weight: bold; font-size: 11pt; padding: 6px 9px;")
         page_name_layout.addWidget(self.page_name_edit, stretch=1)
         
         # Unsaved changes indicator
@@ -269,14 +355,9 @@ class JournalWidget(QWidget):
         self.page_list_widget.itemDoubleClicked.connect(self._on_page_double_clicked)
         
         # Buttons
-        self.add_tag_button.clicked.connect(self._on_add_tag_clicked)
-        # Add Page button: left click for normal dialog, menu for quick presets
         self.add_page_button.clicked.connect(self._on_add_page_clicked)
         self.delete_page_button.clicked.connect(self._on_delete_page_clicked)
         self.rename_page_button.clicked.connect(self._on_rename_page_clicked)
-        
-        # Update add-page menu when presets/page types change
-        self._update_add_page_menu()
         
         # Formatting buttons
         self.bold_button.clicked.connect(self._on_bold_clicked)
@@ -340,12 +421,6 @@ class JournalWidget(QWidget):
         
         for page in pages:
             item = QListWidgetItem(page.name)
-            if page.name == self.current_page_name:
-                item.setBackground(QColor(200, 220, 255))  # Highlight current page
-                item.setForeground(QColor(0, 0, 0))  # Black text for readability
-            else:
-                item.setBackground(QColor(255, 255, 255))  # White background for other items
-                item.setForeground(QColor(51, 51, 51))  # Dark gray text for readability
             self.page_list_widget.addItem(item)
         
         # Update delete button state
@@ -379,8 +454,10 @@ class JournalWidget(QWidget):
         if page_name == self.current_page_name:
             return  # Already on this page
         
-        # Save current page first
-        self._save_current_page()
+        if self.unsaved_indicator.isVisible() and not self._save_current_page():
+            self._refresh_page_list()
+            QMessageBox.warning(self, "Save failed", "Save the current page before switching pages.")
+            return
         
         # Load new page
         self._load_page(page_name)
@@ -452,218 +529,83 @@ class JournalWidget(QWidget):
                         self.page_name_edit.clear()
                         self.text_edit.clear()
                 self._refresh_page_list()
-                self._update_add_page_menu()
             else:
                 QMessageBox.warning(self, "Error", "Failed to delete page.")
     
-    def _update_add_page_menu(self) -> None:
-        """Populate + Add Page menu from API page types not yet on this day."""
-        self.add_page_menu.clear()
-
-        if self.journal_service.uses_api:
-            available_types = self.journal_service.get_available_page_types(self.current_date or "")
-            if not available_types:
-                action = self.add_page_menu.addAction("(All page types added)")
-                action.setEnabled(False)
-                return
-            for page_type in available_types:
-                display_name = page_type.get("display_name") or page_type.get("type_key", "Page")
-                type_key = page_type.get("type_key", display_name)
-                action = self.add_page_menu.addAction(display_name)
-                action.triggered.connect(
-                    lambda checked=False, key=type_key, label=display_name: self._create_page_from_type(key, label)
-                )
-            return
-
-        if self.settings_store:
-            presets = self.settings_store.get_journal_presets()
-            if presets:
-                for preset in presets:
-                    action = self.add_page_menu.addAction(f"Quick: {preset}")
-                    action.triggered.connect(
-                        lambda checked=False, tag=preset: self._quick_create_page_with_tag(tag)
-                    )
-                self.add_page_menu.addSeparator()
-
-        custom_action = self.add_page_menu.addAction("Custom...")
-        custom_action.triggered.connect(self._on_add_page_clicked)
-
-    def _create_page_from_type(self, page_type: str, display_name: str) -> None:
-        """Create a journal page for the current date using an API page type."""
-        if not self.current_date:
-            QMessageBox.warning(self, "No Date", "Please select a date first.")
-            return
-
-        if self.journal_service.page_type_exists(self.current_date, page_type):
-            QMessageBox.warning(self, "Error", f"A '{display_name}' page already exists for this day.")
-            return
-
-        success = self.journal_service.create_page(
-            self.current_date,
-            display_name,
-            page_type=page_type,
-        )
-        if success:
-            self._refresh_page_list()
-            self._load_page(display_name)
-        else:
-            QMessageBox.warning(self, "Error", f"Failed to create '{display_name}' page on the server.")
-    
-    def _quick_create_page_with_tag(self, tag: str) -> None:
-        """Quickly create a page with a preset tag."""
-        if not self.current_date:
-            QMessageBox.warning(self, "No Date", "Please select a date first.")
-            return
-        
-        # Use tag name as default page name, but allow customization
-        default_name = tag
-        page_name, ok = QInputDialog.getText(
-            self,
-            f"Add Page ({tag})",
-            f"Page name (default: {default_name}):",
-            text=default_name
-        )
-        
-        if not ok or not page_name.strip():
-            return
-        
-        page_name = page_name.strip()
-        
-        # Validate name (no duplicates, not empty)
-        if self.journal_service.page_exists(self.current_date, page_name):
-            QMessageBox.warning(self, "Error", "Page name already exists.")
-            return
-        
-        # Create page with preset tag
-        success = self.journal_service.create_page(
-            self.current_date,
-            page_name,
-            tag=tag
-        )
-        
-        if success:
-            self._refresh_page_list()
-            self._load_page(page_name)
-        else:
-            QMessageBox.warning(self, "Error", "Failed to create page.")
-    
-    def _on_add_tag_clicked(self) -> None:
-        """Create a new journal page type on the API."""
-        if self.journal_service.uses_api:
-            display_name, ok = QInputDialog.getText(
-                self,
-                "Add Page Type",
-                "New page type name:",
-                text="",
-            )
-            if not ok or not display_name.strip():
-                return
-            success, error = self.journal_service.create_page_type(display_name.strip())
-            if success:
-                QMessageBox.information(
-                    self,
-                    "Success",
-                    f"Page type '{display_name.strip()}' added.",
-                )
-                self._update_add_page_menu()
-            else:
-                QMessageBox.warning(self, "Error", error or "Failed to add page type.")
-            return
-
-        if not self.settings_store:
-            QMessageBox.warning(self, "Error", "Settings store not available.")
-            return
-        
-        tag_name, ok = QInputDialog.getText(
-            self,
-            "Add Tag",
-            "Preset tag name:",
-            text=""
-        )
-        
-        if ok and tag_name.strip():
-            tag_name = tag_name.strip()
-            
-            existing_presets = self.settings_store.get_journal_presets()
-            if tag_name.lower() in [p.lower() for p in existing_presets]:
-                QMessageBox.warning(self, "Error", "Tag already exists.")
-                return
-            
-            if self.settings_store.add_journal_preset(tag_name):
-                QMessageBox.information(self, "Success", f"Tag '{tag_name}' added successfully.")
-                self._update_add_page_menu()
-            else:
-                QMessageBox.warning(self, "Error", "Failed to add tag.")
-    
     def _on_add_page_clicked(self) -> None:
-        """Open dialog to add new page (local-only mode)."""
-        if self.journal_service.uses_api:
-            return
+        """Create a page through one dialog in both local and API modes."""
         if not self.current_date:
             QMessageBox.warning(self, "No Date", "Please select a date first.")
             return
-        
-        # Get page name
-        page_name, ok = QInputDialog.getText(
-            self,
-            "Add Page",
-            "Page name:",
-            text=""
+
+        api_mode = self.journal_service.uses_api
+        available_types = (
+            self.journal_service.get_available_page_types(self.current_date)
+            if api_mode else []
         )
-        
-        if not ok or not page_name.strip():
-            return
-        
-        page_name = page_name.strip()
-        
-        # Validate name (no duplicates, not empty)
-        if self.journal_service.page_exists(self.current_date, page_name):
-            QMessageBox.warning(self, "Error", "Page name already exists.")
-            return
-        
-        # Get preset tag if available
-        selected_tag = None
-        if self.settings_store:
-            presets = self.settings_store.get_journal_presets()
-            if presets:
-                # Show dialog to select preset (optional)
-                dialog = QDialog(self)
-                dialog.setWindowTitle("Select Tag (Optional)")
-                dialog.setModal(True)
-                layout = QVBoxLayout(dialog)
-                
-                label = QLabel("Select a preset tag (optional):")
-                layout.addWidget(label)
-                
-                combo = QComboBox()
-                combo.addItem("(None)", None)
-                for preset in presets:
-                    combo.addItem(preset, preset)
-                layout.addWidget(combo)
-                
-                buttons = QDialogButtonBox(
-                    QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
-                )
-                buttons.accepted.connect(dialog.accept)
-                buttons.rejected.connect(dialog.reject)
-                layout.addWidget(buttons)
-                
-                if dialog.exec() == QDialog.DialogCode.Accepted:
-                    selected_tag = combo.currentData()
-        
-        # Create page with optional tag
-        success = self.journal_service.create_page(
-            self.current_date,
-            page_name,
-            tag=selected_tag
+        presets = (
+            self.settings_store.get_journal_presets()
+            if self.settings_store and not api_mode else []
         )
-        
-        if success:
-            self._refresh_page_list()
-            self._load_page(page_name)
+        dialog = NewJournalPageDialog(
+            api_mode=api_mode,
+            available_types=available_types,
+            presets=presets,
+            parent=self,
+        )
+        if dialog.exec() != QDialog.DialogCode.Accepted:
+            return
+
+        # Creating a page changes the editor selection. Keep the current text
+        # visible when its save fails instead of silently discarding it.
+        if self.unsaved_indicator.isVisible() and not self._save_current_page():
+            QMessageBox.warning(self, "Save failed", "Save the current page before adding another.")
+            return
+
+        if api_mode:
+            type_key = dialog.type_combo.currentData()
+            created_type = type_key is None
+            if created_type:
+                display_name = dialog.name_edit.text().strip()
+                type_key = display_name.lower().replace(" ", "_")
+                success, error = self.journal_service.create_page_type(display_name)
+                if not success:
+                    QMessageBox.warning(self, "New page", error or "Could not create the page type.")
+                    return
+            else:
+                display_name = dialog.type_combo.currentText()
+            success = self.journal_service.create_page(
+                self.current_date, display_name, page_type=type_key
+            )
+            if not success:
+                message = f"Could not create the '{display_name}' page."
+                if created_type:
+                    message += " The page type was saved and can be selected next time."
+                QMessageBox.warning(self, "New page", message)
+                return
+            pages = self.journal_service.get_pages(self.current_date)
+            page = next((p for p in pages if p.page_type == type_key), None)
+            page_name = page.name if page else display_name
         else:
-            QMessageBox.warning(self, "Error", "Failed to create page.")
-    
+            page_name = dialog.name_edit.text().strip()
+            if self.journal_service.page_exists(self.current_date, page_name):
+                QMessageBox.warning(self, "New page", "A page with that name already exists.")
+                return
+            category = dialog.selected_category()
+            if not self.journal_service.create_page(
+                self.current_date, page_name, tag=category
+            ):
+                QMessageBox.warning(self, "New page", "Could not create the page.")
+                return
+            if category and self.settings_store and category.casefold() not in {
+                preset.casefold() for preset in presets
+            }:
+                self.settings_store.add_journal_preset(category)
+
+        self._load_page(page_name)
+        self.text_edit.setFocus()
+        self.data_saved.emit()
+
     def _on_delete_page_clicked(self) -> None:
         """Delete current page."""
         if not self.current_date or not self.current_page_name:
@@ -697,7 +639,6 @@ class JournalWidget(QWidget):
                 if remaining_pages:
                     self._load_page(remaining_pages[0].name)
                 self._refresh_page_list()
-                self._update_add_page_menu()
             else:
                 QMessageBox.warning(self, "Error", "Failed to delete page.")
     
@@ -740,10 +681,10 @@ class JournalWidget(QWidget):
             else:
                 QMessageBox.warning(self, "Error", "Failed to rename page.")
     
-    def _save_current_page(self) -> None:
-        """Save current page content."""
+    def _save_current_page(self) -> bool:
+        """Save current page content and report whether it succeeded."""
         if not self.current_date or not self.current_page_name:
-            return
+            return True
         
         content = self.text_edit.toHtml()  # Get HTML content
         success = self.journal_service.update_page(
@@ -765,6 +706,7 @@ class JournalWidget(QWidget):
         else:
             self.status_label.setText("Error saving")
             self.status_label.setStyleSheet("color: red; font-size: 10pt;")
+        return success
     
     def _load_page(self, page_name: str) -> None:
         """Load a specific page."""
@@ -873,7 +815,6 @@ class JournalWidget(QWidget):
                     "Could not load journal from API:\n" + "\n".join(result["errors"][:3]),
                 )
 
-        self._update_add_page_menu()
         
         # Get pages
         pages = self.journal_service.get_pages(date)

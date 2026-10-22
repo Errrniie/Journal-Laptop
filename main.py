@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import QApplication
 
 from Storage import JSONStorage
 from config.settings_store import SettingsStore
+from config.data_paths import data_file
 from features.API_Client import APIClient
 from features.Journal_Service import JournalService
 from features.Sleep_Service import SleepService
@@ -43,7 +44,7 @@ def main() -> None:
         sys.argv[0] = APP_DESKTOP_NAME
 
     # Initialize storage
-    storage = JSONStorage("data/lifelog.json")
+    storage = JSONStorage(data_file("lifelog.json"))
     
     # Initialize settings store
     settings_store = SettingsStore()
@@ -56,7 +57,7 @@ def main() -> None:
     sleep_service = SleepService(storage)
     
     # Initialize template service (separate from storage, uses its own file)
-    template_service = WorkoutTemplateService("data/workout_templates.json")
+    template_service = WorkoutTemplateService(data_file("workout_templates.json"))
     
     # Create Qt application
     app = QApplication(sys.argv)

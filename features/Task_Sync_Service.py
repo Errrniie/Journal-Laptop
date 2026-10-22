@@ -4,7 +4,11 @@ Handles fetching, mapping, and merging API tasks with local tasks.
 """
 
 from datetime import datetime
+from hashlib import sha256
+import json
+from pathlib import Path
 from typing import TYPE_CHECKING, Optional
+from uuid import uuid4
 
 from Models import Task
 from features.API_Client import APIClient
@@ -28,11 +32,50 @@ class TaskSyncService:
         """
         self.task_service = task_service
         self.api_client = api_client or APIClient(api_key=None)
+        storage_path = getattr(task_service.storage, "file_path", None)
+        self._pending_tasks_path = (
+            Path(storage_path).with_name("pending_task_requests.json")
+            if storage_path else None
+        )
+
+    def _pending_task_id(self, payload: dict) -> tuple[Optional[str], Optional[str]]:
+        """Keep the same request ID when a POST succeeds but its reply is lost."""
+        if self._pending_tasks_path is None:
+            return None, "Task request storage is unavailable"
+        path = self._pending_tasks_path
+        fingerprint = sha256(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()
+        try:
+            pending = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+            if not isinstance(pending, dict):
+                raise ValueError("pending request file is not an object")
+            if fingerprint in pending:
+                return pending[fingerprint], None
+            request_id = str(uuid4())
+            pending[fingerprint] = request_id
+            temp_path = path.with_suffix(".tmp")
+            temp_path.write_text(json.dumps(pending, indent=2), encoding="utf-8")
+            temp_path.replace(path)
+            return request_id, None
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            return None, f"Could not persist task request: {exc}"
+
+    def _forget_pending_task(self, payload: dict) -> None:
+        if self._pending_tasks_path is None:
+            return
+        path = self._pending_tasks_path
+        fingerprint = sha256(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()
+        try:
+            pending = json.loads(path.read_text(encoding="utf-8"))
+            pending.pop(fingerprint, None)
+            temp_path = path.with_suffix(".tmp")
+            temp_path.write_text(json.dumps(pending, indent=2), encoding="utf-8")
+            temp_path.replace(path)
+        except (OSError, ValueError, json.JSONDecodeError):
+            pass
     
     def refetch_and_replace_tasks(self, date: str) -> dict:
         """
-        Refetch all tasks from API and replace local task list completely.
-        Server is the single source of truth - no merging, no diffing, no patching.
+        Refetch all tasks from API and reconcile observed IDs with local tasks.
         
         Tasks are stored in entries based on their due date, not the current view date.
         
@@ -52,101 +95,116 @@ class TaskSyncService:
         result = {
             "success": False,
             "tasks_synced": 0,
+            "tasks_added": 0,
+            "tasks_updated": 0,
             "tasks_pushed": 0,
             "errors": [],
         }
         
-        # CRITICAL: Push local-only tasks FIRST before refetching
-        # This ensures newly created local tasks get pushed to the server
-        # We need to check all date entries since tasks are stored by due date
+        # Give every local-only task a durable request ID before sending it.
+        # A timeout can otherwise create a duplicate on the next sync.
         if self.api_client.api_key:
-            # Get all local tasks across all dates to find ones without activity_id
-            # Check a range of dates (past 30 days and future 60 days) to find local-only tasks
-            from datetime import date as date_class, timedelta
-            today = date_class.today()
             local_tasks_to_push = []
-            
-            # Check past 30 days and future 60 days for local-only tasks
-            # This covers most common scenarios
-            for i in range(-30, 61):  # -30 to +60 days
-                check_date = today + timedelta(days=i)
-                date_str = check_date.strftime("%Y-%m-%d")
-                local_tasks = self.task_service.get_tasks(date_str)
-                
-                # Find tasks without activity_id
-                for task in local_tasks:
-                    if not task.activity_id:
-                        local_tasks_to_push.append((date_str, task))
-            
-            # Push all local-only tasks
-            if local_tasks_to_push:
-                for task_date, task in local_tasks_to_push:
-                    # Convert Due_Date to ISO format
-                    due_at = None
-                    if task.Due_Date:
-                        try:
-                            due_date_obj = datetime.strptime(task.Due_Date, "%Y-%m-%d")
-                            due_at = due_date_obj.strftime("%Y-%m-%dT23:59:59.490Z")
-                        except (ValueError, AttributeError):
-                            pass
-                    
-                    # Create task on API
-                    task_response, error = self.api_client.create_task(
-                        title=task.name,
-                        description=task.Notes if task.Notes else "",
-                        category="",
-                        priority=task.Priority if task.Priority else 0,
-                        due_at=due_at
-                    )
-                    
-                    if error:
-                        result["errors"].append(f"Failed to push local task '{task.name}': {error}")
-                    elif task_response:
-                        task_id = task_response.get("id") or task_response.get("task_id")
-                        if task_id:
-                            # Update local task with activity_id
-                            task.activity_id = task_id
-                            task.last_synced = datetime.utcnow().isoformat() + "Z"
-                            
-                            # Save updated task
-                            tasks_for_date = self.task_service.get_tasks(task_date)
-                            # Find and update the task in the list
-                            for t in tasks_for_date:
-                                if t.name == task.name and not t.activity_id:
-                                    t.activity_id = task_id
-                                    t.last_synced = task.last_synced
-                                    break
-                            self.task_service.save_tasks_with_sync_info(task_date, tasks_for_date)
+            try:
+                entries = self.task_service.storage.get_entries_range("0001-01-01", "9999-12-31")
+            except Exception as exc:
+                result["errors"].append(f"Could not inspect local tasks: {exc}")
+                return result
+            for entry in entries:
+                changed = False
+                for task in entry.tasks or []:
+                    if not task.activity_id and not task.client_request_id:
+                        task.client_request_id = str(uuid4())
+                        changed = True
+                if changed and not self.task_service.replace_tasks_with_sync_info(entry.date, entry.tasks):
+                    result["errors"].append(f"Could not save task request IDs for {entry.date}")
+                    return result
+                local_tasks_to_push.extend(
+                    (entry.date, task)
+                    for task in entry.tasks or [] if not task.activity_id
+                )
+
+            for task_date, task in local_tasks_to_push:
+                task_response, error = self.api_client.create_task(
+                    title=task.name,
+                    description=task.Notes if task.Notes else "",
+                    category="",
+                    priority=task.Priority if task.Priority else 1,
+                    due_date=task.Due_Date or None,
+                    client_request_id=task.client_request_id,
+                    completed=task.completed,
+                )
+
+                if error:
+                    result["errors"].append(f"Failed to push local task '{task.name}': {error}")
+                elif task_response:
+                    task_id = task_response.get("id") or task_response.get("task_id")
+                    if task_id:
+                        task.activity_id = task_id
+                        task.last_synced = datetime.utcnow().isoformat() + "Z"
+                        tasks_for_date = self.task_service.get_tasks(task_date)
+                        for t in tasks_for_date:
+                            if t.client_request_id == task.client_request_id and not t.activity_id:
+                                t.activity_id = task_id
+                                t.last_synced = task.last_synced
+                                break
+                        if self.task_service.save_tasks_with_sync_info(task_date, tasks_for_date):
                             result["tasks_pushed"] += 1
                         else:
-                            result["errors"].append(f"Pushed task '{task.name}' but response missing task ID")
+                            result["errors"].append(f"Could not save API ID for task '{task.name}'")
+                            return result
                     else:
-                        result["errors"].append(f"Failed to push local task '{task.name}': No response from server")
+                        result["errors"].append(f"Pushed task '{task.name}' but response missing task ID")
+                else:
+                    result["errors"].append(f"Failed to push local task '{task.name}': No response from server")
         
-        # Get all tasks from API using GET /tasks
-        api_tasks_raw, error = self.api_client.get_tasks()
+        # Fetch all pages including tombstones. An omitted task is never proof
+        # of deletion; only an explicit deleted_at value removes a cached task.
+        api_tasks_raw, error = self.api_client.get_tasks(include_deleted=True)
         if error:
             result["errors"].append(f"Failed to get tasks from API: {error}")
             return result
+
+        # Remember dates with API-backed tasks before replacing groups. This
+        # lets a successful full fetch clear dates omitted after remote deletion.
+        local_by_date = {}
+        storage = getattr(self.task_service, "storage", None)
+        if storage is not None and hasattr(storage, "get_entries_range"):
+            try:
+                for entry in storage.get_entries_range("0001-01-01", "9999-12-31"):
+                    if entry.tasks:
+                        local_by_date[entry.date] = entry.tasks
+            except Exception as e:
+                result["errors"].append(f"Failed to inspect local tasks: {e}")
+                return result
+        deleted_ids = {
+            str(task["id"])
+            for task in api_tasks_raw
+            if task.get("deleted_at") is not None
+        }
+        active_rows = [task for task in api_tasks_raw if task.get("deleted_at") is None]
+        active_ids = {str(task["id"]) for task in active_rows}
+        touched_ids = active_ids | deleted_ids
         
         # Group tasks by their due date (or created_at if no due_at)
         # Tasks should be stored in entries based on when they're due, not when viewed
         tasks_by_date = {}
         
-        for task_data in api_tasks_raw:
+        for task_data in active_rows:
             try:
                 mapped_task = self._map_api_task_to_local(task_data)
                 if not mapped_task:
+                    result["errors"].append(f"Could not map API task {task_data.get('id')}")
                     continue
                 
                 # Determine which date entry this task belongs to
-                # Priority: due_at > created_at > today (fallback)
-                task_date = None
+                # A date-only deadline is stable across device time zones.
+                task_date = task_data.get("due_date") or None
                 due_at = task_data.get("due_at", "")
                 created_at = task_data.get("created_at", "")
                 
                 # Try due_at first (this is what the user set)
-                if due_at:
+                if not task_date and due_at:
                     try:
                         due_date_obj = datetime.fromisoformat(due_at.replace("Z", "+00:00"))
                         task_date = due_date_obj.strftime("%Y-%m-%d")
@@ -175,20 +233,37 @@ class TaskSyncService:
                 result["errors"].append(f"Error mapping API task: {str(e)}")
                 continue
         
+        # A malformed page must not partially replace the local task cache.
+        if any(error.startswith(("Could not map API task", "Error mapping API task")) for error in result["errors"]):
+            return result
+
         # Save tasks to their respective date entries
         # Each task is stored in the entry for its due date
         total_tasks = 0
-        for task_date, tasks in tasks_by_date.items():
-            if self.task_service.save_tasks_with_sync_info(task_date, tasks):
-                total_tasks += len(tasks)
+        dates_to_replace = set(tasks_by_date)
+        dates_to_replace.update(
+            task_date
+            for task_date, tasks in local_by_date.items()
+            if any(task.activity_id and str(task.activity_id) in touched_ids for task in tasks)
+        )
+        all_saves_succeeded = True
+        for task_date in dates_to_replace:
+            # Preserve local-only tasks and API tasks that were not observed in
+            # this snapshot. Remove only observed/changed IDs or tombstones.
+            untouched = [
+                task for task in local_by_date.get(task_date, [])
+                if not task.activity_id or str(task.activity_id) not in touched_ids
+            ]
+            combined = list(tasks_by_date.get(task_date, [])) + untouched
+            if self.task_service.replace_tasks_with_sync_info(task_date, combined):
+                total_tasks += len(tasks_by_date.get(task_date, []))
             else:
                 result["errors"].append(f"Failed to save tasks for date {task_date}")
+                all_saves_succeeded = False
         
-        if total_tasks > 0 or len(tasks_by_date) == 0:
+        if all_saves_succeeded and not result["errors"]:
             result["success"] = True
             result["tasks_synced"] = total_tasks
-        else:
-            result["errors"].append("Failed to save any tasks")
         
         return result
     
@@ -205,7 +280,9 @@ class TaskSyncService:
         return self.refetch_and_replace_tasks(date)
     
     def create_task_and_refetch(self, date: str, title: str, description: str = "", 
-                                category: str = "", priority: int = 0, due_at: Optional[str] = None) -> dict:
+                                category: str = "", priority: int = 1,
+                                due_at: Optional[str] = None,
+                                due_date: Optional[str] = None) -> dict:
         """
         Create a task on the API and immediately refetch all tasks.
         Server is the single source of truth.
@@ -215,7 +292,7 @@ class TaskSyncService:
             title: Task title (required)
             description: Task description (optional)
             category: Task category (optional)
-            priority: Priority level (optional, defaults to 0)
+            priority: Priority level (optional, defaults to 1)
             due_at: Due date in ISO format (optional)
             
         Returns:
@@ -229,6 +306,19 @@ class TaskSyncService:
             "success": False,
             "errors": [],
         }
+
+        request_payload = {
+            "title": title,
+            "description": description,
+            "category": category,
+            "priority": priority,
+            "due_at": due_at,
+            "due_date": due_date,
+        }
+        request_id, id_error = self._pending_task_id(request_payload)
+        if id_error:
+            result["errors"].append(id_error)
+            return result
         
         # Create task on API
         task_response, error = self.api_client.create_task(
@@ -236,7 +326,9 @@ class TaskSyncService:
             description=description,
             category=category,
             priority=priority,
-            due_at=due_at
+            due_at=due_at,
+            due_date=due_date,
+            client_request_id=request_id,
         )
         
         if error:
@@ -252,10 +344,13 @@ class TaskSyncService:
         refetch_result = self.refetch_and_replace_tasks(date)
         result["success"] = refetch_result["success"]
         result["errors"].extend(refetch_result["errors"])
+        if result["success"]:
+            self._forget_pending_task(request_payload)
         
         return result
     
-    def delete_task_and_refetch(self, date: str, task_id: str) -> dict:
+    def delete_task_and_refetch(self, date: str, task_id: str,
+                                expected_revision: Optional[int] = None) -> dict:
         """
         Delete a task from the API and immediately refetch all tasks.
         Server is the single source of truth.
@@ -277,7 +372,7 @@ class TaskSyncService:
         }
         
         # Delete task on API
-        success, error = self.api_client.delete_task(task_id)
+        success, error = self.api_client.delete_task(task_id, expected_revision)
         
         if error:
             result["errors"].append(f"Failed to delete task: {error}")
@@ -294,14 +389,28 @@ class TaskSyncService:
         
         return result
     
-    def complete_task_and_refetch(self, date: str, task_id: str) -> dict:
+    def complete_task_and_refetch(self, date: str, task_id: str,
+                                  expected_revision: Optional[int] = None) -> dict:
         """
         Mark task as complete via POST /tasks/{task_id}/complete and refetch all tasks.
         """
         result = {"success": False, "errors": []}
-        success, error = self.api_client.complete_task(task_id)
+        success, error = self.api_client.complete_task(task_id, expected_revision)
         if error:
             result["errors"].append(error)
+            return result
+        refetch_result = self.refetch_and_replace_tasks(date)
+        result["success"] = refetch_result["success"]
+        result["errors"].extend(refetch_result["errors"])
+        return result
+
+    def reopen_task_and_refetch(self, date: str, task_id: str,
+                                expected_revision: Optional[int] = None) -> dict:
+        """Mark a completed task pending using the task API, then refresh."""
+        result = {"success": False, "errors": []}
+        success, error = self.api_client.reopen_task(task_id, expected_revision)
+        if not success:
+            result["errors"].append(error or "Failed to reopen task")
             return result
         refetch_result = self.refetch_and_replace_tasks(date)
         result["success"] = refetch_result["success"]
@@ -330,7 +439,7 @@ class TaskSyncService:
         tasks = self.task_service.get_tasks(date)
         completed = [t for t in tasks if t.completed and t.activity_id]
         for task in completed:
-            ok, err = self.api_client.delete_task(task.activity_id)
+            ok, err = self.api_client.delete_task(task.activity_id, task.revision)
             if err:
                 result["errors"].append(f"Delete '{task.name}': {err}")
             else:
@@ -341,75 +450,10 @@ class TaskSyncService:
         return result
     
     def sync_all_recent_tasks(self, limit: int = 20) -> dict:
-        """
-        Sync all tasks from the API (no date filtering).
-        
-        Args:
-            limit: Not used anymore, kept for compatibility
-            
-        Returns:
-            Dictionary with sync results (same format as sync_tasks_for_date)
-        """
-        result = {
-            "success": False,
-            "tasks_synced": 0,
-            "tasks_added": 0,
-            "tasks_updated": 0,
-            "tasks_pushed": 0,
-            "errors": [],
-        }
-        
-        # Get all tasks from API
-        api_tasks_raw, error = self.api_client.get_tasks()
-        if error:
-            result["errors"].append(f"Failed to get tasks from API: {error}")
-            return result
-        
-        # Get all local tasks (across all dates)
-        # For now, we'll sync tasks for today's date
+        """Compatibility entry point for a complete all-date task reconciliation."""
         from datetime import date as date_class
         today = date_class.today().strftime("%Y-%m-%d")
-        local_tasks = self.task_service.get_tasks(today)
-        
-        # Track original local task IDs
-        original_local_task_ids = {t.activity_id for t in local_tasks if t.activity_id}
-        
-        # Map API tasks to local Task objects
-        api_tasks = []
-        for task_data in api_tasks_raw:
-            try:
-                mapped_task = self._map_api_task_to_local(task_data)
-                if mapped_task:
-                    api_tasks.append(mapped_task)
-            except Exception as e:
-                result["errors"].append(f"Error mapping API task: {str(e)}")
-                continue
-        
-        # Merge API tasks with local tasks
-        merged_tasks = self._merge_tasks(api_tasks, local_tasks)
-        
-        # Calculate statistics
-        result["tasks_added"] = len([
-            t for t in api_tasks 
-            if t.activity_id and t.activity_id not in original_local_task_ids
-        ])
-        
-        result["tasks_updated"] = len([
-            t for t in merged_tasks 
-            if t.activity_id 
-            and t.activity_id in original_local_task_ids
-            and any(api_t.activity_id == t.activity_id for api_t in api_tasks)
-        ])
-        
-        result["tasks_synced"] = len([t for t in merged_tasks if t.activity_id])
-        
-        # Save merged tasks
-        if self.task_service.save_tasks_with_sync_info(today, merged_tasks):
-            result["success"] = True
-        else:
-            result["errors"].append("Failed to save merged tasks")
-        
-        return result
+        return self.refetch_and_replace_tasks(today)
     
     def _map_api_task_to_local(self, task_data: dict) -> Optional[Task]:
         """
@@ -434,6 +478,7 @@ class TaskSyncService:
             status = task_data.get("status", "").lower()
             priority = task_data.get("priority", 1)
             due_at = task_data.get("due_at", "")
+            due_date = task_data.get("due_date") or ""
             created_at = task_data.get("created_at", "")
             
             # Ensure priority is in range 1-5
@@ -447,7 +492,9 @@ class TaskSyncService:
             
             # Convert due_at from ISO format to "YYYY-MM-DD" format
             due_date_str = ""
-            if due_at:
+            if due_date:
+                due_date_str = str(due_date)
+            elif due_at:
                 try:
                     due_date_obj = datetime.fromisoformat(due_at.replace("Z", "+00:00"))
                     due_date_str = due_date_obj.strftime("%Y-%m-%d")
@@ -466,6 +513,9 @@ class TaskSyncService:
                 activity_id=task_id,  # Store task ID in activity_id field
                 session_id=None,  # Not available from GET /tasks
                 last_synced=last_synced,
+                revision=task_data.get("revision"),
+                client_request_id=(str(task_data["client_request_id"])
+                                   if task_data.get("client_request_id") else None),
             )
         except Exception as e:
             # Return None if mapping fails - error will be logged by caller

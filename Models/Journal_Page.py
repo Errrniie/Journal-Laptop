@@ -11,3 +11,4 @@ class JournalPage:
     page_id: Optional[str] = None  # API journal_pages.id
     page_type: Optional[str] = None  # API page_type / type_key
     journal_entry_id: Optional[str] = None  # API parent journal_entries.id
+    revision: Optional[int] = None  # API revision for conflict-safe edits

@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Optional
 
 from PyQt6.QtCore import QDate
+from .data_paths import data_file
 
 
 class SettingsStore:
@@ -23,9 +24,7 @@ class SettingsStore:
             settings_path: Path to settings.json file. If None, uses data/settings.json
         """
         if settings_path is None:
-            # Default to data/settings.json relative to project root
-            project_root = Path(__file__).parent.parent
-            settings_path = project_root / "data" / "settings.json"
+            settings_path = data_file("settings.json")
         
         self.settings_path = Path(settings_path)
         self.settings_path.parent.mkdir(parents=True, exist_ok=True)

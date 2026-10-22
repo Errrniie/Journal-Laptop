@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Optional
 from PyQt6.QtCore import QDate, QTimer, Qt, pyqtSignal
 from PyQt6.QtGui import QColor
 from PyQt6.QtWidgets import (
-    QCheckBox,
     QDateEdit,
     QDialog,
     QGroupBox,
@@ -39,7 +38,7 @@ class TaskItemWidget(QWidget):
     def __init__(self, task: "Task", task_index: int, parent=None) -> None:
         """
         Initialize Task Item Widget.
-        
+
         Args:
             task: Task object to display
             task_index: Index of task in the list
@@ -53,20 +52,31 @@ class TaskItemWidget(QWidget):
     
     def _setup_ui(self) -> None:
         """Create and layout UI components."""
+        self.setObjectName("taskItem")
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(5, 5, 5, 5)
-        layout.setSpacing(10)
-        
-        # Checkbox for completion status
-        self.completed_checkbox = QCheckBox()
-        self.completed_checkbox.setChecked(self.task.completed)
-        layout.addWidget(self.completed_checkbox)
+        layout.setContentsMargins(12, 9, 12, 9)
+        layout.setSpacing(12)
+
+        # Labeled completion control stays clear on dark desktop themes.
+        self.completion_button = QPushButton()
+        self.completion_button.setObjectName("taskCompletionButton")
+        self.completion_button.setCheckable(True)
+        self.completion_button.setChecked(self.task.completed)
+        self.completion_button.setText("✓ Done" if self.task.completed else "Mark done")
+        self.completion_button.setToolTip(
+            "Mark this task as incomplete" if self.task.completed
+            else "Mark this task as completed"
+        )
+        self.completion_button.setMinimumWidth(104)
+        self.completion_button.toggled.connect(self._update_completion_button)
+        layout.addWidget(self.completion_button)
         
         # Task name label
         self.name_label = QLabel(self.task.name)
         self.name_label.setWordWrap(True)
+        self.name_label.setStyleSheet("font-size: 10pt; font-weight: 600; color: #f7f9fc;")
         if self.task.completed:
-            self.name_label.setStyleSheet("text-decoration: line-through; color: gray;")
+            self.name_label.setStyleSheet("text-decoration: line-through; color: #aeb8c8;")
         layout.addWidget(self.name_label, stretch=2)
         
         # Priority indicator
@@ -93,9 +103,9 @@ class TaskItemWidget(QWidget):
                 due_date = datetime.strptime(self.task.Due_Date, "%Y-%m-%d").date()
                 today = date.today()
                 if due_date < today and not self.task.completed:
-                    due_date_label.setStyleSheet("color: red; font-weight: bold;")
+                    due_date_label.setStyleSheet("color: #ff8794; font-weight: bold;")
                 elif due_date == today:
-                    due_date_label.setStyleSheet("color: orange; font-weight: bold;")
+                    due_date_label.setStyleSheet("color: #ffc46b; font-weight: bold;")
             except ValueError:
                 pass
         
@@ -103,26 +113,34 @@ class TaskItemWidget(QWidget):
         
         # Notes indicator button (always visible – click to view/edit notes)
         self.notes_button = QPushButton()
-        self.notes_button.setMaximumSize(24, 24)
+        self.notes_button.setFixedSize(34, 34)
         self.notes_button.setToolTip("View/Edit notes")
         self.notes_button.setText("📝")
         self.notes_button.setStyleSheet("""
             QPushButton {
-                border: 1px solid #CCCCCC;
-                border-radius: 3px;
-                background-color: #F0F0F0;
-                font-size: 12pt;
+                border: 1px solid #526072;
+                border-radius: 8px;
+                background-color: #303b4c;
+                font-size: 12pt; color: #f7f9fc;
             }
             QPushButton:hover {
-                background-color: #E0E0E0;
+                background-color: #3c4b60;
             }
         """)
         layout.addWidget(self.notes_button)
         
         # Delete button
         self.delete_button = QPushButton("Delete")
-        self.delete_button.setMaximumWidth(70)
+        self.delete_button.setMaximumWidth(78)
+        self.delete_button.setStyleSheet("background: #3b2a32; color: #ffc4cf; border-color: #68414b;")
         layout.addWidget(self.delete_button)
+
+    def _update_completion_button(self, completed: bool) -> None:
+        self.completion_button.setText("✓ Done" if completed else "Mark done")
+        self.completion_button.setToolTip(
+            "Mark this task as incomplete" if completed
+            else "Mark this task as completed"
+        )
 
 
 class TasksWidget(QWidget):
@@ -159,12 +177,58 @@ class TasksWidget(QWidget):
     
     def _setup_ui(self) -> None:
         """Create and layout UI components."""
+        self.setObjectName("tasksPage")
+        self.setStyleSheet("""
+            QWidget#tasksPage { background: #171b24; color: #e6ecf5; }
+            QWidget#tasksPage QGroupBox {
+                background: #20242e; color: #f7f9fc; border: 1px solid #343b49;
+                border-radius: 12px; margin-top: 12px; padding: 14px 12px 12px;
+                font-size: 11pt; font-weight: 700;
+            }
+            QWidget#tasksPage QGroupBox::title { subcontrol-origin: margin; left: 14px; padding: 0 5px; }
+            QWidget#tasksPage QLabel, QWidget#tasksPage QCheckBox { color: #e6ecf5; }
+            QWidget#tasksPage QLineEdit, QWidget#tasksPage QTextEdit, QWidget#tasksPage QDateEdit {
+                background: #171b24; color: #f7f9fc; border: 1px solid #465163;
+                border-radius: 7px; padding: 7px;
+                selection-background-color: #377fd1;
+            }
+            QWidget#tasksPage QLineEdit:focus, QWidget#tasksPage QTextEdit:focus,
+            QWidget#tasksPage QDateEdit:focus { border: 1px solid #5596e2; }
+            QWidget#tasksPage QPushButton {
+                background: #303b4c; color: #f7f9fc; border: 1px solid #526072;
+                border-radius: 8px; padding: 8px 12px;
+            }
+            QWidget#tasksPage QPushButton:hover { background: #3c4b60; }
+            QWidget#tasksPage QPushButton#tasksPrimary {
+                background: #377fd1; border: 0; font-weight: 700; padding: 10px 14px;
+            }
+            QWidget#tasksPage QPushButton#tasksPrimary:hover { background: #4c91dd; }
+            QWidget#tasksPage QPushButton#taskCompletionButton {
+                background: #303b4c; color: #f7f9fc; border: 1px solid #66758b;
+                border-radius: 8px; padding: 8px 10px; font-weight: 700;
+            }
+            QWidget#tasksPage QPushButton#taskCompletionButton:hover { background: #3c4b60; }
+            QWidget#tasksPage QPushButton#taskCompletionButton:checked {
+                background: #245a45; color: #c9f7dc; border-color: #3f9a70;
+            }
+            QWidget#tasksPage QScrollArea { background: transparent; border: 0; }
+            QWidget#tasksPage QWidget#taskListSurface { background: transparent; }
+            QWidget#tasksPage QWidget#taskItem {
+                background: #252b37; border: 1px solid #343f50; border-radius: 10px;
+            }
+            QWidget#tasksPage QLabel#tasksDayHeading {
+                color: #aeb8c8; font-size: 9pt; font-weight: 700;
+                padding: 5px 3px 1px; border: 0; background: transparent;
+            }
+            QWidget#tasksPage QLabel#tasksEmptyState { color: #aeb8c8; padding: 30px; }
+        """)
         main_layout = QVBoxLayout(self)
-        main_layout.setContentsMargins(10, 10, 10, 10)
-        main_layout.setSpacing(10)
+        main_layout.setContentsMargins(18, 16, 18, 16)
+        main_layout.setSpacing(14)
         
         # Add Task Section
         add_task_group = QGroupBox("Add New Task")
+        add_task_group.setObjectName("tasksCreateCard")
         add_task_layout = QVBoxLayout(add_task_group)
         add_task_layout.setSpacing(5)
         
@@ -214,6 +278,7 @@ class TasksWidget(QWidget):
         
         # Add Task button
         add_button = QPushButton("Add Task")
+        add_button.setObjectName("tasksPrimary")
         add_button.clicked.connect(self._add_task)
         add_task_layout.addWidget(add_button)
         
@@ -221,6 +286,7 @@ class TasksWidget(QWidget):
         
         # Tasks List Section
         tasks_group = QGroupBox("Tasks")
+        tasks_group.setObjectName("tasksListCard")
         tasks_layout = QVBoxLayout(tasks_group)
         
         # Task count, Sync button, and Clear Completed button
@@ -249,8 +315,10 @@ class TasksWidget(QWidget):
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
         scroll_area.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        scroll_area.viewport().setStyleSheet("background: transparent;")
         
         self.tasks_container = QWidget()
+        self.tasks_container.setObjectName("taskListSurface")
         self.tasks_layout = QVBoxLayout(self.tasks_container)
         self.tasks_layout.setContentsMargins(0, 0, 0, 0)
         self.tasks_layout.setSpacing(5)
@@ -281,16 +349,19 @@ class TasksWidget(QWidget):
         due_date_qdate = self.due_date_edit.date()
         due_date_str = qdate_to_string(due_date_qdate) if due_date_qdate.isValid() else None
         notes = self.notes_edit.toPlainText().strip()
-        
-        # Convert due_date to ISO format if provided
-        due_at = None
-        if due_date_str:
-            try:
-                from datetime import datetime
-                due_date_obj = datetime.strptime(due_date_str, "%Y-%m-%d")
-                due_at = due_date_obj.strftime("%Y-%m-%dT23:59:59.490Z")
-            except (ValueError, AttributeError):
-                pass
+
+        if not self.sync_service.api_client.api_key:
+            if self.task_service.add_task(
+                self.current_date, task_name, priority, due_date_str, notes
+            ):
+                self.task_name_edit.clear()
+                self.notes_edit.clear()
+                self.star_rating.set_rating(3)
+                self._refresh_task_list()
+                self.data_saved.emit()
+            else:
+                QMessageBox.warning(self, "Error", "Failed to save task locally.")
+            return
         
         # Create task on API and refetch (server is source of truth)
         result = self.sync_service.create_task_and_refetch(
@@ -299,7 +370,7 @@ class TasksWidget(QWidget):
             description=notes,
             category="",
             priority=priority,
-            due_at=due_at
+            due_date=due_date_str,
         )
         
         if result["success"]:
@@ -319,9 +390,10 @@ class TasksWidget(QWidget):
             error_msg = "\n".join(result["errors"]) if result["errors"] else "Unknown error"
             QMessageBox.warning(self, "Error", f"Failed to create task:\n\n{error_msg}")
     
-    def _delete_task(self, task_index: int) -> None:
+    def _delete_task(self, task_index: int, task_date: str | None = None) -> None:
         """Remove task at index."""
-        if not self.current_date:
+        task_date = task_date or self.current_date
+        if not task_date:
             return
         
         if not self.sync_service:
@@ -329,16 +401,12 @@ class TasksWidget(QWidget):
             return
         
         # Get task to find its ID
-        tasks = self.task_service.get_tasks(self.current_date)
+        tasks = self.task_service.get_tasks(task_date)
         if task_index < 0 or task_index >= len(tasks):
             QMessageBox.warning(self, "Error", "Invalid task index.")
             return
         
         task = tasks[task_index]
-        if not task.activity_id:
-            QMessageBox.warning(self, "Error", "Task does not have an ID. Cannot delete from server.")
-            return
-        
         reply = QMessageBox.question(
             self,
             "Delete Task",
@@ -347,10 +415,21 @@ class TasksWidget(QWidget):
         )
         
         if reply == QMessageBox.StandardButton.Yes:
+            if task.activity_id and not self.sync_service.api_client.api_key:
+                QMessageBox.warning(self, "Offline", "Reconnect to delete a synced task.")
+                return
+            if not task.activity_id or not self.sync_service.api_client.api_key:
+                if self.task_service.delete_task(task_date, task_index):
+                    self._refresh_task_list()
+                    self.data_saved.emit()
+                else:
+                    QMessageBox.warning(self, "Error", "Failed to delete local task.")
+                return
             # Delete task on API and refetch (server is source of truth)
             result = self.sync_service.delete_task_and_refetch(
-                date=self.current_date,
-                task_id=task.activity_id
+                date=task_date,
+                task_id=task.activity_id,
+                expected_revision=task.revision,
             )
             
             if result["success"]:
@@ -362,48 +441,66 @@ class TasksWidget(QWidget):
                 error_msg = "\n".join(result["errors"]) if result["errors"] else "Unknown error"
                 QMessageBox.warning(self, "Error", f"Failed to delete task:\n\n{error_msg}")
     
-    def _toggle_task(self, task_index: int, checked: bool) -> None:
+    def _toggle_task(self, task_index: int, checked: bool, task_date: str | None = None) -> None:
         """Toggle task completion status."""
-        if not self.current_date:
-            return
-        
-        if not self.sync_service:
-            QMessageBox.warning(self, "Error", "Sync service not available.")
+        task_date = task_date or self.current_date
+        if not task_date:
             return
         
         # Get task to find its ID
-        tasks = self.task_service.get_tasks(self.current_date)
+        tasks = self.task_service.get_tasks(task_date)
         if task_index < 0 or task_index >= len(tasks):
             return
         
         task = tasks[task_index]
+        api_client = getattr(self.sync_service, "api_client", None)
+        api_enabled = bool(getattr(api_client, "api_key", None))
+        if task.activity_id and not api_enabled:
+            QMessageBox.warning(self, "Offline", "Reconnect to change a synced task.")
+            self._refresh_task_list()
+            return
         if not task.activity_id:
-            # Task doesn't have ID yet - update locally and sync will handle it
-            success = self.task_service.update_task(self.current_date, task_index, completed=checked)
-            if success:
+            # Persist first; a configured sync service then immediately uploads
+            # the local task with its updated completion state.
+            success = self.task_service.update_task(task_date, task_index, completed=checked)
+            if not success:
+                QMessageBox.warning(self, "Error", "Failed to update task completion.")
                 self._refresh_task_list()
-                self.data_saved.emit()
+                return
+            if api_enabled:
+                result = self.sync_service.refetch_and_replace_tasks(task_date)
+                if not result.get("success"):
+                    error_msg = "\n".join(result.get("errors", [])) or "Unknown sync error"
+                    self._refresh_task_list()
+                    QMessageBox.warning(
+                        self, "Sync failed",
+                        f"Task completion was saved locally, but could not be sent to the database:\n\n{error_msg}",
+                    )
+                    return
+            self._refresh_task_list()
+            self.data_saved.emit()
+            return
+
+        if not self.sync_service:
+            QMessageBox.warning(self, "Error", "Sync service not available.")
+            self._refresh_task_list()
             return
         
-        # Use POST /tasks/{id}/complete when marking complete; record for pending
+        # Completion state belongs to the task API, not workout records.
         if checked:
-            result = self.sync_service.complete_task_and_refetch(self.current_date, task.activity_id)
-        else:
-            record_data = {"status": "pending", "source": "linux"}
-            if task.Notes:
-                record_data["comment"] = task.Notes
-            _, record_error = self.sync_service.api_client.create_record(
-                activity_id=task.activity_id, data=record_data
+            result = self.sync_service.complete_task_and_refetch(
+                task_date, task.activity_id, task.revision
             )
-            if record_error:
-                QMessageBox.warning(self, "Error", f"Failed to update task status: {record_error}")
-                return
-            result = self.sync_service.refetch_and_replace_tasks(self.current_date)
+        else:
+            result = self.sync_service.reopen_task_and_refetch(
+                task_date, task.activity_id, task.revision
+            )
         if result["success"]:
             self._refresh_task_list()
             self.data_saved.emit()
         else:
             error_msg = "\n".join(result["errors"]) if result["errors"] else "Unknown error"
+            self._refresh_task_list()
             QMessageBox.warning(self, "Error", f"Failed to sync after update:\n\n{error_msg}")
     
     def _clear_completed(self) -> None:
@@ -421,6 +518,19 @@ class TasksWidget(QWidget):
         )
         
         if reply == QMessageBox.StandardButton.Yes:
+            if not self.sync_service.api_client.api_key:
+                if any(task.completed and task.activity_id
+                       for task in self.task_service.get_tasks(self.current_date)):
+                    QMessageBox.warning(
+                        self, "Offline", "Reconnect to clear synced completed tasks."
+                    )
+                    return
+                if self.task_service.clear_completed_tasks(self.current_date):
+                    self._refresh_task_list()
+                    self.data_saved.emit()
+                else:
+                    QMessageBox.warning(self, "Error", "Failed to clear local tasks.")
+                return
             result = self.sync_service.clear_completed_and_refetch(self.current_date)
             if result["success"]:
                 self._refresh_task_list()
@@ -432,7 +542,7 @@ class TasksWidget(QWidget):
                 )
     
     def _refresh_task_list(self) -> None:
-        """Reload and display tasks."""
+        """Reload this week's unfinished tasks and all tasks on the selected day."""
         # Clear existing task widgets
         for widget in self.task_widgets:
             widget.setParent(None)
@@ -444,47 +554,73 @@ class TasksWidget(QWidget):
             return
         
         # Load tasks from service
-        tasks = self.task_service.get_tasks(self.current_date)
-        
-        # Create task item widgets
-        for index, task in enumerate(tasks):
-            task_widget = TaskItemWidget(task, index)
-            
-            # Connect signals
-            task_widget.completed_checkbox.stateChanged.connect(
-                lambda state, idx=index: self._toggle_task(idx, state == Qt.CheckState.Checked.value)
-            )
-            
-            # Connect notes button (always – view/edit notes for any task)
-            task_widget.notes_button.clicked.connect(
-                lambda checked=False, idx=index: self._show_notes_dialog(idx)
-            )
-            
-            task_widget.delete_button.clicked.connect(
-                lambda checked=False, idx=index: self._delete_task(idx)
-            )
-            
-            self.tasks_layout.insertWidget(self.tasks_layout.count() - 1, task_widget)
-            self.task_widgets.append(task_widget)
-        
-        # Update task count
-        completed_count = sum(1 for task in tasks if task.completed)
-        total_count = len(tasks)
-        self.task_count_label.setText(f"{completed_count}/{total_count} completed")
+        selected_day = date.fromisoformat(self.current_date)
+        week_start = date.fromordinal(selected_day.toordinal() - selected_day.weekday())
+        week_days = [date.fromordinal(week_start.toordinal() + offset) for offset in range(7)]
+        visible_total = 0
+        remaining_total = 0
+        selected_completed = 0
+        selected_total = 0
+
+        for day in week_days:
+            task_date = day.isoformat()
+            day_tasks = self.task_service.get_tasks(task_date)
+            if task_date == self.current_date:
+                selected_total = len(day_tasks)
+                selected_completed = sum(task.completed for task in day_tasks)
+                visible_tasks = day_tasks
+            else:
+                visible_tasks = [task for task in day_tasks if not task.completed]
+            if not visible_tasks:
+                continue
+
+            heading = QLabel(day.strftime("%A, %B %d") + ("  ·  Selected day" if task_date == self.current_date else ""))
+            heading.setObjectName("tasksDayHeading")
+            self.tasks_layout.insertWidget(self.tasks_layout.count() - 1, heading)
+            for index, task in enumerate(day_tasks):
+                if task_date != self.current_date and task.completed:
+                    continue
+                task_widget = TaskItemWidget(task, index)
+                task_widget.completion_button.clicked.connect(
+                    lambda checked, idx=index, day_key=task_date: self._toggle_task(
+                        idx, checked, day_key
+                    )
+                )
+                task_widget.notes_button.clicked.connect(
+                    lambda checked=False, idx=index, day_key=task_date: self._show_notes_dialog(idx, day_key)
+                )
+                task_widget.delete_button.clicked.connect(
+                    lambda checked=False, idx=index, day_key=task_date: self._delete_task(idx, day_key)
+                )
+                self.tasks_layout.insertWidget(self.tasks_layout.count() - 1, task_widget)
+                self.task_widgets.append(task_widget)
+                visible_total += 1
+                remaining_total += not task.completed
+
+        self.task_count_label.setText(
+            f"{remaining_total} remaining this week  ·  "
+            f"{selected_completed}/{selected_total} completed on selected day"
+        )
+        if visible_total == 0:
+            empty_state = QLabel("No tasks this week. Add one above to get started.")
+            empty_state.setObjectName("tasksEmptyState")
+            empty_state.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.tasks_layout.insertWidget(self.tasks_layout.count() - 1, empty_state)
     
-    def _show_notes_dialog(self, task_index: int) -> None:
+    def _show_notes_dialog(self, task_index: int, task_date: str | None = None) -> None:
         """
         Open dialog to view/edit task notes.
         
         Args:
             task_index: Index of the task in the list
         """
-        if not self.current_date:
+        task_date = task_date or self.current_date
+        if not task_date:
             return
         
         # Get task
-        tasks = self.task_service.get_tasks(self.current_date)
-        if task_index >= len(tasks):
+        tasks = self.task_service.get_tasks(task_date)
+        if task_index < 0 or task_index >= len(tasks):
             return
         
         task = tasks[task_index]
@@ -496,11 +632,25 @@ class TasksWidget(QWidget):
         if dialog.exec() == QDialog.DialogCode.Accepted:
             # Save updated notes
             new_notes = dialog.get_notes()
-            success = self.task_service.update_task(
-                self.current_date,
-                task_index,
-                notes=new_notes
-            )
+            if task.activity_id and self.sync_service and not self.sync_service.api_client.api_key:
+                QMessageBox.warning(self, "Offline", "Reconnect to edit a synced task.")
+                return
+            if task.activity_id and self.sync_service and self.sync_service.api_client.api_key:
+                _, error = self.sync_service.api_client.update_task(
+                    task.activity_id,
+                    {"description": new_notes, "expected_revision": task.revision},
+                )
+                if error:
+                    QMessageBox.warning(self, "Error", f"Failed to update notes: {error}")
+                    return
+                result = self.sync_service.refetch_and_replace_tasks(task_date)
+                success = result["success"]
+            else:
+                success = self.task_service.update_task(
+                    task_date,
+                    task_index,
+                    notes=new_notes,
+                )
             
             if success:
                 self._refresh_task_list()
@@ -517,6 +667,9 @@ class TasksWidget(QWidget):
         
         if not self.sync_service:
             QMessageBox.warning(self, "Error", "Sync service not available.")
+            return
+        if not self.sync_service.api_client.api_key:
+            self.sync_status_label.setText("API not configured")
             return
         
         # Update UI to show syncing
@@ -543,8 +696,6 @@ class TasksWidget(QWidget):
                 message = (
                     f"Sync completed!\n\n"
                     f"Tasks synced: {result.get('tasks_synced', 0)}\n"
-                    f"Tasks added: {result.get('tasks_added', 0)}\n"
-                    f"Tasks updated: {result.get('tasks_updated', 0)}\n"
                     f"Tasks pushed: {result.get('tasks_pushed', 0)}"
                 )
                 if result["errors"]:
@@ -579,7 +730,7 @@ class TasksWidget(QWidget):
     
     def _auto_sync_tasks(self) -> None:
         """Auto-sync tasks (called by timer)."""
-        if self.current_date and self.sync_service:
+        if self.current_date and self.sync_service and self.sync_service.api_client.api_key:
             # Only sync if Tasks tab is likely active (we can't check tab directly here)
             # Sync silently without showing messages
             result = self.sync_service.sync_tasks_for_date(self.current_date)

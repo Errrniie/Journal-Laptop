@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Optional
 import json as json_module
 
-from PyQt6.QtCore import QTime, Qt, pyqtSignal
+from PyQt6.QtCore import QDate, QSize, QTime, Qt, pyqtSignal
 from PyQt6.QtGui import QMouseEvent
 
 # #region agent log
@@ -26,6 +26,7 @@ from PyQt6.QtWidgets import (
     QComboBox,
     QDialog,
     QDialogButtonBox,
+    QDateEdit,
     QDoubleSpinBox,
     QFrame,
     QGridLayout,
@@ -34,12 +35,15 @@ from PyQt6.QtWidgets import (
     QInputDialog,
     QLabel,
     QLineEdit,
+    QListWidget,
+    QListWidgetItem,
     QMessageBox,
     QPushButton,
     QRadioButton,
     QScrollArea,
     QSizePolicy,
     QSpinBox,
+    QStackedWidget,
     QTextEdit,
     QTimeEdit,
     QVBoxLayout,
@@ -199,6 +203,10 @@ class SetRowWidget(QWidget):
         """
         super().__init__(parent)
         self.set_index = set_index
+        self.extra_data: dict = {}
+        self.comment_key = "comment"
+        self.weight_key = "weight"
+        self.record_time: str | None = None
         self._setup_ui()
     
     def _setup_ui(self) -> None:
@@ -215,8 +223,8 @@ class SetRowWidget(QWidget):
         # Reps
         reps_label = QLabel("Reps:")
         self.reps_spinbox = QSpinBox()
-        self.reps_spinbox.setMinimum(1)
-        self.reps_spinbox.setMaximum(1000)
+        self.reps_spinbox.setMinimum(0)
+        self.reps_spinbox.setMaximum(1000000)
         self.reps_spinbox.setValue(10)
         self.reps_spinbox.setMaximumWidth(80)
         self.reps_spinbox.setStyleSheet("""
@@ -260,11 +268,17 @@ class SetRowWidget(QWidget):
         weight_label = QLabel("Weight:")
         self.weight_spinbox = QDoubleSpinBox()
         self.weight_spinbox.setMinimum(0.0)
-        self.weight_spinbox.setMaximum(10000.0)
-        self.weight_spinbox.setDecimals(1)
+        self.weight_spinbox.setMaximum(1000000000.0)
+        self.weight_spinbox.setDecimals(4)
         self.weight_spinbox.setSuffix(" lbs")
         self.weight_spinbox.setValue(0.0)
         self.weight_spinbox.setMaximumWidth(120)
+        self.unit_combo = QComboBox()
+        self.unit_combo.addItems(["lbs", "kg"])
+        self.unit_combo.setMaximumWidth(70)
+        self.unit_combo.currentTextChanged.connect(
+            lambda unit: self.weight_spinbox.setSuffix(f" {unit}")
+        )
         self.weight_spinbox.setStyleSheet("""
             QDoubleSpinBox {
                 background-color: #3c3c3c;
@@ -301,6 +315,7 @@ class SetRowWidget(QWidget):
         """)
         layout.addWidget(weight_label)
         layout.addWidget(self.weight_spinbox)
+        layout.addWidget(self.unit_combo)
         
         # Comment
         comment_label = QLabel("Comment:")
@@ -334,9 +349,17 @@ class SetRowWidget(QWidget):
             "reps": self.reps_spinbox.value(),
             "weight": self.weight_spinbox.value(),
             "comment": self.comment_edit.text().strip(),
+            "unit": self.unit_combo.currentText(),
+            "extra_data": self.extra_data.copy(),
+            "comment_key": self.comment_key,
+            "weight_key": self.weight_key,
+            "record_time": self.record_time,
         }
     
-    def set_set_data(self, reps: int, weight: float, comment: str = "") -> None:
+    def set_set_data(self, reps: int, weight: float, comment: str = "",
+                     unit: str = "lbs", extra_data: dict | None = None,
+                     comment_key: str = "comment", weight_key: str = "weight",
+                     record_time: str | None = None) -> None:
         """
         Set set data in form inputs.
         
@@ -348,6 +371,13 @@ class SetRowWidget(QWidget):
         self.reps_spinbox.setValue(reps)
         self.weight_spinbox.setValue(weight)
         self.comment_edit.setText(comment)
+        if self.unit_combo.findText(unit) < 0:
+            self.unit_combo.addItem(unit)
+        self.unit_combo.setCurrentText(unit)
+        self.extra_data = dict(extra_data or {})
+        self.comment_key = comment_key
+        self.weight_key = weight_key
+        self.record_time = record_time
     
     def validate(self) -> tuple[bool, str]:
         """
@@ -440,6 +470,7 @@ class ExerciseFormWidget(QWidget):
         super().__init__(parent)
         self.exercise_index = exercise_index
         self.set_widgets: list[SetRowWidget] = []
+        self.metadata: dict = {}
         self.volume_callback = volume_callback
         self.muscle_groups_list = muscle_groups_list or []
         self._setup_ui()
@@ -572,13 +603,14 @@ class ExerciseFormWidget(QWidget):
         """Add a new set row."""
         set_widget = SetRowWidget(len(self.set_widgets))
         set_widget.remove_button.clicked.connect(
-            lambda checked=False, idx=len(self.set_widgets): self._remove_set(idx)
+            lambda checked=False, row=set_widget: self._remove_set_widget(row)
         )
         
         # Connect to volume calculation callback
         if self.volume_callback:
             set_widget.reps_spinbox.valueChanged.connect(self.volume_callback)
             set_widget.weight_spinbox.valueChanged.connect(self.volume_callback)
+            set_widget.unit_combo.currentTextChanged.connect(self.volume_callback)
         
         self.sets_layout.addWidget(set_widget)
         self.set_widgets.append(set_widget)
@@ -598,6 +630,10 @@ class ExerciseFormWidget(QWidget):
             self._update_set_numbers()
             if self.volume_callback:
                 self.volume_callback()
+
+    def _remove_set_widget(self, widget: SetRowWidget) -> None:
+        if widget in self.set_widgets:
+            self._remove_set(self.set_widgets.index(widget))
     
     def _update_set_numbers(self) -> None:
         """Update set number labels."""
@@ -630,9 +666,11 @@ class ExerciseFormWidget(QWidget):
             "name": self.name_edit.text().strip(),
             "sets": sets_data,
             "muscle_groups": muscle_groups,
+            "metadata": self.metadata.copy(),
         }
     
-    def set_exercise_data(self, name: str, sets: list[dict], muscle_groups: list[str] = None) -> None:
+    def set_exercise_data(self, name: str, sets: list[dict], muscle_groups: list[str] = None,
+                          metadata: dict | None = None) -> None:
         """
         Set exercise data in form inputs.
         
@@ -642,6 +680,7 @@ class ExerciseFormWidget(QWidget):
             muscle_groups: List of muscle group names for this exercise
         """
         self.name_edit.setText(name)
+        self.metadata = dict(metadata or {})
         # Update header with name
         self._update_exercise_header()
         
@@ -667,13 +706,19 @@ class ExerciseFormWidget(QWidget):
                     set_data.get("reps", 10),
                     set_data.get("weight", 0.0),
                     set_data.get("comment", ""),
+                    set_data.get("unit", "lbs"),
+                    set_data.get("extra_data"),
+                    set_data.get("comment_key", "comment"),
+                    set_data.get("weight_key", "weight"),
+                    set_data.get("record_time"),
                 )
                 set_widget.remove_button.clicked.connect(
-                    lambda checked=False, idx=len(self.set_widgets): self._remove_set(idx)
+                    lambda checked=False, row=set_widget: self._remove_set_widget(row)
                 )
                 if self.volume_callback:
                     set_widget.reps_spinbox.valueChanged.connect(self.volume_callback)
                     set_widget.weight_spinbox.valueChanged.connect(self.volume_callback)
+                    set_widget.unit_combo.currentTextChanged.connect(self.volume_callback)
                 
                 self.sets_layout.addWidget(set_widget)
                 self.set_widgets.append(set_widget)
@@ -770,26 +815,65 @@ class WorkoutWidget(QWidget):
         self.current_date: str | None = None
         self.exercise_widgets: list[ExerciseFormWidget] = []
         self._current_session_id: str | None = None  # API session_id for delete/restore
+        self._selected_session_id: str | None = None
+        self._creation_mode = False
+        self._editing = False
+        self._editing_revision: int | None = None
+        self._editor_snapshot: dict | None = None
         
         self._setup_ui()
     
     def _filter_valid_muscle_groups(self, muscle_groups: list[str]) -> list[str]:
-        """
-        Filter muscle groups to only include valid ones (Option A migration).
-        Legacy muscle groups not in the new 7 are ignored/dropped.
-        
-        Args:
-            muscle_groups: List of muscle group names (may include legacy groups)
-            
-        Returns:
-            Filtered list containing only muscle groups in MUSCLE_GROUPS
-        """
-        return [mg for mg in muscle_groups if mg in self.MUSCLE_GROUPS]
+        """Keep stored groups, including custom names from older workouts."""
+        return list(dict.fromkeys(
+            group.strip() for group in muscle_groups
+            if isinstance(group, str) and group.strip()
+        ))
     
     def _setup_ui(self) -> None:
         """Create and layout UI components."""
-        # Set global menu styling for dropdown menus
+        # Shared surfaces keep the library readable with either system theme.
         self.setStyleSheet("""
+            QWidget#workoutReviewPage, QWidget#workoutReviewContent,
+            QWidget#workoutEditorPage { background: #171b24; }
+            QFrame#workoutSidebar, QFrame#workoutReviewCard {
+                background: #20242e; border: 1px solid #343b49; border-radius: 12px;
+            }
+            QLabel#workoutHeading { color: #f7f9fc; font-size: 18pt; font-weight: 700; }
+            QLabel#workoutSubheading { color: #aeb8c8; font-size: 10pt; }
+            QLabel#workoutReviewTitle { color: #f7f9fc; font-size: 16pt; font-weight: 700; }
+            QLabel#workoutReviewMeta { color: #aeb8c8; font-size: 10pt; }
+            QListWidget#workoutHistory {
+                background: transparent; color: #f7f9fc; border: 0;
+                outline: 0; font-size: 10pt;
+            }
+            QListWidget#workoutHistory::item {
+                border-radius: 8px; padding: 8px; margin: 3px;
+            }
+            QListWidget#workoutHistory::item:selected { background: #35557a; color: white; }
+            QListWidget#workoutHistory::item:hover { background: #303b4c; }
+            QPushButton#workoutPrimary {
+                background: #377fd1; color: white; border: 0; border-radius: 8px;
+                padding: 9px 15px; font-weight: 700;
+            }
+            QPushButton#workoutPrimary:hover { background: #4c91dd; }
+            QPushButton#workoutPrimary:disabled { background: #47546a; color: #bdc6d3; }
+            QPushButton#workoutSecondary {
+                background: #303b4c; color: #f7f9fc; border: 1px solid #526072;
+                border-radius: 8px; padding: 8px 13px;
+            }
+            QPushButton#workoutSecondary:hover { background: #3c4b60; }
+            QWidget#workoutEditorPage QGroupBox {
+                background: #20242e; color: #f7f9fc;
+                border: 1px solid #343b49; border-radius: 10px;
+                margin-top: 12px; padding-top: 8px;
+            }
+            QWidget#workoutEditorPage QGroupBox::title {
+                color: #f7f9fc; subcontrol-origin: margin; left: 14px;
+            }
+            QWidget#workoutEditorPage QLabel, QWidget#workoutEditorPage QCheckBox {
+                color: #e6ecf5;
+            }
             QMenu {
                 background-color: #E0E0E0;
                 color: #333333;
@@ -810,18 +894,125 @@ class WorkoutWidget(QWidget):
             }
         """)
         
-        main_layout = QVBoxLayout(self)
-        main_layout.setContentsMargins(10, 10, 10, 10)
+        root_layout = QHBoxLayout(self)
+        root_layout.setContentsMargins(12, 12, 12, 12)
+        root_layout.setSpacing(14)
+
+        sidebar = QFrame()
+        sidebar.setObjectName("workoutSidebar")
+        sidebar.setMinimumWidth(215)
+        sidebar.setMaximumWidth(275)
+        sidebar_layout = QVBoxLayout(sidebar)
+        sidebar_layout.setContentsMargins(14, 16, 14, 16)
+        sidebar_layout.setSpacing(10)
+        heading = QLabel("Workouts")
+        heading.setObjectName("workoutHeading")
+        sidebar_layout.addWidget(heading)
+        subtitle = QLabel("Browse and revise your history")
+        subtitle.setObjectName("workoutSubheading")
+        sidebar_layout.addWidget(subtitle)
+        sidebar_layout.addSpacing(8)
+        refresh_button = QPushButton("Refresh history")
+        refresh_button.setObjectName("workoutSecondary")
+        refresh_button.clicked.connect(self._refresh_from_source)
+        sidebar_layout.addWidget(refresh_button)
+        self.search_edit = QLineEdit()
+        self.search_edit.setPlaceholderText("Search workouts...")
+        self.search_edit.setStyleSheet(
+            "background: #161b24; color: #f7f9fc; border: 1px solid #526072;"
+            "border-radius: 7px; padding: 8px;"
+        )
+        self.search_edit.textChanged.connect(self._refresh_library)
+        sidebar_layout.addWidget(self.search_edit)
+        self.history_list = QListWidget()
+        self.history_list.setObjectName("workoutHistory")
+        self.history_list.itemClicked.connect(self._on_history_clicked)
+        sidebar_layout.addWidget(self.history_list, stretch=1)
+        date_prompt = QLabel("Open a date")
+        date_prompt.setObjectName("workoutSubheading")
+        sidebar_layout.addWidget(date_prompt)
+        self.browse_date_edit = QDateEdit()
+        self.browse_date_edit.setCalendarPopup(True)
+        self.browse_date_edit.setDisplayFormat("MMM d, yyyy")
+        self.browse_date_edit.setStyleSheet(
+            "background: #161b24; color: #f7f9fc; border: 1px solid #526072;"
+            "border-radius: 7px; padding: 6px;"
+        )
+        self.browse_date_edit.dateChanged.connect(self._on_browse_date_changed)
+        sidebar_layout.addWidget(self.browse_date_edit)
+        self.new_workout_button = QPushButton("+ New workout")
+        self.new_workout_button.setObjectName("workoutSecondary")
+        self.new_workout_button.clicked.connect(self._start_new_workout)
+        sidebar_layout.addWidget(self.new_workout_button)
+        root_layout.addWidget(sidebar)
+
+        self.page_stack = QStackedWidget()
+        root_layout.addWidget(self.page_stack, stretch=1)
+
+        review_page = QWidget()
+        review_page.setObjectName("workoutReviewPage")
+        review_layout = QVBoxLayout(review_page)
+        review_layout.setContentsMargins(0, 0, 0, 0)
+        review_layout.setSpacing(10)
+        review_header = QHBoxLayout()
+        review_heading_box = QVBoxLayout()
+        self.review_title = QLabel("Select a workout")
+        self.review_title.setObjectName("workoutReviewTitle")
+        review_heading_box.addWidget(self.review_title)
+        self.review_meta = QLabel("")
+        self.review_meta.setObjectName("workoutReviewMeta")
+        review_heading_box.addWidget(self.review_meta)
+        review_header.addLayout(review_heading_box, stretch=1)
+        self.edit_workout_button = QPushButton("Edit workout")
+        self.edit_workout_button.setObjectName("workoutPrimary")
+        self.edit_workout_button.clicked.connect(self._start_edit_workout)
+        review_header.addWidget(self.edit_workout_button)
+        review_layout.addLayout(review_header)
+
+        review_scroll = QScrollArea()
+        review_scroll.setWidgetResizable(True)
+        review_scroll.setFrameShape(QFrame.Shape.NoFrame)
+        review_content = QWidget()
+        review_content.setObjectName("workoutReviewContent")
+        self.review_content_layout = QVBoxLayout(review_content)
+        self.review_content_layout.setContentsMargins(0, 0, 4, 0)
+        self.review_content_layout.setSpacing(10)
+        review_scroll.setWidget(review_content)
+        review_layout.addWidget(review_scroll, stretch=1)
+        self.page_stack.addWidget(review_page)
+
+        editor_page = QWidget()
+        editor_page.setObjectName("workoutEditorPage")
+        main_layout = QVBoxLayout(editor_page)
+        main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(10)
+        editor_header = QHBoxLayout()
+        self.editor_title = QLabel("Edit workout")
+        self.editor_title.setObjectName("workoutReviewTitle")
+        editor_header.addWidget(self.editor_title, stretch=1)
+        cancel_button = QPushButton("Cancel")
+        cancel_button.setObjectName("workoutSecondary")
+        cancel_button.clicked.connect(self._cancel_edit)
+        editor_header.addWidget(cancel_button)
+        main_layout.addLayout(editor_header)
         
         # Workout Info Section
         info_group = QGroupBox("Workout Information")
         info_layout = QVBoxLayout(info_group)
         info_layout.setSpacing(10)
+        info_layout.addWidget(QLabel("Workout title"))
+        self.title_edit = QLineEdit()
+        self.title_edit.setPlaceholderText("e.g. Upper body")
+        self.title_edit.setStyleSheet(
+            "background: #161b24; color: #f7f9fc; border: 1px solid #526072;"
+            "border-radius: 7px; padding: 7px;"
+        )
+        info_layout.addWidget(self.title_edit)
         
         # Muscle Groups
         muscle_group = QGroupBox("Muscle Groups")
         muscle_layout = QGridLayout(muscle_group)
+        self.muscle_layout = muscle_layout
         
         self.muscle_checkboxes = {}
         row = 0
@@ -852,7 +1043,7 @@ class WorkoutWidget(QWidget):
         duration_layout.addWidget(QLabel("Duration (minutes):"))
         self.duration_spinbox = QSpinBox()
         self.duration_spinbox.setMinimum(0)
-        self.duration_spinbox.setMaximum(1440)  # 24 hours
+        self.duration_spinbox.setMaximum(1000000)
         self.duration_spinbox.setValue(0)
         self.duration_spinbox.setStyleSheet("""
             QSpinBox {
@@ -893,12 +1084,14 @@ class WorkoutWidget(QWidget):
         
         # Time (optional)
         time_layout = QVBoxLayout()
-        time_layout.addWidget(QLabel("Time (optional):"))
+        self.time_checkbox = QCheckBox("Record time")
+        time_layout.addWidget(self.time_checkbox)
         self.time_edit = QTimeEdit()
         self.time_edit.setDisplayFormat("HH:mm")
         self.time_edit.setTime(QTime.currentTime())  # Default to current time
         self.time_edit.setCalendarPopup(False)
-        # Allow clearing time (set to invalid time to represent "not set")
+        self.time_edit.setEnabled(False)
+        self.time_checkbox.toggled.connect(self.time_edit.setEnabled)
         time_layout.addWidget(self.time_edit)
         duration_time_layout.addLayout(time_layout)
         
@@ -934,6 +1127,7 @@ class WorkoutWidget(QWidget):
         header_layout = QHBoxLayout()
         
         self.add_exercise_button = QPushButton("Add Exercise")
+        self.add_exercise_button.setObjectName("workoutSecondary")
         self.add_exercise_button.clicked.connect(self._add_exercise)
         header_layout.addWidget(self.add_exercise_button)
         
@@ -974,7 +1168,7 @@ class WorkoutWidget(QWidget):
         self.day_type_label.setStyleSheet("font-weight: bold; font-size: 12pt; padding: 10px;")
         self.day_type_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.day_type_label.setVisible(False)
-        main_layout.addWidget(self.day_type_label)
+        review_layout.addWidget(self.day_type_label)
         
         # Rest/Missed Day Buttons
         rest_missed_layout = QHBoxLayout()
@@ -997,13 +1191,14 @@ class WorkoutWidget(QWidget):
         rest_missed_layout.addWidget(self.clear_rest_missed_button)
         
         rest_missed_layout.addStretch()
-        main_layout.addLayout(rest_missed_layout)
+        review_layout.addLayout(rest_missed_layout)
         
         # Action Buttons
         buttons_layout = QHBoxLayout()
         buttons_layout.addStretch()
         
         clear_button = QPushButton("Clear Workout")
+        clear_button.setObjectName("workoutSecondary")
         clear_button.clicked.connect(self._clear_workout)
         buttons_layout.addWidget(clear_button)
         
@@ -1011,34 +1206,332 @@ class WorkoutWidget(QWidget):
         self.delete_workout_button.setStyleSheet("background-color: #8B0000; color: white;")
         self.delete_workout_button.clicked.connect(self._delete_workout_from_server)
         self.delete_workout_button.setVisible(False)
-        buttons_layout.addWidget(self.delete_workout_button)
+        review_layout.addWidget(self.delete_workout_button)
         
         self.restore_workout_button = QPushButton("Restore workout")
         self.restore_workout_button.clicked.connect(self._restore_workout)
         self.restore_workout_button.setVisible(False)
-        buttons_layout.addWidget(self.restore_workout_button)
+        review_layout.addWidget(self.restore_workout_button)
         
         # Save as Template button (only if template service is available)
         if self.template_service:
             save_template_button = QPushButton("Save as Template")
+            save_template_button.setObjectName("workoutSecondary")
             save_template_button.clicked.connect(self._save_as_template)
             buttons_layout.addWidget(save_template_button)
             
             load_template_button = QPushButton("Load Template")
+            load_template_button.setObjectName("workoutSecondary")
             load_template_button.clicked.connect(self._load_template)
             buttons_layout.addWidget(load_template_button)
         
         save_button = QPushButton("Save Workout")
-        save_button.setStyleSheet("font-weight: bold;")
+        save_button.setObjectName("workoutPrimary")
         save_button.clicked.connect(self._save_workout)
         buttons_layout.addWidget(save_button)
         
         main_layout.addLayout(buttons_layout)
+        editor_scroll = QScrollArea()
+        editor_scroll.setWidgetResizable(True)
+        editor_scroll.setFrameShape(QFrame.Shape.NoFrame)
+        editor_scroll.setWidget(editor_page)
+        self.page_stack.addWidget(editor_scroll)
+        self.page_stack.setCurrentIndex(0)
         
         # Store references to form widgets for enabling/disabling
         self.workout_form_widgets = [
             info_group, exercises_group, save_button, clear_button
         ]
+
+    def _form_snapshot(self) -> dict:
+        return {
+            "groups": self._get_selected_muscle_groups(),
+            "duration": self.duration_spinbox.value(),
+            "time": self.time_edit.time().toString("HH:mm"),
+            "has_time": self.time_checkbox.isChecked(),
+            "notes": self.notes_edit.toPlainText(),
+            "title": self.title_edit.text(),
+            "exercises": [widget.get_exercise_data() for widget in self.exercise_widgets],
+        }
+
+    def _can_leave_editor(self) -> bool:
+        if not self._editing or self._form_snapshot() == self._editor_snapshot:
+            return True
+        return QMessageBox.question(
+            self, "Discard changes?", "This workout has unsaved changes. Discard them?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No,
+        ) == QMessageBox.StandardButton.Yes
+
+    def _on_history_clicked(self, item: QListWidgetItem) -> None:
+        date, session_id = item.data(Qt.ItemDataRole.UserRole)
+        self._open_date(date, session_id)
+
+    def _on_browse_date_changed(self, date: QDate) -> None:
+        if date.isValid():
+            self._open_date(date.toString("yyyy-MM-dd"))
+
+    def _open_date(self, date: str, session_id: str | None = None) -> None:
+        if date == self.current_date and session_id == self._selected_session_id:
+            return
+        if not date or not self._can_leave_editor():
+            self._refresh_library()
+            return
+        self._editing = False
+        self.load_entry(date, session_id)
+
+    def _refresh_from_source(self) -> None:
+        if not self._can_leave_editor():
+            return
+        if getattr(getattr(self.workout_service, "api_client", None), "api_key", None):
+            self.setCursor(Qt.CursorShape.WaitCursor)
+            try:
+                success, error = self.workout_service.load_workouts_from_api()
+            except Exception as exc:
+                success, error = False, str(exc)
+            finally:
+                self.unsetCursor()
+            if not success:
+                QMessageBox.warning(self, "Refresh failed", error or "Could not load workouts.")
+                return
+        self._editing = False
+        if self.current_date:
+            self.load_entry(self.current_date, self._selected_session_id)
+        else:
+            self._refresh_library()
+        self.data_saved.emit()
+
+    def _refresh_library(self) -> None:
+        """List cached/local workouts with newest dates first."""
+        try:
+            entries = self.workout_service.storage.get_entries_range(
+                "0001-01-01", "9999-12-31"
+            )
+        except Exception:
+            entries = []
+        api_enabled = bool(getattr(getattr(self.workout_service, "api_client", None), "api_key", None))
+        api_cache = getattr(self.workout_service, "_workout_cache", None)
+        workouts = [
+            entry.workout for entry in entries
+            if entry.workout and (
+                not api_enabled or api_cache is None or not entry.workout.session_id
+            )
+        ]
+        if api_enabled and api_cache is not None:
+            workouts.extend(getattr(self.workout_service, "_workout_library", None) or api_cache.values())
+        query = self.search_edit.text().strip().casefold()
+        self.history_list.clear()
+        for workout in sorted(
+            workouts,
+            key=lambda row: (row.date, row.workout_time or "", row.session_id or ""),
+            reverse=True,
+        ):
+            date = workout.date
+            searchable = " ".join([
+                date, workout.name or "", workout.notes or "",
+                workout.source or "", *(workout.muscle_groups or []),
+                *(exercise.name for exercise in workout.exercises),
+            ]).casefold()
+            if query and query not in searchable:
+                continue
+            date_label = QDate.fromString(date, "yyyy-MM-dd").toString("MMM d, yyyy")
+            title = workout.name or (
+                workout.exercises[0].name if workout.exercises else "Workout"
+            )
+            when = f" · {workout.workout_time}" if workout.workout_time else ""
+            item = QListWidgetItem(f"{date_label}{when}\n{title[:34]}")
+            item.setToolTip(f"{date_label}{when} — {title}")
+            item.setData(Qt.ItemDataRole.UserRole, (date, workout.session_id))
+            item.setSizeHint(QSize(180, 58))
+            self.history_list.addItem(item)
+            if date == self.current_date and workout.session_id == self._selected_session_id:
+                self.history_list.setCurrentItem(item)
+        if self.current_date:
+            selected = QDate.fromString(self.current_date, "yyyy-MM-dd")
+            if selected.isValid():
+                was_blocked = self.browse_date_edit.blockSignals(True)
+                self.browse_date_edit.setDate(selected)
+                self.browse_date_edit.blockSignals(was_blocked)
+
+    def _review_card(self) -> QVBoxLayout:
+        card = QFrame()
+        card.setObjectName("workoutReviewCard")
+        layout = QVBoxLayout(card)
+        layout.setContentsMargins(18, 16, 18, 16)
+        layout.setSpacing(8)
+        self.review_content_layout.addWidget(card)
+        return layout
+
+    @staticmethod
+    def _review_text(text: str, *, title: bool = False) -> QLabel:
+        label = QLabel(text)
+        label.setTextFormat(Qt.TextFormat.PlainText)
+        label.setWordWrap(True)
+        label.setStyleSheet(
+            "color: #f7f9fc; font-size: 12pt; font-weight: 700;" if title
+            else "color: #c5cfdd; font-size: 10pt;"
+        )
+        return label
+
+    def _show_review(self, workout: "Workout | None", day_type: str) -> None:
+        while self.review_content_layout.count():
+            item = self.review_content_layout.takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
+        date_label = QDate.fromString(self.current_date or "", "yyyy-MM-dd").toString("MMMM d, yyyy")
+        self.review_meta.setText(date_label)
+        api_enabled = bool(getattr(getattr(self.workout_service, "api_client", None), "api_key", None))
+        self.new_workout_button.setEnabled(
+            (workout is None or (api_enabled and bool(workout.session_id)))
+            and day_type not in ("rest", "missed")
+        )
+        self.edit_workout_button.setVisible(workout is not None)
+        self.mark_rest_button.setVisible(workout is None and day_type not in ("rest", "missed"))
+        self.mark_missed_button.setVisible(workout is None and day_type not in ("rest", "missed"))
+        if workout is None:
+            self.review_title.setText("No workout recorded")
+            card = self._review_card()
+            if day_type in ("rest", "missed"):
+                card.addWidget(self._review_text(
+                    "Clear this day status to add a workout.", title=True
+                ))
+            else:
+                card.addWidget(self._review_text(
+                    "Choose a workout from the list, or start one for this date.", title=True
+                ))
+        else:
+            self.review_title.setText(workout.name or "Workout review")
+            can_edit = not workout.edit_reason and not (
+                api_enabled and workout.session_id and workout.revision is None
+            )
+            self.edit_workout_button.setEnabled(can_edit)
+            self.edit_workout_button.setToolTip(
+                workout.edit_reason or (
+                    "The workout edit API must be deployed before this server workout can be edited."
+                    if not can_edit else "Edit this saved workout"
+                )
+            )
+            set_count = sum(len(exercise.sets) for exercise in workout.exercises)
+            volume = self.workout_service.calculate_volume(workout)
+            summary = self._review_card()
+            if workout.edit_reason:
+                summary.addWidget(self._review_text(
+                    f"Editing unavailable: {workout.edit_reason}"
+                ))
+            elif not can_edit:
+                summary.addWidget(self._review_text(
+                    "Editing this server workout requires the updated Life-Api edit endpoint. "
+                    "Deploy that API update, then reload the workout."
+                ))
+            summary.addWidget(self._review_text(
+                f"{len(workout.exercises)} exercises  ·  {set_count} sets  ·  {volume:,.1f} lb equivalent",
+                title=True,
+            ))
+            details = []
+            if workout.workout_time:
+                details.append(workout.workout_time)
+            if workout.duration_minutes:
+                details.append(f"{workout.duration_minutes} min")
+            if workout.muscle_groups:
+                details.append(" · ".join(workout.muscle_groups))
+            if workout.source:
+                details.append(f"From {workout.source}")
+            if details:
+                summary.addWidget(self._review_text("  •  ".join(details)))
+            extra_session = {
+                key: value for key, value in (
+                    workout.metadata if isinstance(workout.metadata, dict) else {}
+                ).items()
+                if key not in {"local_date", "utc_offset_minutes", "duration_minutes"}
+            }
+            if extra_session:
+                summary.addWidget(self._review_text(
+                    "  ·  ".join(f"{key.replace('_', ' ').title()}: {value}" for key, value in extra_session.items())
+                ))
+            if workout.notes:
+                notes = self._review_card()
+                notes.addWidget(self._review_text("Notes", title=True))
+                notes.addWidget(self._review_text(workout.notes))
+            for index, exercise in enumerate(workout.exercises, 1):
+                card = self._review_card()
+                card.addWidget(self._review_text(f"{index:02d}  {exercise.name}", title=True))
+                if exercise.muscle_groups:
+                    card.addWidget(self._review_text(" · ".join(exercise.muscle_groups)))
+                extra_exercise = {
+                    key: value for key, value in (
+                        exercise.metadata if isinstance(exercise.metadata, dict) else {}
+                    ).items()
+                    if key != "muscle_groups"
+                }
+                if extra_exercise:
+                    card.addWidget(self._review_text(
+                        "  ·  ".join(f"{key.replace('_', ' ').title()}: {value}" for key, value in extra_exercise.items())
+                    ))
+                for set_index, set_obj in enumerate(exercise.sets, 1):
+                    line = f"Set {set_index}     {set_obj.reps} reps  ×  {set_obj.weight:g} {set_obj.unit}"
+                    if set_obj.comment:
+                        line += f"     {set_obj.comment}"
+                    card.addWidget(self._review_text(line))
+                    extra_set = {
+                        key: value for key, value in (
+                            set_obj.extra_data if isinstance(set_obj.extra_data, dict) else {}
+                        ).items() if key != "set"
+                    }
+                    if extra_set:
+                        card.addWidget(self._review_text(
+                            "  ·  ".join(f"{key.replace('_', ' ').title()}: {value}" for key, value in extra_set.items())
+                        ))
+        self.review_content_layout.addStretch()
+        self.page_stack.setCurrentIndex(0)
+
+    def _start_edit_workout(self) -> None:
+        if not self.current_date:
+            return
+        workout = self.workout_service.get_workout(self.current_date, self._selected_session_id)
+        if workout is None:
+            return
+        if workout.edit_reason:
+            QMessageBox.warning(self, "Editing unavailable", workout.edit_reason)
+            return
+        api_enabled = bool(getattr(getattr(self.workout_service, "api_client", None), "api_key", None))
+        if api_enabled and workout.session_id and workout.revision is None:
+            QMessageBox.warning(self, "Editing unavailable", "Deploy the updated workout API before editing this server workout.")
+            return
+        self._editing_revision = workout.revision
+        self._creation_mode = False
+        self._editor_snapshot = self._form_snapshot()
+        self._editing = True
+        self.editor_title.setText(f"Edit · {self.current_date}")
+        self.page_stack.setCurrentIndex(1)
+
+    def _start_new_workout(self) -> None:
+        if not self.current_date:
+            return
+        if not self._can_leave_editor():
+            return
+        current = self.workout_service.get_workout(self.current_date)
+        if current and (
+            not current.session_id or not getattr(
+                getattr(self.workout_service, "api_client", None), "api_key", None
+            )
+        ):
+            return
+        if self.workout_service.get_day_type(self.current_date) in ("rest", "missed"):
+            return
+        self._clear_workout_form()
+        self._editing_revision = None
+        self._creation_mode = True
+        self._editor_snapshot = self._form_snapshot()
+        self._editing = True
+        self.editor_title.setText(f"New workout · {self.current_date}")
+        self.page_stack.setCurrentIndex(1)
+
+    def _cancel_edit(self) -> None:
+        if not self._can_leave_editor():
+            return
+        self._editing = False
+        if self.current_date:
+            self.load_entry(self.current_date, self._selected_session_id)
     
     def _on_muscle_group_changed(self) -> None:
         """Update muscle group list when checkboxes change."""
@@ -1060,10 +1553,10 @@ class WorkoutWidget(QWidget):
         exercise_widget = ExerciseFormWidget(
             len(self.exercise_widgets),
             volume_callback=self._update_volume_display,
-            muscle_groups_list=self.MUSCLE_GROUPS
+            muscle_groups_list=list(self.muscle_checkboxes)
         )
         exercise_widget.remove_button.clicked.connect(
-            lambda checked=False, idx=len(self.exercise_widgets): self._remove_exercise(idx)
+            lambda checked=False, row=exercise_widget: self._remove_exercise_widget(row)
         )
         
         # Connect set changes to volume calculation for existing sets
@@ -1089,6 +1582,10 @@ class WorkoutWidget(QWidget):
                 w.set_exercise_index(i)
             
             self._update_volume_display()
+
+    def _remove_exercise_widget(self, widget: ExerciseFormWidget) -> None:
+        if widget in self.exercise_widgets:
+            self._remove_exercise(self.exercise_widgets.index(widget))
     
     def _get_exercises_data(self) -> list[dict]:
         """
@@ -1140,14 +1637,17 @@ class WorkoutWidget(QWidget):
             if data["name"]:
                 # Sum volume for all sets in this exercise
                 for set_data in data["sets"]:
-                    volume = set_data["reps"] * set_data["weight"]
+                    weight_lbs = set_data["weight"] * (
+                        2.2046226218 if set_data.get("unit", "lbs").casefold() in ("kg", "kgs") else 1
+                    )
+                    volume = set_data["reps"] * weight_lbs
                     total_volume += volume
         return total_volume
     
     def _update_volume_display(self) -> None:
         """Update the volume display label."""
         volume = self._calculate_volume()
-        self.volume_label.setText(f"Total Volume: {volume:,.1f} lbs")
+        self.volume_label.setText(f"Volume: {volume:,.1f} lb equivalent")
     
     def _save_workout(self) -> None:
         """Validate and save workout to storage."""
@@ -1166,10 +1666,11 @@ class WorkoutWidget(QWidget):
         exercises_data = self._get_exercises_data()
         duration = self.duration_spinbox.value()
         notes = self.notes_edit.toPlainText().strip()
+        title = self.title_edit.text().strip() or "Workout"
         
         # Get workout time (optional)
         workout_time = None
-        if self.time_edit.time().isValid():
+        if self.time_checkbox.isChecked() and self.time_edit.time().isValid():
             # Convert QTime to "HH:MM" string format
             time = self.time_edit.time()
             workout_time = f"{time.hour():02d}:{time.minute():02d}"
@@ -1184,6 +1685,11 @@ class WorkoutWidget(QWidget):
                     reps=set_data["reps"],
                     weight=set_data["weight"],
                     comment=set_data.get("comment", ""),
+                    unit=set_data.get("unit", "lbs"),
+                    extra_data=set_data.get("extra_data", {}),
+                    comment_key=set_data.get("comment_key", "comment"),
+                    weight_key=set_data.get("weight_key", "weight"),
+                    record_time=set_data.get("record_time"),
                 )
                 for set_data in data["sets"]
             ]
@@ -1193,16 +1699,41 @@ class WorkoutWidget(QWidget):
             exercises.append(Exercise(
                 name=data["name"], 
                 sets=set_objects,
-                muscle_groups=filtered_muscle_groups
+                muscle_groups=filtered_muscle_groups,
+                metadata=data.get("metadata", {}),
             ))
         
         # Collect all unique muscle groups from exercises for workout-level tracking
-        all_muscle_groups = set()
+        all_muscle_groups = set(muscle_groups)
         for exercise in exercises:
             all_muscle_groups.update(exercise.muscle_groups)
         
-        # Save via API when configured, else storage
-        if getattr(self.workout_service, "api_client", None):
+        existing = None if self._creation_mode else self.workout_service.get_workout(
+            self.current_date, self._selected_session_id
+        )
+        has_api = bool(getattr(getattr(self.workout_service, "api_client", None), "api_key", None))
+        if has_api and existing and existing.session_id:
+            if self._editing_revision is None:
+                QMessageBox.warning(self, "Editing unavailable", "Reload this workout after the updated API is deployed.")
+                return
+            success, err = self.workout_service.update_workout_via_api(
+                self.current_date, existing.session_id, self._editing_revision,
+                list(all_muscle_groups), exercises, duration_minutes=duration,
+                notes=notes, workout_time=workout_time, name=title,
+            )
+            if not success:
+                QMessageBox.warning(self, "Save failed", err or "Could not update this workout.")
+                return
+        elif existing:
+            success = self.workout_service.update_workout(
+                self.current_date, muscle_groups=list(all_muscle_groups),
+                exercises=exercises, duration_minutes=duration, notes=notes,
+                workout_time=workout_time, name=title,
+            )
+            if not success:
+                QMessageBox.warning(self, "Save failed", "Could not update this local workout.")
+                return
+        elif has_api:
             success, err = self.workout_service.create_workout_via_api(
                 self.current_date,
                 list(all_muscle_groups),
@@ -1210,6 +1741,7 @@ class WorkoutWidget(QWidget):
                 duration_minutes=duration,
                 notes=notes,
                 workout_time=workout_time,
+                name=title,
             )
             if not success:
                 QMessageBox.warning(self, "Error", err or "Failed to save workout.")
@@ -1222,15 +1754,20 @@ class WorkoutWidget(QWidget):
                 duration_minutes=duration,
                 notes=notes,
                 workout_time=workout_time,
+                name=title,
             )
             if not success:
                 QMessageBox.warning(self, "Error", "Failed to save workout. Please check your input.")
                 return
         
-        QMessageBox.information(self, "Success", "Workout saved successfully!")
+        self._editing = False
+        self._editor_snapshot = None
+        self._creation_mode = False
+        if has_api and existing is None:
+            self._selected_session_id = self.workout_service.last_created_session_id
         self.data_saved.emit()
         # Reload current date so widget shows saved workout from API cache
-        self.load_entry(self.current_date)
+        self.load_entry(self.current_date, self._selected_session_id)
     
     def _build_template_data(self) -> Optional[dict]:
         """
@@ -1256,17 +1793,29 @@ class WorkoutWidget(QWidget):
         
         # Get workout time (optional)
         workout_time = None
-        if self.time_edit.time().isValid():
+        if self.time_checkbox.isChecked() and self.time_edit.time().isValid():
             # Convert QTime to "HH:MM" string format
             time = self.time_edit.time()
             workout_time = f"{time.hour():02d}:{time.minute():02d}"
         
         # Build template data structure (no date field)
+        template_exercises = [
+            {
+                "name": exercise["name"],
+                "muscle_groups": exercise["muscle_groups"],
+                "sets": [
+                    {key: set_data[key] for key in ("reps", "weight", "comment", "unit")}
+                    for set_data in exercise["sets"]
+                ],
+            }
+            for exercise in exercises_data
+        ]
         template_data = {
             "muscle_groups": muscle_groups,
-            "exercises": exercises_data,  # Already in dict format with sets as dicts
+            "exercises": template_exercises,
             "duration_minutes": duration,
             "notes": notes,
+            "name": self.title_edit.text().strip(),
             "workout_time": workout_time,
         }
         
@@ -1444,10 +1993,12 @@ class WorkoutWidget(QWidget):
         # Set duration, notes, and time
         self.duration_spinbox.setValue(template_data.get("duration_minutes", 0))
         self.notes_edit.setPlainText(template_data.get("notes", ""))
+        self.title_edit.setText(template_data.get("name", ""))
         
         # Set workout time if available
         workout_time = template_data.get("workout_time")
         if workout_time:
+            self.time_checkbox.setChecked(True)
             try:
                 # Parse "HH:MM" string to QTime
                 hour, minute = map(int, workout_time.split(":"))
@@ -1456,6 +2007,7 @@ class WorkoutWidget(QWidget):
                 # Invalid time format, leave as default
                 self.time_edit.setTime(QTime.currentTime())
         else:
+            self.time_checkbox.setChecked(False)
             # Clear time (set to current time as default)
             self.time_edit.setTime(QTime.currentTime())
         
@@ -1484,7 +2036,8 @@ class WorkoutWidget(QWidget):
                     {
                         "reps": 10,
                         "weight": 0.0,
-                        "comment": ""
+                        "comment": "",
+                        "unit": set_data.get("unit", "lbs"),
                     }
                     for _ in sets_data
                 ]
@@ -1496,7 +2049,7 @@ class WorkoutWidget(QWidget):
             exercise_widget = ExerciseFormWidget(
                 len(self.exercise_widgets),
                 volume_callback=self._update_volume_display,
-                muscle_groups_list=self.MUSCLE_GROUPS
+                muscle_groups_list=list(self.muscle_checkboxes)
             )
             
             # Set exercise data
@@ -1508,7 +2061,7 @@ class WorkoutWidget(QWidget):
             
             # Connect remove button
             exercise_widget.remove_button.clicked.connect(
-                lambda checked=False, idx=len(self.exercise_widgets): self._remove_exercise(idx)
+                lambda checked=False, row=exercise_widget: self._remove_exercise_widget(row)
             )
             
             # Connect set changes to volume calculation
@@ -1536,6 +2089,8 @@ class WorkoutWidget(QWidget):
         # Clear duration, notes, and time
         self.duration_spinbox.setValue(0)
         self.notes_edit.clear()
+        self.title_edit.clear()
+        self.time_checkbox.setChecked(False)
         # Clear time (set to current time as default)
         self.time_edit.setTime(QTime.currentTime())
         
@@ -1559,14 +2114,21 @@ class WorkoutWidget(QWidget):
         if reply == QMessageBox.StandardButton.Yes:
             self._clear_workout_form()
     
-    def load_entry(self, date: str) -> None:
+    def load_entry(self, date: str, session_id: str | None = None) -> None:
         """
         Load workout for the given date.
         
         Args:
             date: Date string in "YYYY-MM-DD" format
         """
+        if self._editing:
+            if date == self.current_date and session_id == self._selected_session_id:
+                return
+            if not self._can_leave_editor():
+                return
+            self._editing = False
         self.current_date = date
+        self._selected_session_id = session_id
         
         # Check day type (workout, rest, missed, or None)
         day_type = self.workout_service.get_day_type(date)
@@ -1576,37 +2138,55 @@ class WorkoutWidget(QWidget):
             self._current_session_id = None
             self._update_delete_restore_buttons()
             self._show_rest_day_ui()
+            self._refresh_library()
+            self._show_review(None, day_type)
             return
         elif day_type == "missed":
             self._current_session_id = None
             self._update_delete_restore_buttons()
             self._show_missed_day_ui()
+            self._refresh_library()
+            self._show_review(None, day_type)
             return
         else:
             self._show_normal_workout_ui()
         
         # Load workout from service
-        workout = self.workout_service.get_workout(date)
+        workout = self.workout_service.get_workout(date, session_id)
+        if workout is None and session_id is not None:
+            workout = self.workout_service.get_workout(date)
         
         if workout is None:
             # Clear form if no workout (without confirmation dialog)
             self._current_session_id = None
             self._update_delete_restore_buttons()
             self._clear_workout_form()
+            self._refresh_library()
+            self._show_review(None, day_type)
             return
+        self._selected_session_id = workout.session_id
         
         # Load muscle groups (filter to valid ones - Option A migration)
         workout_muscle_groups = workout.muscle_groups if workout.muscle_groups else []
         filtered_workout_muscle_groups = self._filter_valid_muscle_groups(workout_muscle_groups)
+        for muscle in filtered_workout_muscle_groups:
+            if muscle not in self.muscle_checkboxes:
+                checkbox = QCheckBox(muscle)
+                checkbox.stateChanged.connect(self._on_muscle_group_changed)
+                self.muscle_checkboxes[muscle] = checkbox
+                index = len(self.muscle_checkboxes) - 1
+                self.muscle_layout.addWidget(checkbox, index // 4, index % 4)
         for muscle, checkbox in self.muscle_checkboxes.items():
             checkbox.setChecked(muscle in filtered_workout_muscle_groups)
         
         # Load duration, notes, and time
         self.duration_spinbox.setValue(workout.duration_minutes)
         self.notes_edit.setPlainText(workout.notes)
+        self.title_edit.setText(workout.name)
         
         # Load workout time if available
         if workout.workout_time:
+            self.time_checkbox.setChecked(True)
             try:
                 # Parse "HH:MM" string to QTime
                 hour, minute = map(int, workout.workout_time.split(":"))
@@ -1615,6 +2195,7 @@ class WorkoutWidget(QWidget):
                 # Invalid time format, leave as default
                 self.time_edit.setTime(QTime.currentTime())
         else:
+            self.time_checkbox.setChecked(False)
             # Clear time (set to current time as default)
             self.time_edit.setTime(QTime.currentTime())
         
@@ -1629,7 +2210,10 @@ class WorkoutWidget(QWidget):
             exercise_widget = ExerciseFormWidget(
                 len(self.exercise_widgets),
                 volume_callback=self._update_volume_display,
-                muscle_groups_list=self.MUSCLE_GROUPS
+                muscle_groups_list=self.MUSCLE_GROUPS + [
+                    group for group in getattr(exercise, "muscle_groups", [])
+                    if group not in self.MUSCLE_GROUPS
+                ]
             )
             
             # Convert Set objects to dictionaries for set_exercise_data
@@ -1638,6 +2222,11 @@ class WorkoutWidget(QWidget):
                     "reps": set_obj.reps,
                     "weight": set_obj.weight,
                     "comment": set_obj.comment,
+                    "unit": set_obj.unit,
+                    "extra_data": set_obj.extra_data,
+                    "comment_key": set_obj.comment_key,
+                    "weight_key": set_obj.weight_key,
+                    "record_time": set_obj.record_time,
                 }
                 for set_obj in exercise.sets
             ]
@@ -1646,9 +2235,12 @@ class WorkoutWidget(QWidget):
             # Filter to valid ones (Option A migration - ignore legacy groups)
             exercise_muscle_groups = getattr(exercise, 'muscle_groups', [])
             filtered_exercise_muscle_groups = self._filter_valid_muscle_groups(exercise_muscle_groups)
-            exercise_widget.set_exercise_data(exercise.name, sets_data, filtered_exercise_muscle_groups)
+            exercise_widget.set_exercise_data(
+                exercise.name, sets_data, filtered_exercise_muscle_groups,
+                getattr(exercise, "metadata", {}),
+            )
             exercise_widget.remove_button.clicked.connect(
-                lambda checked=False, idx=len(self.exercise_widgets): self._remove_exercise(idx)
+                lambda checked=False, row=exercise_widget: self._remove_exercise_widget(row)
             )
             
             # Connect set changes to volume calculation
@@ -1662,10 +2254,12 @@ class WorkoutWidget(QWidget):
         self._current_session_id = getattr(workout, "session_id", None)
         self._update_delete_restore_buttons()
         self._update_volume_display()
+        self._refresh_library()
+        self._show_review(workout, day_type)
     
     def _update_delete_restore_buttons(self) -> None:
         """Show Delete/Restore when API is used and we have a session_id."""
-        has_api = bool(getattr(self.workout_service, "api_client", None))
+        has_api = bool(getattr(getattr(self.workout_service, "api_client", None), "api_key", None))
         self.delete_workout_button.setVisible(has_api and bool(self._current_session_id))
         self.restore_workout_button.setVisible(False)  # Reserved for when we show deleted sessions
     
@@ -1755,7 +2349,9 @@ class WorkoutWidget(QWidget):
         
         self.duration_spinbox.setEnabled(enabled)
         self.notes_edit.setEnabled(enabled)
-        self.time_edit.setEnabled(enabled)
+        self.title_edit.setEnabled(enabled)
+        self.time_checkbox.setEnabled(enabled)
+        self.time_edit.setEnabled(enabled and self.time_checkbox.isChecked())
         self.add_exercise_button.setEnabled(enabled)
         
         for exercise_widget in self.exercise_widgets:

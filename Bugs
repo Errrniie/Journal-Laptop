@@ -1,0 +1,58 @@
+# Journal bug audit
+
+Updated after narrow fixes to the five audited issues. No tests were run, per task scope.
+
+## P1 — Corrupt life-log JSON is treated as empty and can be overwritten
+
+**Status:** Fixed in `Storage/json_storage.py`: invalid JSON now raises an `IOError` instead of loading as an empty store. Workout-template JSON also fails closed; template reads show an empty view and template writes return failure without replacing corrupt content.
+
+**Impact:** A single subsequent save can replace the whole life-log file with only the entry being saved, making every previously stored day inaccessible through the application. The damaged original is not backed up by this path.
+
+**Trigger / repro:** Make `data/lifelog.json` invalid JSON, open the app, then save any journal, task, sleep, or workout change. `JSONStorage._load_data()` catches `JSONDecodeError` and returns `{}` ([json_storage.py:46-59](Storage/json_storage.py)); `save_entry()` then adds the current date to that empty map and `_save_data()` replaces the original file ([json_storage.py:272-293](Storage/json_storage.py)).
+
+**Caveat:** Recovery is a manual repair or restore step. Settings still load defaults after invalid JSON; the destructive overwrite path identified here was in the life-log and template stores.
+
+## P1 — API requests have no timeout, so date loading and sync can hang indefinitely
+
+**Status:** Fixed in `features/API_Client.py` with a shared 5-second connect and 20-second read timeout. Timeout exceptions continue through existing failure paths, and the date-load worker now reports failed task, workout, and journal results in the status bar when those API integrations are enabled.
+
+**Impact:** `requests` defaults to no timeout. The date-load worker performs task, workout, and journal requests serially ([Main_Window.py:106-114](GUI/Main_Window.py)); a stalled request can keep it running indefinitely. The UI retains a wait cursor and queues later date loads behind that worker ([Main_Window.py:383-431]). Any API call made directly from a widget can also block the GUI thread.
+
+**Trigger / repro:** Configure an API key and use a network path/server that accepts a connection but never completes the response; navigate to a date or invoke a sync operation.
+
+**Caveat:** No retries were added; requests with side effects therefore cannot be duplicated by retry behavior.
+
+## P1 — Life-log and template paths depend on the process working directory
+
+**Status:** Fixed by `config/data_paths.py`, used for life-log, template, and settings paths. Linux/source launches use the established project `data` directory independent of cwd. Windows and macOS use a per-user writable directory and copy existing project data there on first use.
+
+**Impact:** On source launches from another directory, and especially a packaged Windows app launched with an arbitrary working directory, `lifelog.json` and templates are read/written under `<working-directory>/data`. Settings instead resolve relative to the source/bundle module directory. Users can therefore see fresh/empty journal data, write into an unintended directory, or create multiple competing data stores. This conflicts with the stated porting goal of not depending on a fixed launch directory (`WINDOWS_PORTING.md`, sections 1–3).
+
+**Trigger / repro:** Start `Journal/main.py` with a working directory other than `Journal/`; `main()` passes relative strings for storage and templates ([main.py:45-59]), while settings use a path based on `__file__` ([settings_store.py:18-30]).
+
+**Caveat:** One-time migration copies the existing project file and leaves that source file untouched. Later edits made in the old location are not merged. Packaged Windows startup was not exercised.
+
+## P2 — Remote task deletion can leave stale tasks in local storage
+
+**Status:** Fixed in `features/Task_Sync_Service.py` and `features/Task_Service.py`. After a successful full fetch, dates with prior API-linked tasks are explicitly replaced even when omitted from the response. Local-only tasks without API ids are retained.
+
+**Impact:** The task sync describes the server as source of truth, but only writes local entries for dates present in the returned API data. If a date has no remaining server tasks, it is absent from `tasks_by_date` and its old local task list is never cleared. That deleted task remains visible in the local date view and can be pushed back to the API on a later sync as a local-only task.
+
+**Trigger / repro:** Have one API-linked task on a date, delete it remotely (or through a flow that does not clear its local entry), then sync. Sync only iterates nonempty returned groups ([Task_Sync_Service.py:126-185]); local deletion/replacement is not performed for dates omitted from the response.
+
+**Caveat:** The existing upload scan still covers 30 days in the past and 60 days in the future. A failed API fetch exits before replacing any task lists; if upload or API-task mapping errors occur, omitted-date deletion is also skipped conservatively.
+
+## P2 — Unexpected workout record values can escape the background worker
+
+**Status:** Fixed in `features/Workout_Service.py` by skipping malformed set records and in `GUI/Main_Window.py` with a worker exception boundary, a queued GUI-thread status-bar error signal, and guaranteed emission of the existing `done(str)` signal.
+
+**Impact:** A `ValueError`/`TypeError` during workout response mapping is not caught by `load_workouts_from_api()` around the record loop ([Workout_Service.py:211-277]). `BackgroundLoadWorker.run()` previously had no exception boundary ([Main_Window.py:106-115]); unexpected failures and returned API errors are now communicated through a nonmodal status-bar signal.
+
+**Trigger / repro:** API returns a workout record with e.g. `data.reps: "unknown"` or a nonnumeric weight while the date-load worker is loading workouts.
+
+**Caveat:** Malformed records are reported to stdout and skipped. Malformed records are reported to stdout and skipped. Unexpected worker exceptions and returned task/workout/journal API failures appear briefly in the status bar when API sync is enabled; `done(str)` and the queued-date lifecycle remain unchanged, with no modal offline popup.
+
+## Windows compatibility notes
+
+- `WINDOWS_PORTING.md` correctly calls out the working-directory problem, the hardcoded Linux debug paths, and the missing network timeouts. `Workout_Widget.py:8` and `Workout_Template_Service.py:7` point to `/home/LxSparda/Desktop/Journal/.cursor/debug.log`; logging failures are swallowed, so this appears to disable diagnostics on Windows rather than crash the app.
+- I found no source-level Windows-only import or syntax blocker in the reviewed paths. A clean Windows/PyInstaller build and runtime behavior remain unverified because this audit did not run tests or packaging.

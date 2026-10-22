@@ -1,4 +1,7 @@
 #!/bin/bash
-cd /home/LxSparda/Desktop/Journal || exit 1
-source .venv/bin/activate
-exec -a ernesto-journal python main.py
+
+# Always launch relative to this script so moving the project does not break it.
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)" || exit 1
+cd "$SCRIPT_DIR" || exit 1
+
+exec -a ernesto-journal "$SCRIPT_DIR/.venv/bin/python" "$SCRIPT_DIR/main.py"
