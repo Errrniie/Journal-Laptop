@@ -3147,7 +3147,7 @@
         "activity_id": "e64a7756-9048-41c1-8fa5-8889cbc96974",
         "session_id": null,
         "last_synced": "2026-10-21T05:05:04.957672Z",
-        "revision": 51,
+        "revision": 55,
         "client_request_id": "a35e4eda-1926-4776-bcbc-7e88ba4b3c4e"
       }
     ],
@@ -4348,6 +4348,18 @@
     "journal": "",
     "journal_pages": [],
     "tasks": [
+      {
+        "name": "Respond to Aurora Company. Possibly ask again....?",
+        "completed": false,
+        "Priority": 4,
+        "Due_Date": "2026-10-22",
+        "Notes": null,
+        "activity_id": "996e261a-fb55-4397-a3ae-5ade2bc759c6",
+        "session_id": null,
+        "last_synced": "2026-10-22T00:48:31.675565Z",
+        "revision": 1,
+        "client_request_id": "c99bd23c-a40d-4713-96d6-73637db2abe6"
+      },
       {
         "name": "Fix Job Application and Change it for Internships",
         "completed": false,
